@@ -1,0 +1,99 @@
+{
+	"Data":{ 
+		"Employee":{
+			"Id":"8546022714",
+			"Name": "Đặng Kim Thúy",
+			"CMND": "341490903",
+			"CardNo":"01",
+			"BirthDay":"",
+			"IsLock":false,
+			"JobLevel":3,
+			"Department":"",
+			"Description":"This Item For User Master Data"
+		},
+		"Card":{
+			"ID":"",
+			"Employee":"",
+			"Color":"",
+			"RegistTime":80923850984,
+			"Status":"Using/Release"			
+		},
+		"Model":{
+			"Id":"khsfjlkdjf",
+			"Name":"Sửa Cá 1",
+			"ProcessId":"processId",
+			"CreateDate":83794872394,
+			"WeighMax":9809,
+			"WeightMin":6898,
+			"Properties2":"",
+			"Propertiesn":""
+		},
+		"Process":{
+			"Id":"dsfsdfafsdf",
+			"Name":"Sửa Cá",
+			"Level":1,
+			"Parent":"ProcessID",
+			"Before":"ProcessID (before)",
+			"After":"ProcessID (After)"
+		},
+		"Recode":{
+			"ProcessId":"Process",
+			"DeviceId":"Device",
+			"CardId":"Card",
+			"Model":"Model",
+			"ReadTime":8937983275,
+			"Weight":500,
+			"Startus":"OK/Error/Waiting"
+		}	
+	},
+	"Protocol":
+	{
+		"MqttMssg":
+		{
+			"DeviceId":"abc123",
+			"ParaName":"RFID_01",
+			"Value":"ValueData",
+			"UnixTime":1212121512,
+			"RequestId":"abc123-index"
+		},
+		"Device":
+		 {
+			"Id": 87,
+			"Name": "WeighingStation01",
+			"Capabilitie": "WeighingStation",
+			"DeviceType": "Machine",
+			"IsConnect": false,
+			"DataSourceId": "5f51e4a22e68c490a50d4fe3",
+			"Status": {
+				"RunStatus": "Alarm",
+				"ErrorCode": "",
+				"Weigh": "120",
+				"RFID": "125",
+				"RedLight": true,
+				"GreenLine": "3.5",
+				"YellowLight": "15",				
+				"CurrentRunModel": "Model",
+				"ProcessId":"Process"
+			},
+			"DataSaveList": [
+				"RunStatus",
+				"ErrorCode",
+				"Weigh",
+				"RFID",
+				"RedLight",
+				"GreenLine",
+				"YellowLight"
+			],
+			"MeterSaveList": [],
+			"SectionId": -1,
+			"DataSourcePara": {				
+				"Weigh":"MQTT",
+				"RFID":"MQTT",
+				"RedLight":"MQTT",
+				"GreenLine":"MQTT",			
+				"YellowLight":"MQTT"
+			},
+			"LastStatusChange": {}
+		}		
+	}
+}
