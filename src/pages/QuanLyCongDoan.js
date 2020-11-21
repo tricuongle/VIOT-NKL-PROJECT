@@ -16,7 +16,11 @@ var ArrayValue = [];
 var ArrayNameProcess = [];
 // khi gọi về chỉ hiển thị id của khu vực, dùng id lấy tên
 var i;
-
+const LOCALHOST = "http://171.232.86.160:5000";
+const KEY = "";
+const CLASSIFY = "Model";
+const TOKEN =
+  "04c5077dc551934ebdc267fbc83357b9967e19d21fa9d8c4884fac130acb7dadc50e05c08b9980cd7a379f2c8fa39e50";
 class QuanLyCongDoan extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +32,7 @@ class QuanLyCongDoan extends Component {
     axios({
       method: "GET",
       url:
-        "http://171.232.86.160:5001/api/data/Values?token=ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34&Classify=Model",
+      LOCALHOST+"/api/data/Values?token="+TOKEN+"&Classify="+CLASSIFY,
       data: null,
     })
       .then((resModel) => {
@@ -42,7 +46,7 @@ class QuanLyCongDoan extends Component {
           });
           $(document).ready(function () {
             $("#tableData").DataTable({
-              pageLength: 10,
+              pageLength: 5,
               processing: true,
               responsive: true,
               dom: "Bfrtip",

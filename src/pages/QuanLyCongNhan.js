@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
+import $ from "jquery";
 import TableContentItemCongNhan from "../components/comQLCongNhan/tableItemCongNhan/TableContentItemCongNhan";
 import TableContentCongNhan from "../components/comQLCongNhan/tableContentCongNhan/TableContentCongNhan";
 import ActionCreateCongNhan from "../components/comQLCongNhan/comQLCongNhanActions/ActionCreateCongNhan";
-import $ from "jquery";
-import ActionEditCongNhan from '../components/comQLCongNhan/comQLCongNhanActions/ActionEditCongNhan'
-var JsonValue;
+import ActionEditCongNhan from '../components/comQLCongNhan/comQLCongNhanActions/ActionEditCongNhan';
+import * as Config from '../untils/Config'
 var ArrayValue = [];
 class QuanLyCongNhan extends Component {
   constructor(props) {
@@ -14,9 +14,8 @@ class QuanLyCongNhan extends Component {
       contentItems: [],
       filter: {
         name: "",
-        status: -1,
+        status: -1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
       },
-      keyword: "",
     };
   }
   onChange = (event) => {
@@ -27,6 +26,7 @@ class QuanLyCongNhan extends Component {
       [name]: value,
     });
   };
+  // hàm filter nội dung (tất cả, đã nghỉ, đang làm) 
   onFilter = (filterStatus) => {
     filterStatus = parseInt(filterStatus, 10);
     this.setState({
@@ -35,17 +35,12 @@ class QuanLyCongNhan extends Component {
       },
     });
   };
-  onSearch = (keyword) => {
-    this.setState({
-      keyword: keyword.toLowerCase(),
-    });
-  };
+  // hàm lấy danh sách công nhân từ api
   componentDidMount() {
-    
     axios({
       method: "GET",
       url:
-        "http://171.232.86.160:5001/api/data/Values?token=ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34&Classify=Employee",
+        `${Config.API_URL}`+"/api/data/Values?token="+`${Config.TOKEN}`+"&Classify=Employee",
       data: null,
     })
       .then((res) => {
@@ -57,9 +52,10 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
+        // sử dụng thư viện datatable 
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 10,
+            pageLength: 5,
             processing: true,
             responsive: true,
             dom: "Bfrtip",
@@ -73,7 +69,7 @@ class QuanLyCongNhan extends Component {
 
   render() {
     var { contentItems, filter, keyword } = this.state;
-    if (filter) {
+    if (filter) { // xét điều kiện để filter
       if (filter.name) {
         contentItems = contentItems.filter((contentItems) => {
           return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
@@ -87,17 +83,8 @@ class QuanLyCongNhan extends Component {
         }
       });
     }
-    if (keyword) {
-      // code seach content to id,name, cmnd
-      contentItems = contentItems.filter((contentItems) => {
-        return (
-          contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
-          contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
-          contentItems.CMND.toLowerCase().indexOf(keyword) !== -1
-        );
-      });
-    }
     return (
+      // giao diện 
       <div className="content-wrapper">
         <section className="content-header">
           <h1>QUẢN LÝ CÔNG NHÂN</h1>
@@ -113,7 +100,6 @@ class QuanLyCongNhan extends Component {
         <section className="content">
           <TableContentCongNhan
             onFilter={this.onFilter}
-            onSearch={this.onSearch}
           >
             {this.showContentItems(contentItems)}
           </TableContentCongNhan>
@@ -168,6 +154,7 @@ class QuanLyCongNhan extends Component {
       </div>
     );
   }
+  // hàm đổ dữ liệu vào table
   showContentItems(contentItems) {
     var result = null;
     if (contentItems.length >= 0) {

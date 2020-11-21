@@ -8,14 +8,14 @@ import axios from "axios";
 import TableContentKhuVuc from "../components/comQLKhuVuc/tableContentKhuVuc/TableContentKhuVuc";
 import TableContentItemsKhuVuc from "../components/comQLKhuVuc/tableItemKhuVuc/TableContentItemsKhuVuc";
 import ActionCreateKhuVuc from '../components/comQLKhuVuc/comQLKhuVucActions/ActionCreateKhuVuc'
-
-
+import * as Config from '../untils/Config'
 import $ from 'jquery'; 
 var JsonValue;
 var JsonTime;
 var JsonDes;
 var ArrayValue = [];
 
+var arrayValueModel = [];
 class QuanLyKhuVuc extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +53,7 @@ class QuanLyKhuVuc extends Component {
     axios({
       method: "GET",
       url:
-        "http://171.232.86.160:5001/api/data?token=ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34&Classify=Process",
+      `${Config.API_URL}`+"/api/data?token="+`${Config.TOKEN}`+"&Classify=Process",
       data: null,
     })
       .then((res) => {
@@ -70,7 +70,7 @@ class QuanLyKhuVuc extends Component {
         });
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 10,
+            pageLength: 5,
             processing: true,
             responsive: true,
             dom: "Bfrtip",

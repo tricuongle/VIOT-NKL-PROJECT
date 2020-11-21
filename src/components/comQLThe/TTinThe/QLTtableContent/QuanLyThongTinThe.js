@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-//Bootstrap and jQuery libraries
 import "jquery/dist/jquery.min.js";
 import axios from "axios";
-//Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import QLTTableContentThe from "./QLTTableContentThe";
 import QLTTableContentItemThe from "../QLTtableItems/QLTTableContentItemThe";
 import $ from "jquery";
+import * as Config from '../../../../untils/Config'
 var JsonValue;
 var ArrayValue = [];
 class QuanLyThongTinThe extends Component {
@@ -41,7 +40,7 @@ class QuanLyThongTinThe extends Component {
     axios({
       method: "GET",
       url:
-        "http://171.232.86.160:5001/api/data/Values?token=ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34&Classify=Card",
+      `${Config.API_URL}`+"/api/data/Values?token="+`${Config.TOKEN}`+"&Classify=Card",
       data: null,
     })
       .then((res) => {
@@ -55,7 +54,7 @@ class QuanLyThongTinThe extends Component {
         console.log(this.state.contentItems);
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 10,
+            pageLength: 5,
             processing: true,
             responsive: true,
             dom: "Bfrtip",

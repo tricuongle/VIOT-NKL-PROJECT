@@ -2,12 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
 import { data } from "jquery";
-const id = "NV-0";
-const LOCALHOST = "http://171.232.86.160:5001";
-const KEY = "";
-const CLASSIFY = "Model";
-const TOKEN =
-  "ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34";
+import * as Config from '../../../untils/Config'
+
 var count;
 var valueNew;
 var Description;
@@ -45,7 +41,7 @@ class ActionCreateCongDoan extends Component {
     
     axios({
       method: "GET",
-      url: LOCALHOST + "/api/data?token=" + TOKEN + "&Classify=" + CLASSIFY,
+      url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}` + "&Classify=Model",
       data: null,
     })
       .then((res) => {
@@ -63,7 +59,7 @@ class ActionCreateCongDoan extends Component {
     axios({
       method: "GET",
       url:
-        LOCALHOST + "/api/data/Values?token=" + TOKEN + "&Classify=Process",
+      `${Config.API_URL}` + "/api/data/Values?token=" + `${Config.TOKEN}` + "&Classify=Process",
       data: null,
     })
       .then((resProcess) => {
@@ -87,17 +83,17 @@ class ActionCreateCongDoan extends Component {
     axios({
       method: "POST",
       url:
-        LOCALHOST +
+      `${Config.API_URL}` +
         "/api/data/Add?token=" +
-        TOKEN +
+        `${Config.TOKEN}` +
         "&key=" +
         Id +
         "&Value=" +
         valueNew +
         "&Description=" +
         Description +
-        "&classify=" +
-        CLASSIFY,
+        "&classify=Model"
+        ,
       data: null,
     })
       .then((res) => {

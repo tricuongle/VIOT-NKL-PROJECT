@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
 import { data } from "jquery";
-const id = "NV-0";
-const LOCALHOST = "http://171.232.86.160:5001";
-const KEY = "";
-const CLASSIFY = "&Classify=Employee";
-const TOKEN =
-  "ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34";
+import * as Config from '../../../untils/Config'
 var count;
 var valueNew;
 class ActionCreateCongNhan extends Component {
@@ -35,16 +30,16 @@ class ActionCreateCongNhan extends Component {
       [name]: value,
     });
   };
-
+// lấy số lượng ds công nhân và cộng 1 tạo id công nhân mới 
   componentDidMount = () => {
     axios({
       method: "GET",
-      url: LOCALHOST + "/api/data?token=" + TOKEN + CLASSIFY,
+      url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}` + "&Classify=Employee",
       data: null,
     })
       .then((res) => {
         count = res.data.length + 1;
-        var countString = "NV-0" + count;
+        var countString = "CN-NKL-0" + count;
         this.setState({
           Id: countString,
         });
@@ -61,14 +56,14 @@ class ActionCreateCongNhan extends Component {
     axios({
       method: "POST",
       url:
-        LOCALHOST +
+      `${Config.API_URL}` +
         "/api/data/Add?token=" +
-        TOKEN +
+        `${Config.TOKEN}` +
         "&key=" +
         Id +
         "&Value=" +
         valueNew +
-        "&Description=Test&classify=Employee",
+        "&Description=NKL&classify=Employee",
       data: null,
     })
       .then((res) => {

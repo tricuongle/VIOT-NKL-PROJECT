@@ -13,6 +13,7 @@ class TableContentItemTramCan extends Component {
   }
   componentDidMount() {
     var { contentItem } = this.props; // transfet content
+    console.log(contentItem.Status.ModelId );
     axios({
       method: "GET",
       url:

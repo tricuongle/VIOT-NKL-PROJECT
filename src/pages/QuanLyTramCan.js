@@ -3,14 +3,8 @@ import "reactjs-popup/dist/index.css";
 import axios from "axios";
 import TableContentTramCan from "../components/comQLTramCan/tableContentTramCan/TableContentTramCan";
 import TableContentItemTramCan from "../components/comQLTramCan/tableItemTramCan/TableContentItemTramCan";
-
 import $ from "jquery";
-const LOCALHOST = "http://171.232.86.160:5001";
-const KEY = "";
-const CLASSIFY = "";
-const TOKEN =
-  "ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34";
-
+import * as Config from '../untils/Config'
 var arrayValueModel = [];
 class QuanLyTramCan extends Component {
   constructor(props) {
@@ -18,27 +12,23 @@ class QuanLyTramCan extends Component {
     this.state = {
       contentItems: [],
       contentModel: [],
-      contentEditDevice: {
-
-
-      },
     };
   }
-  // api get Devices
+  // hàm lấy tất cả thiết bị cân
   componentDidMount() {
     axios({
       method: "GET",
-      url: LOCALHOST + "/api/iotdevice/all?token=" + TOKEN,
+      url: `${Config.API_URL}`+ "/api/iotdevice/all?token=" + `${Config.TOKEN}`,
       data: null,
     })
       .then((res) => {
         this.setState({
           contentItems: res.data,
         });
-        console.log(this.state.contentItems);
+        // tabledata giao diện
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 10,
+            pageLength: 5,
             processing: true,
             responsive: true,
             dom: "Bfrtip",
@@ -48,10 +38,10 @@ class QuanLyTramCan extends Component {
       .catch((err) => {
         console.log(err);
       });
-    // api get list Models
+    // hàm lấy danh sách công đoạn
     axios({
       method: "GET",
-      url: LOCALHOST + "/api/data/Values?token=" + TOKEN + "&Classify=Model",
+      url: `${Config.API_URL}`+ "/api/data/Values?token=" + `${Config.TOKEN}` + "&Classify=Model",
       data: null,
     })
       .then((resModel) => {
@@ -66,7 +56,6 @@ class QuanLyTramCan extends Component {
       .catch((err) => {
         console.log(err);
       });
-    //initialize datatable
   }
   // get value of radio button
   onChangeValue = (event) => {
@@ -125,23 +114,23 @@ class QuanLyTramCan extends Component {
                     </label>
 
                     <form onChange={this.onChangeValue}>
-                      <label class="radio-inline">
+                      <label className="radio-inline">
                         <input type="radio" name="optradio" value="In" />
                         <b>1. Input</b>
                       </label>
-                      <label class="radio-inline">
+                      <label className="radio-inline">
                         <input type="radio" name="optradio" value="Out" />
                         <b>2. Output</b>
                       </label>
-                      <label class="radio-inline">
+                      <label className="radio-inline">
                         <input type="radio" name="optradio" value="In-Out" />
                         <b>3. Input-Output</b>
                       </label>
-                      <label class="radio-inline">
+                      <label className="radio-inline">
                         <input type="radio" name="optradio" value="M-In" />
                         <b>4. Mutil-Input</b>
                       </label>
-                      <label class="radio-inline">
+                      <label className="radio-inline">
                         <input type="radio" name="optradio" value="M-out" />
                         <b>5.Mutil-Output</b>
                       </label>
@@ -198,7 +187,7 @@ class QuanLyTramCan extends Component {
       </div>
     );
   }
-  // truyền dữ liệu state 
+  // truyền dữ liệu vào table hiển thị lên
   showContentItems(contentItems) {
     var result = null;
     if (contentItems.length >= 0) {
@@ -214,7 +203,7 @@ class QuanLyTramCan extends Component {
     }
     return result;
   }
-  // show Model Name in select
+  // Hiển thị thông tin list công đoạn vào select trong chỉnh sửa thiết bị
   showContentSelect(contentModel) {
     var result = null;
     if (contentModel.length >= 0) {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
-const LOCALHOST = "http://171.232.86.160:5001";
+const LOCALHOST = "http://171.232.86.160:5000";
 const KEY = "";
 const TOKEN =
-  "ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34";
+  "04c5077dc551934ebdc267fbc83357b9967e19d21fa9d8c4884fac130acb7dadc50e05c08b9980cd7a379f2c8fa39e50";
 var textName;
 var ObjName;
 var ObjValue;
