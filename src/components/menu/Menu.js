@@ -13,7 +13,7 @@ import QuanLyCongNhan from "../../pages/QuanLyCongNhan";
 import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
 import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02FilletXeBuom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
+import $ from "jquery";
 class Menu extends Component {
 
   render() {
@@ -199,11 +199,10 @@ class Menu extends Component {
                     <span>Quản lý trạm cân</span>
                   </Link>
                 </li>
-                <li className="" >
-                  <Link to="/Quan-ly-cong-nhan">
-                    <i className="fa fa-user-circle" ></i>
-                   Quản lý công nhân 
-
+                <li className="">
+                  <Link  to="/Quan-ly-cong-nhan" >
+                    <i className="fa fa-user-circle"></i>
+                    Quản lý công nhân
                   </Link>
                 </li>
                 <li className="">
@@ -226,7 +225,7 @@ class Menu extends Component {
             </section>
           </aside>
         </div>
-        
+
         <Route path="/Tong-hop" exact component={tongHop} />
         <Route path="/Fillet-vao" exact component={filletVao} />
         <Route path="/Thong-ke" exact component={thongKe} />
@@ -247,7 +246,7 @@ class Menu extends Component {
         />
         <Route path="/Quan-ly-cong-doan" exact component={quanLyCongDoan} />
         <Route path="/Quan-ly-the" exact component={quanLyThe} />
-        <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan}/>
+        <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
       </Router>
     );
   }

@@ -4,8 +4,8 @@ import $ from "jquery";
 import TableContentItemCongNhan from "../components/comQLCongNhan/tableItemCongNhan/TableContentItemCongNhan";
 import TableContentCongNhan from "../components/comQLCongNhan/tableContentCongNhan/TableContentCongNhan";
 import ActionCreateCongNhan from "../components/comQLCongNhan/comQLCongNhanActions/ActionCreateCongNhan";
-import ActionEditCongNhan from '../components/comQLCongNhan/comQLCongNhanActions/ActionEditCongNhan';
-import * as Config from '../untils/Config'
+import ActionEditCongNhan from "../components/comQLCongNhan/comQLCongNhanActions/ActionEditCongNhan";
+import * as Config from "../untils/Config";
 var ArrayValue = [];
 class QuanLyCongNhan extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class QuanLyCongNhan extends Component {
       [name]: value,
     });
   };
-  // hàm filter nội dung (tất cả, đã nghỉ, đang làm) 
+  // hàm filter nội dung (tất cả, đã nghỉ, đang làm)
   onFilter = (filterStatus) => {
     filterStatus = parseInt(filterStatus, 10);
     this.setState({
@@ -37,13 +37,18 @@ class QuanLyCongNhan extends Component {
   };
   // hàm lấy danh sách công nhân từ api
   componentDidMount() {
+    console.log(ArrayValue);
     axios({
       method: "GET",
       url:
-        `${Config.API_URL}`+"/api/data/Values?token="+`${Config.TOKEN}`+"&Classify=Employee",
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee",
       data: null,
     })
       .then((res) => {
+        ArrayValue = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           ArrayValue.push(contentItem);
@@ -52,7 +57,7 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
-        // sử dụng thư viện datatable 
+        // sử dụng thư viện datatable
         $(document).ready(function () {
           $("#tableData").DataTable({
             pageLength: 5,
@@ -69,7 +74,8 @@ class QuanLyCongNhan extends Component {
 
   render() {
     var { contentItems, filter, keyword } = this.state;
-    if (filter) { // xét điều kiện để filter
+    if (filter) {
+      // xét điều kiện để filter
       if (filter.name) {
         contentItems = contentItems.filter((contentItems) => {
           return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
@@ -84,7 +90,7 @@ class QuanLyCongNhan extends Component {
       });
     }
     return (
-      // giao diện 
+      // giao diện
       <div className="content-wrapper">
         <section className="content-header">
           <h1>QUẢN LÝ CÔNG NHÂN</h1>
@@ -98,22 +104,16 @@ class QuanLyCongNhan extends Component {
           </ol>
         </section>
         <section className="content">
-          <TableContentCongNhan
-            onFilter={this.onFilter}
-          >
+          <TableContentCongNhan onFilter={this.onFilter}>
             {this.showContentItems(contentItems)}
           </TableContentCongNhan>
 
-
           {/*buton create Employee*/}
-          <ActionCreateCongNhan>
-          </ActionCreateCongNhan>
+          <ActionCreateCongNhan></ActionCreateCongNhan>
 
-           {/*buton Edit Employee*/}
-           <ActionEditCongNhan>
-          </ActionEditCongNhan>
+          {/*buton Edit Employee*/}
+          <ActionEditCongNhan></ActionEditCongNhan>
 
-         
           <div className="modal fade" id="modal-Delete">
             <div className="modal-dialog">
               <div className="modal-content">

@@ -44,6 +44,7 @@ class QuanLyThongTinThe extends Component {
       data: null,
     })
       .then((res) => {
+        ArrayValue = [] // load lại data
         for (var i = 0; i < res.data.length; i++) {
           JsonValue = JSON.parse(res.data[i]);
           ArrayValue.push(JsonValue);

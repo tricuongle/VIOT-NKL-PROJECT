@@ -12,7 +12,6 @@ class TableContentItemCongNhan extends Component {
     var statusEmployee = contentItem.IsLock ? "đang làm việc" : "Đã nghỉ";
     //const dataDay = parseInt(contentItem.BirthDay);
     //var BirthDay = new Date(dataDay).toLocaleDateString("en-US")
-    console.log(contentItem.Id);
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>

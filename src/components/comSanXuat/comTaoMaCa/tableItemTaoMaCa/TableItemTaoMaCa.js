@@ -2,11 +2,12 @@ import React, { Component } from "react";
 
 class TableItemTaoMaCa extends Component {
   render() {
+    var { contentItem, index } = this.props;
     return (
       <tr>
-        <td>1</td>
-        <td>001</td>
-        <td>Cá nga</td>
+        <td>{index+1}</td>
+        <td>{contentItem.ID}</td>
+        <td>{contentItem.Name}</td>
         <td>
           <button
             type="button"

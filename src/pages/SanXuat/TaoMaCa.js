@@ -1,13 +1,58 @@
 import React, { Component } from "react";
 //Bootstrap and jQuery libraries
 import "jquery/dist/jquery.min.js";
+import $ from "jquery";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import TableContentTaoMaCa from "../../components/comSanXuat/comTaoMaCa/tableContentChonMaCa/TableContentTaoMaCa";
 import ActionCreateTaoMaCa from '../../components/comSanXuat/comTaoMaCa/comQLTaoMaCaActions/ActionCreateTaoMaCa'
+import TableItemTaoMaCa from '../../components/comSanXuat/comTaoMaCa/tableItemTaoMaCa/TableItemTaoMaCa'
+import * as Config from '../../untils/Config'
+import axios from "axios";
+
+var ArrayValue = [];
 class TaoMaCa extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contentItems: [],
+    };
+  }
+  // hàm lấy danh sách mã cá từ api
+  componentDidMount() {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}`+"/api/data/Values?token="+`${Config.TOKEN}`+"&Classify=FishCode",
+      data: null,
+    })
+      .then((res) => {
+        ArrayValue = []
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          ArrayValue.push(contentItem);
+        });
+
+        this.setState({
+          contentItems: ArrayValue,
+        });
+        // sử dụng thư viện datatable 
+        $(document).ready(function () {
+          $("#tableData").DataTable({
+            pageLength: 5,
+            processing: true,
+            responsive: true,
+            dom: "Bfrtip",
+          });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   render() {
+    var {contentItems} = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -36,7 +81,9 @@ class TaoMaCa extends Component {
             </div>
           </form>
            {/*TABLE THÔNG TIN MÃ CÁ*/}
-          <TableContentTaoMaCa></TableContentTaoMaCa>
+          <TableContentTaoMaCa>
+          {this.showContentItems(contentItems)}
+          </TableContentTaoMaCa>
           
           {/*BUTTON TẠO MÃ CÁ */}
           <ActionCreateTaoMaCa></ActionCreateTaoMaCa>
@@ -205,6 +252,22 @@ class TaoMaCa extends Component {
         </section>
       </div>
     );
+  }
+  // hàm đổ dữ liệu vào table
+  showContentItems(contentItems) {
+    var result = null;
+    if (contentItems.length >= 0) {
+      result = contentItems.map((contentItem, index) => {
+        return (
+          <TableItemTaoMaCa
+            key={index}
+            contentItem={contentItem}
+            index={index}
+          />
+        );
+      });
+    }
+    return result;
   }
 }
 export default TaoMaCa;

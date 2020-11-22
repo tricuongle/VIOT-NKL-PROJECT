@@ -57,6 +57,7 @@ class QuanLyKhuVuc extends Component {
       data: null,
     })
       .then((res) => {
+        ArrayValue = []
         for (var i = 0; i < res.data.length; i++) {
           JsonTime = JSON.parse(res.data[i].Time); // get time
           JsonDes = res.data[i].Description; // get description

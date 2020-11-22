@@ -36,6 +36,8 @@ class QuanLyCongDoan extends Component {
       data: null,
     })
       .then((resModel) => {
+        ArrayValue = []
+        ArrayNameProcess = []             
         for (i = 0; i < resModel.data.length; i++) {
           JsonValue = JSON.parse(resModel.data[i]);
           ArrayValue.push(JsonValue);

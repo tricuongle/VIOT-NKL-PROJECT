@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import TableItemTaoMaCa from '../tableItemTaoMaCa/TableItemTaoMaCa'
+import TableItemTaoMaCa from "../tableItemTaoMaCa/TableItemTaoMaCa";
 class TableContentTaoMaCa extends Component {
   render() {
     return (
       <div>
-        <table id="data" className="table table-hover" width="100%">
+        <table id="tableData" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
               <th>STT</th>
@@ -14,8 +14,7 @@ class TableContentTaoMaCa extends Component {
               <th>Xóa mã cá</th>
             </tr>
           </thead>
-          <tbody>
-            <TableItemTaoMaCa/></tbody>
+          <tbody>{this.props.children}</tbody>
         </table>
       </div>
     );
