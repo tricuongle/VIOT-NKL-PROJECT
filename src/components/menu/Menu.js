@@ -18,7 +18,7 @@ class Menu extends Component {
 
   render() {
     return (
-      <Router>
+      <Router >
         <div className="wrapper">
           <header className="main-header">
             <Link to="/Tong-hop" className="logo">

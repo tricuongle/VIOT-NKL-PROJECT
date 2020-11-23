@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import TableItemChonMaCa from "../tableItemChonMaCa/TableItemChonMaCa";
+import $ from "jquery";
 class TableContentChonMaCa extends Component {
   render() {
     return (
       <div>
-        <table id="data" className="table table-hover" width="100%">
+        <table id="tableData" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
               <th>STT</th>
@@ -15,7 +16,7 @@ class TableContentChonMaCa extends Component {
             </tr>
           </thead>
           <tbody>
-            <TableItemChonMaCa />
+          {this.props.children}
           </tbody>
         </table>
       </div>

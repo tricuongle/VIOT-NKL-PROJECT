@@ -7,7 +7,7 @@ var count;
 var valueNew;
 var Description;
 var ObjPriceOld;
-var arrayPrice =[]
+var arrayPrice = [];
 class ActionCreateCongNhan extends Component {
   constructor(props) {
     super(props);
@@ -58,14 +58,36 @@ class ActionCreateCongNhan extends Component {
     this.setState({
       Price: arrayPrice,
     });
+    var nametag = document.getElementById("NameTag").value;
+    var idw = document.getElementById("idWeight").value;
+    var idpri = document.getElementById("idPriceTag").value;
+    if (nametag == "" || idpri == "" || idw == "") {
+      alert("Vui lòng điền đầy đủ thông tin !");
+    }
+    else{
+      alert("Thêm định giá thành công !");
+      document.getElementById("NameTag").value='';
+      document.getElementById("idWeight").value='';
+      document.getElementById("idPriceTag").value='';
+    }
   };
+  btnXoaDinhMuc =()=>{
+    var txt;
+    if (window.confirm("Bạn muốn xóa định mức ? ")) {
+      txt = "Bạn chọn OK!";
+      console.log(txt);
+    } else {
+      txt = "Bạn chọn Cancel!";
+      console.log(txt);
+    }
+  }
   // upload data lên server
   onSave = (event) => {
     event.preventDefault();
     var { ID } = this.state;
     valueNew = JSON.stringify(this.state);
     console.log(valueNew);
-    
+
     axios({
       method: "POST",
       url:
@@ -174,6 +196,7 @@ class ActionCreateCongNhan extends Component {
                         name="Price"
                         placeholder="nhập đơn giá (vnđ)"
                         required
+                        min={0}
                         //onChange={this.onChange}
                       />
                     </div>
@@ -204,16 +227,13 @@ class ActionCreateCongNhan extends Component {
                           <button
                             type="button"
                             className="btn btn-primary "
-                            data-toggle="modal"
-                            data-target="#modal-Delete"
                           >
                             Sửa
                           </button>
                           <button
                             type="button"
                             className="btn btn-danger btnXoaDinhMuc"
-                            data-toggle="modal"
-                            data-target="#modal-Delete"
+                            onClick={this.btnXoaDinhMuc}
                           >
                             Xóa
                           </button>
@@ -231,6 +251,7 @@ class ActionCreateCongNhan extends Component {
                   type="button"
                   className="btn btn-default"
                   data-dismiss="modal"
+
                 >
                   Thoát
                 </button>

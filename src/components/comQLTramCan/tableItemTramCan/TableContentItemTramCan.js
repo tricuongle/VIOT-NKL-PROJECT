@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import * as Config from '../../../untils/Config'
 var textName;
 var ObjName;
 var ObjValue;
@@ -17,7 +18,7 @@ class TableContentItemTramCan extends Component {
     axios({
       method: "GET",
       url:
-        "http://171.232.86.160:5001/api/data/valuekey?token=ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34&Classify=Model&key=" +
+        `${Config.API_URL}`+"/api/data/valuekey?token="+`${Config.TOKEN}`+"&Classify=Model&key=" +
         contentItem.Status.ModelId + // assign
         "",
       data: null,

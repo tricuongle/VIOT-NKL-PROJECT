@@ -45,6 +45,7 @@ class QuanLyTramCan extends Component {
       data: null,
     })
       .then((resModel) => {
+        arrayValueModel =[]
         for (var k in resModel.data) {
           var Object = JSON.parse(resModel.data[k]);
           arrayValueModel.push(Object);
@@ -211,7 +212,7 @@ class QuanLyTramCan extends Component {
         return <option key={index}>{contentItem.Name}</option>;
       });
     }
-    return result;
+    return result; 
   }
 }
 export default QuanLyTramCan;

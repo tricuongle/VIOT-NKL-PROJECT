@@ -7,14 +7,15 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import axios from "axios";
 import TableContentKhuVuc from "../components/comQLKhuVuc/tableContentKhuVuc/TableContentKhuVuc";
 import TableContentItemsKhuVuc from "../components/comQLKhuVuc/tableItemKhuVuc/TableContentItemsKhuVuc";
-import ActionCreateKhuVuc from '../components/comQLKhuVuc/comQLKhuVucActions/ActionCreateKhuVuc'
-import * as Config from '../untils/Config'
-import $ from 'jquery'; 
+import ActionCreateKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionCreateKhuVuc";
+import ActionEditKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionEditKhuVuc";
+import * as Config from "../untils/Config";
+import $ from "jquery";
 var JsonValue;
 var JsonTime;
 var JsonDes;
 var ArrayValue = [];
-
+var turnOn;
 var arrayValueModel = [];
 class QuanLyKhuVuc extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class QuanLyKhuVuc extends Component {
     this.state = {
       contentItems: [],
       contentTime: [],
+      contentGetProcessId: {},
       id: "",
       txtIDKhuVuc: "",
       txtTenKhuVuc: "",
@@ -33,7 +35,6 @@ class QuanLyKhuVuc extends Component {
         Before: "ProcessID (before)",
         After: "ProcessID (After)",
       },
-      keyword: "",
     };
   }
   onChange = (event) => {
@@ -44,26 +45,24 @@ class QuanLyKhuVuc extends Component {
       [name]: value,
     });
   };
-  onSearch = (keyword) => {
-
-     console.log(keyword);
-  };
- 
   componentDidMount() {
     axios({
       method: "GET",
       url:
-      `${Config.API_URL}`+"/api/data?token="+`${Config.TOKEN}`+"&Classify=Process",
+        `${Config.API_URL}` +
+        "/api/data?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process",
       data: null,
     })
       .then((res) => {
-        ArrayValue = []
+        ArrayValue = []; // set mảng về 0 khi load lại
         for (var i = 0; i < res.data.length; i++) {
           JsonTime = JSON.parse(res.data[i].Time); // get time
           JsonDes = res.data[i].Description; // get description
           JsonValue = JSON.parse(res.data[i].Value); // get value
           JsonValue["TimeCreate"] = JsonTime; // add on value to array
-         JsonValue["Description"] = JsonDes;
+          JsonValue["Description"] = JsonDes;
           ArrayValue.push(JsonValue);
         }
         this.setState({
@@ -75,10 +74,8 @@ class QuanLyKhuVuc extends Component {
             processing: true,
             responsive: true,
             dom: "Bfrtip",
-           
           });
         });
-
       })
       .catch((err) => {
         console.log(err);
@@ -86,14 +83,37 @@ class QuanLyKhuVuc extends Component {
       });
   }
 
-  render() {
-    var { txtIDKhuVuc, txtTenKhuVuc, contentItems, keyword } = this.state;
-    if (keyword) {
-      // render ra nội dung
-      contentItems = contentItems.filter((contentItems) => {
-        return contentItems.Id.toLowerCase().indexOf(keyword) !== -1;
+  // sửa thông tin khu vực
+  onUpdate = (Id) => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process&key=" +
+        Id,
+      data: null,
+    })
+      .then((res) => {
+        var temp = JSON.parse(res.data);
+        this.setState({
+          contentGetProcessId: temp,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi");
       });
-    }
+  };
+  render() {
+    var {
+      contentItems,
+      keyword,
+      contentGetProcessId,
+      isDisplayActionEdit,
+    } = this.state;
+
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -111,65 +131,13 @@ class QuanLyKhuVuc extends Component {
           <TableContentKhuVuc>
             {this.showContentItems(contentItems)}
           </TableContentKhuVuc>
-          {/*content button khu vực */}
+          {/*content button tạo, sửa khu vực */}
           <ActionCreateKhuVuc></ActionCreateKhuVuc>
-          
-          <div className="modal fade" id="modal-edit">
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-hidden="true"
-                  >
-                    &times;
-                  </button>
-                  <h4 className="modal-title">Sửa khu vực</h4>
-                </div>
-                <div className="modal-body">
-                  <div className="form-group">
-                    <label htmlFor="devices">
-                      <h5>Id khu vực:</h5>
-                    </label>
-                    <br />
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="nameDevice"
-                      disabled
-                    />
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label htmlFor="area" id="areaDevice">
-                      <h5> Khu vực:</h5>
-                    </label>
-                    <br />
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="nameDevice"
-                    />
-                  </div>
-                  <br />
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-primary">
-                    Lưu thay đổi
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
-                  >
-                    Thoát
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ActionEditKhuVuc></ActionEditKhuVuc>
+
+
+
+
           <div className="modal fade" id="modal-Delete">
             <div className="modal-dialog">
               <div className="modal-content">
@@ -219,6 +187,7 @@ class QuanLyKhuVuc extends Component {
             key={index}
             contentItem={contentItem}
             index={index}
+            onUpdate={this.onUpdate}
           />
         );
       });

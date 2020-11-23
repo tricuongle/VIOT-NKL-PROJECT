@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 
 class TableContentItemsKhuVuc extends Component {
+
+onUpdate =() => {
+  this.props.onUpdate(this.props.contentItem.Id);
+}
   render() {
     var { contentItem, index } = this.props;
-   // var statusEmployee = contentItem.IsLock ? "đang làm việc" : "Đã nghỉ";
     const dataDay = parseInt(contentItem.TimeCreate);
-    var dayCreate = new Date(dataDay*1000).toLocaleDateString("en-US");
+    var dayCreate = new Date(dataDay * 1000).toLocaleDateString("en-US");
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
@@ -18,6 +21,7 @@ class TableContentItemsKhuVuc extends Component {
             className="btn btn-primary card card-primary card-outline container-fluid"
             data-toggle="modal"
             data-target="#modal-edit"
+            onClick= {this.onUpdate}
           >
             Sửa
           </button>

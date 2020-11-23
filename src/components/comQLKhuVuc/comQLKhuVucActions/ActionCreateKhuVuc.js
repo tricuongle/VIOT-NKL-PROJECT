@@ -126,7 +126,7 @@ class ActionCreateCongNhan extends Component {
                     maxLength="50"
                     name="info"
                     id="info"
-                    class="form-control"
+                    className="form-control"
                     rows="3"
                     placeholder="mô tả ngắn gọn về hoạt động của khu vực"
                   ></textarea>
