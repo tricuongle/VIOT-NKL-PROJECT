@@ -12,19 +12,21 @@ class TableContentItemTramCan extends Component {
       contentItemModelGetId: [],
     };
   }
+  /*----------------------get ID of table Model to call name Model ----------------------------- */
   componentDidMount() {
-    var { contentItem } = this.props; // transfet content
+    var { contentItem } = this.props;
     console.log(contentItem.Status.ModelId );
     axios({
       method: "GET",
       url:
         `${Config.API_URL}`+"/api/data/valuekey?token="+`${Config.TOKEN}`+"&Classify=Model&key=" +
-        contentItem.Status.ModelId + // assign
+        contentItem.Status.ModelId +
         "",
       data: null,
     })
       .then((resProcess) => {
         ObjValue = JSON.parse(resProcess.data);
+        console.log(ObjValue);
         this.setState({
           contentItemModelGetId: ObjValue
         })
@@ -41,6 +43,9 @@ class TableContentItemTramCan extends Component {
         console.log(err);
       });
   }
+  onEdit=()=>{
+    this.props.onEdit(this.props.contentItem.Id);
+  }
   render() {
     var { contentItem, index } = this.props;
     var { contentItemModelGetId } = this.state;
@@ -51,14 +56,14 @@ class TableContentItemTramCan extends Component {
         <td>{contentItem.Name}</td>
         <td>{contentItem.Status.Type}</td>
         <td>{contentItemModelGetId.Name}</td>
-        <td>{contentItemModelGetId.WeightMin}</td>
-        <td>{contentItemModelGetId.WeighMax}</td>
+        <td>{contentItem.Status.Weigh}</td>
         <td>
           <button
             type="button"
             className="btn btn-primary card card-primary card-outline container-fluid"
             data-toggle="modal"
             data-target="#modal-edit"
+            onClick={this.onEdit}
           >
             Chỉnh sửa
           </button>

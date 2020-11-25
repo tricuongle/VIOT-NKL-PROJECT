@@ -8,17 +8,18 @@ import QuanLyKhuVuc from "../../pages/QuanLyKhuVuc";
 import ChonMaCa from "../../pages/SanXuat/ChonMaCa";
 import TaoMaCa from "../../pages/SanXuat/TaoMaCa";
 import QuanLyCongDoan from "../../pages/QuanLyCongDoan";
-import QuanLyThe from "../../pages/QuanLyThe";
+import QuanLyThe from "../../pages/QuanLyThe/QuanLyThe";
 import QuanLyCongNhan from "../../pages/QuanLyCongNhan";
 import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
 import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02FilletXeBuom";
+import ThemThe from '../../pages/QuanLyThe/ThemThe'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
 import $ from "jquery";
 class Menu extends Component {
-
   render() {
     return (
-      <Router >
+      <Router>
         <div className="wrapper">
           <header className="main-header">
             <Link to="/Tong-hop" className="logo">
@@ -136,7 +137,8 @@ class Menu extends Component {
                 </li>
                 <li className="treeview">
                   <a>
-                    <i className="fa fa-pie-chart"></i> <span>Sản xuất</span>
+                    <i className="fa fa-pie-chart"></i>{" "}
+                    <span>Quản lý mã cá</span>
                     <span className="pull-right-container">
                       <i className="fa fa-angle-left pull-right"></i>
                     </span>
@@ -146,7 +148,7 @@ class Menu extends Component {
                       <Link to="/Chon-ma-ca">Chọn mã cá</Link>
                     </li>
                     <li className="">
-                      <Link to="/Tao-ma-ca">Tạo mã cá</Link>
+                      <Link to="/Quan-ly-cong-doan">Tạo công đoạn mã cá</Link>
                     </li>
                   </ul>
                 </li>
@@ -175,18 +177,31 @@ class Menu extends Component {
                     <span>Tính tiền</span>
                   </Link>
                 </li>
-                <li className="">
-                  <Link to="/Quan-ly-the">
-                    <i className="fa fa-address-card-o" aria-hidden="true"></i>
+
+                <li className="treeview">
+                  <a>
+                    <i className="fa fa-industry" aria-hidden="true"></i>
                     <span>Quản lý thẻ</span>
-                  </Link>
+                    <span className="pull-right-container">
+                      <i className="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+                  <ul className="treeview-menu">
+                    <li className="">
+                      <Link to="/Them-the">Thêm thẻ</Link>
+                    </li>
+                    <li className="">
+                      <Link to="/Quan-ly-the">Danh sách thẻ</Link>
+                    </li>
+                  </ul>
                 </li>
-                <li className="">
+
+                {/* <li className="">
                   <Link to="/Quan-ly-cong-doan">
                     <i className="fa fa-id-card-o" aria-hidden="true"></i>
                     <span>Quản lý công đoạn</span>
                   </Link>
-                </li>
+                </li>*/}
                 <li className="">
                   <Link to="/Quan-Ly-Khu-Vuc">
                     <i className="fa fa fa-tasks" aria-hidden="true"></i>
@@ -200,7 +215,7 @@ class Menu extends Component {
                   </Link>
                 </li>
                 <li className="">
-                  <Link  to="/Quan-ly-cong-nhan" >
+                  <Link to="/Quan-ly-cong-nhan">
                     <i className="fa fa-user-circle"></i>
                     Quản lý công nhân
                   </Link>
@@ -246,6 +261,7 @@ class Menu extends Component {
         />
         <Route path="/Quan-ly-cong-doan" exact component={quanLyCongDoan} />
         <Route path="/Quan-ly-the" exact component={quanLyThe} />
+        <Route path="/Them-the" exact component={themThe} />
         <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
       </Router>
     );
@@ -290,6 +306,9 @@ const manghinhSX02FilletXeBuom = () => {
 };
 const quanLyCongNhan = () => {
   return <QuanLyCongNhan />;
+};
+const themThe = () => {
+  return <ThemThe />;
 };
 
 export default Menu;

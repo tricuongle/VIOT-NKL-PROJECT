@@ -11,9 +11,7 @@ class ChonMaCa extends Component {
     super(props);
     this.state = {
       contentItems: [],
-      /////////////
       contentItemsFish: [],
-
     };
   }
 
@@ -21,15 +19,14 @@ class ChonMaCa extends Component {
 
   getValueFishCode = () => {};
   componentDidMount = () => {
-  
-      /////////////////////////////////////////////
+    /////////////////////////////////////////////
     axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Model",
+        "&Classify=Process",
       data: null,
     })
       .then((res) => {
@@ -52,6 +49,36 @@ class ChonMaCa extends Component {
             dom: "Bfrtip",
           });
         });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  onGetValue = (Id, IdFishCode) => {
+    console.log(Id);
+    console.log(IdFishCode);
+    axios({
+      method: "GET",
+      url:
+        +`${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Model&key=" +
+        IdFishCode,
+      data: null,
+    })
+      .then((res) => {
+        console.log("KHOA");
+        console.log(res.data);
+        /*ArrayValue = [];
+          res.data.map((contentItem) => {
+            contentItem = JSON.parse(contentItem);
+            ArrayValue.push(contentItem);
+          });
+  
+          this.setState({
+            contentItems: ArrayValue,
+          });*/
       })
       .catch((err) => {
         console.log(err);
@@ -90,6 +117,7 @@ class ChonMaCa extends Component {
             key={index}
             contentItem={contentItem}
             index={index}
+            onGetValue={this.onGetValue}
           />
         );
       });

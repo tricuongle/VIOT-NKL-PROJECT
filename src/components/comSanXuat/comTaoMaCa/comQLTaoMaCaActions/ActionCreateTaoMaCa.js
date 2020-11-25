@@ -103,7 +103,6 @@ class ActionCreateCongNhan extends Component {
     })
       .then((res) => {
         console.log(res);
-        window.location.reload(false);
         alert("Thêm mã cá " + this.state.Name + " thành công !");
       })
       .catch((err) => {

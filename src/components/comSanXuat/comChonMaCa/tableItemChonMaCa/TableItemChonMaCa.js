@@ -13,7 +13,7 @@ class TableItemChonMaCa extends Component {
       NameFishYes:'',
     };
   }
-  // lấy danh sách mã cá gán vào select
+  // lấy danh sách mã cá (model)  gán vào select
   componentDidMount = () => {
     axios({
       method: "GET",
@@ -21,7 +21,7 @@ class TableItemChonMaCa extends Component {
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=FishCode",
+        "&Classify=Model",
       data: null,
     })
       .then((resFishCode) => {
@@ -36,19 +36,23 @@ class TableItemChonMaCa extends Component {
         });
         arrayNameFishCode =[]
         for(var temp in this.state.contentFishCode){
-          if (this.state.contentFishCode[temp].ModelId == contentItem.Id){
-            arrayNameFishCode.push(this.state.contentFishCode[temp].Name);
+          // so sách
+          if (this.state.contentFishCode[temp].ProcessId == contentItem.Id){
+            arrayNameFishCode.push(this.state.contentFishCode[temp].Name); // lấy ds mã cá đã thêm
             this.setState({
               NameFishYes : arrayNameFishCode
             })
           }
         }
-        console.log(this.state.NameFishYes);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  onGetValue=()=>{
+    var IdFishCode=document.getElementById('idSelectFS').value;
+    this.props.onGetValue(this.props.contentItem.Id,IdFishCode)
+  }
   render() {
     var { contentFishCode ,NameFishYes} = this.state;
     var { contentItem, index } = this.props;
@@ -58,13 +62,14 @@ class TableItemChonMaCa extends Component {
         <td>{contentItem.Name}</td>
         <td>
           <div>
-            <select className="form-control" id="area">
+            <select className="form-control" id="idSelectFS">
               {this.showContentSelect(contentFishCode)}
             </select>
           </div>
         </td>
         <td>
-          <button type="button" className="btn btn-success">
+          <button type="button" className="btn btn-success" 
+          onClick={this.onGetValue}>
             Chọn
           </button>
         </td>
@@ -77,7 +82,7 @@ class TableItemChonMaCa extends Component {
     var result = null;
     if (contentFishCode.length >= 0) {
       result = contentFishCode.map((contentItem, index) => {
-        return <option key={index}>{contentItem.Name}</option>;
+        return <option key={index} value= {contentItem.Id}>{contentItem.Name}</option>;
       });
     }
     return result;

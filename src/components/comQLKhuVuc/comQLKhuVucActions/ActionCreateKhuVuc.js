@@ -15,6 +15,7 @@ class ActionCreateCongNhan extends Component {
       Name: "",
       Level: 1,
       Parent: '',
+      status: true,
       Before: "ProcessID (before)",
       After: "ProcessID (After)",
     };
@@ -48,6 +49,7 @@ class ActionCreateCongNhan extends Component {
   };
 
   onSave = (event) => {
+    
     event.preventDefault();
     var { Id } = this.state;
     valueNew = JSON.stringify(this.state);
@@ -71,8 +73,9 @@ class ActionCreateCongNhan extends Component {
     })
       .then((res) => {
         console.log(res);
-        window.location.reload(false);
         alert("Thêm khu vực " + this.state.Name + " thành công !");
+        document.getElementById('NameKhuVuc').value='';
+        document.getElementById('info').value='';
       })
       .catch((err) => {
         console.log(err);
@@ -108,7 +111,7 @@ class ActionCreateCongNhan extends Component {
                     minLength="5"
                     type="text"
                     className="form-control"
-                    id="NameEmployee"
+                    id="NameKhuVuc"
                     name="Name"
                     required
                     placeholder="Nhập tên khu vực"

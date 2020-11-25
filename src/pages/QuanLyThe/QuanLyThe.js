@@ -4,8 +4,7 @@ import "jquery/dist/jquery.min.js";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import QuanLyThongTinThe from '../components/comQLThe/TTinThe/QLTtableContent/QuanLyThongTinThe'
-import QuanLyThongTinCongNhan from '../components/comQLThe/GanCongNhanVaoThe/QLTtableContent/QuanLyThongTinCongNhan'
+import QuanLyThongTinThe from '../../components/comQLThe/TTinThe/QLTtableContent/QuanLyThongTinThe'
 class QuanLyThe extends Component {
   render() {
     return (
@@ -21,7 +20,6 @@ class QuanLyThe extends Component {
             <li className="active">Quản lý thẻ</li>
           </ol>
         </section>
-        <QuanLyThongTinCongNhan/>
         <QuanLyThongTinThe/>
       </div>
     );

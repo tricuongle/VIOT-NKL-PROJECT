@@ -4,7 +4,7 @@ import axios from "axios";
 import TableContentTramCan from "../components/comQLTramCan/tableContentTramCan/TableContentTramCan";
 import TableContentItemTramCan from "../components/comQLTramCan/tableItemTramCan/TableContentItemTramCan";
 import $ from "jquery";
-import * as Config from '../untils/Config'
+import * as Config from "../untils/Config";
 var arrayValueModel = [];
 class QuanLyTramCan extends Component {
   constructor(props) {
@@ -14,11 +14,12 @@ class QuanLyTramCan extends Component {
       contentModel: [],
     };
   }
-  // hàm lấy tất cả thiết bị cân
+  /*-----------------------function get list device to api ---------------------------------- */
   componentDidMount() {
     axios({
       method: "GET",
-      url: `${Config.API_URL}`+ "/api/iotdevice/all?token=" + `${Config.TOKEN}`,
+      url:
+        `${Config.API_URL}` + "/api/iotdevice/all?token=" + `${Config.TOKEN}`,
       data: null,
     })
       .then((res) => {
@@ -41,11 +42,15 @@ class QuanLyTramCan extends Component {
     // hàm lấy danh sách công đoạn
     axios({
       method: "GET",
-      url: `${Config.API_URL}`+ "/api/data/Values?token=" + `${Config.TOKEN}` + "&Classify=Model",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Model",
       data: null,
     })
       .then((resModel) => {
-        arrayValueModel =[]
+        arrayValueModel = [];
         for (var k in resModel.data) {
           var Object = JSON.parse(resModel.data[k]);
           arrayValueModel.push(Object);
@@ -62,6 +67,52 @@ class QuanLyTramCan extends Component {
   onChangeValue = (event) => {
     console.log(event.target.value);
   };
+  onEdit=(Id)=>{
+    
+  }
+  /*-------------- Hàm xử lý gọi api cập nhập------------------------- */
+  /*onUpdateSave = (event) => {
+    event.preventDefault();
+    //Description = document.getElementById("info").value;
+    var { contentGetProcessId, Name, Level, Before, After } = this.state;
+    var idEdit = contentGetProcessId.Id;
+    valueNew =
+      '{"Id":"' +
+      idEdit +
+      '","Name":"' +
+      Name +
+      '","Level":' +
+      Level +
+      ',"Parent":"' +
+      idEdit +
+      '","Before":"' +
+      Before +
+      '","After":"' +
+      After +
+      '"}';
+    console.log(idEdit);
+    console.log(valueNew);
+    axios({
+      method: "PUT",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/putkey?token=" +
+        `${Config.TOKEN}` +
+        "&classify=Process&key=" +
+        idEdit +
+        "&value=" +
+        valueNew +
+        "&Description=nkl",
+      data: null,
+    })
+      .then((res) => {
+        console.log(res);
+        alert("Sửa khu vực " + this.state.Name + " thành công !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };*/
   render() {
     var { contentItems, contentModel } = this.state;
     return (
@@ -82,6 +133,7 @@ class QuanLyTramCan extends Component {
           <TableContentTramCan>
             {this.showContentItems(contentItems)}
           </TableContentTramCan>
+          {/*----------------------------Edit device--------------------------------*/}
           <div className="modal fade" id="modal-edit">
             <div className="modal-dialog">
               <div className="modal-content">
@@ -145,29 +197,6 @@ class QuanLyTramCan extends Component {
                       {this.showContentSelect(contentModel)}
                     </select>
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="devices">
-                      <h5>Khối lượng quy định (KG):</h5>
-                    </label>
-
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="nameDevice"
-                      min="0.1"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="devices">
-                      <h5>Giới hạn sai số (KG):</h5>
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="nameDevice"
-                      min="0.1"
-                    />
-                  </div>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-primary">
@@ -198,6 +227,7 @@ class QuanLyTramCan extends Component {
             key={index}
             contentItem={contentItem}
             index={index}
+            onEdit= {this.onEdit}
           />
         );
       });
@@ -212,7 +242,7 @@ class QuanLyTramCan extends Component {
         return <option key={index}>{contentItem.Name}</option>;
       });
     }
-    return result; 
+    return result;
   }
 }
 export default QuanLyTramCan;

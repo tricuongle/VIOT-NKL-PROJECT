@@ -9,9 +9,8 @@ class TableContentTongHop extends Component {
             <th>STT</th>
             <th>Khu vực</th>
             <th>Công đoạn</th>
-            <th>Thiết bị cân</th>
-            <th>Mã cá</th>
-            <th>Khối lượng (KG)</th>
+            <th>Khối lượng đầu vào (KG)</th>
+            <th>Khối lượng đầu ra (KG)</th>
           </tr>
         </thead>
         <tbody>

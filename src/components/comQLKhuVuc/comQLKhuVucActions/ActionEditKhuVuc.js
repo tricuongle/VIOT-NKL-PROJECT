@@ -34,6 +34,9 @@ class ActionEditKhuVuc extends Component {
     var { Id } = this.state;
     valueNew = JSON.stringify(this.state);
     console.log(valueNew);
+    
+
+
    /* axios({
       method: "POST",
       url:
@@ -145,6 +148,10 @@ class ActionEditKhuVuc extends Component {
         </form>
       </div>
     );
+  }
+  componentWillMount=()=>{
+    var {task} = this.props
+    console.log(task);
   }
 }
 export default ActionEditKhuVuc;

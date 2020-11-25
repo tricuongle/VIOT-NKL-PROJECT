@@ -68,16 +68,12 @@ class ActionCreateCongNhan extends Component {
     })
       .then((res) => {
         console.log(res);
-        window.location.reload(false);
         alert("Thêm nhân viên " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  buttonClicked() {
-    alert("I'm Clicked");
-  }
   render() {
     var { Name, CMND, BirthDay, Id } = this.state;
     return (

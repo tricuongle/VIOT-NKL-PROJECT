@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 
 class TableContentItemCongNhan extends Component {
-  onEdit = (id) => {
-    
+  onGetId = () => {
+    this.props.onGetId(this.props.contentItem.Id);
   };
   render() {
     var { contentItem, index } = this.props;
-    this.componentDidMount=()=>{
+    this.componentDidMount = () => {
       this.props.onEdit(contentItem.Id); // truyền ra ngoài
-    }
+    };
     var statusEmployee = contentItem.IsLock ? "đang làm việc" : "Đã nghỉ";
     //const dataDay = parseInt(contentItem.BirthDay);
     //var BirthDay = new Date(dataDay).toLocaleDateString("en-US")
@@ -26,6 +26,7 @@ class TableContentItemCongNhan extends Component {
             className="btn btn-primary card card-primary card-outline container-fluid"
             data-toggle="modal"
             data-target="#modal-edit"
+            onClick={this.onGetId}
           >
             Sửa
           </button>
@@ -36,6 +37,7 @@ class TableContentItemCongNhan extends Component {
             className="btn btn-danger"
             data-toggle="modal"
             data-target="#modal-Delete"
+            onClick={this.onGetId}
           >
             Xóa
           </button>

@@ -4,7 +4,7 @@ class SearchThe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      keyword: "",
+      keyword: ""
     };
   }
   onChange = (event) => {
@@ -21,26 +21,20 @@ class SearchThe extends Component {
   render() {
     var { keyword } = this.state;
     return (
-      <form className="filter-section form-inline ">
-        {/*<div className="input-group inputSeach">
-          <input
-            name="keyword"
-            type="text"
-            className="form-control"
-            placeholder="tìm kiếm thông tin thẻ"
-            value={keyword}
-            onChange={this.onChange}
-          />
-          <span className="input-group-btn">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.onSearch}
-            >
-              Tìm kiếm thẻ
-            </button>
-          </span>
-    </div>*/}
+      <form className="filter-section form-inline">
+
+        
+        <div className="infoCard ">
+          <button
+            type="button"
+            className="btn btn-primary card card-primary card-outline container-fluid"
+            data-toggle="modal"
+            data-target="#modal-View"
+            id="id123"
+          >
+            Thêm thẻ
+          </button>
+        </div>
       </form>
     );
   }

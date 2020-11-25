@@ -11,12 +11,11 @@ class QLTTableContentThe extends Component {
             <tr className="tieude">
             <th>Chọn</th>
               <th>ID thẻ</th>
-              <th>ID công nhân</th>
-              <th>Tên nhân viên</th>
+              <th>Tên công nhân</th>
               <th>Màu thẻ</th>
-              <th>Công đoạn</th>
-              <th>Thời gian tạo</th>
-              <th>Tình trạng </th>
+              <th>Công đoạn(mã cá)</th>
+              <th>Khu vực</th>
+              <th>Loại</th>
               <th>Chỉnh sửa </th>
               <th>Xóa</th>
             </tr>

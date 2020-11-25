@@ -10,31 +10,33 @@ import TableContentItemsKhuVuc from "../components/comQLKhuVuc/tableItemKhuVuc/T
 import ActionCreateKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionCreateKhuVuc";
 import ActionEditKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionEditKhuVuc";
 import * as Config from "../untils/Config";
-import $ from "jquery";
+import $, { event } from "jquery";
 var JsonValue;
 var JsonTime;
 var JsonDes;
 var ArrayValue = [];
 var turnOn;
 var arrayValueModel = [];
+var count;
+var valueNew;
+var Description;
+var IdProcessOld;
 class QuanLyKhuVuc extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contentItems: [],
-      contentTime: [],
-      contentGetProcessId: {},
-      id: "",
-      txtIDKhuVuc: "",
-      txtTenKhuVuc: "",
-      valueKhuVuc: {
-        Id: "Zone-NKL-Suaca",
-        Name: "Sửa cá",
-        Level: 1,
-        Parent: "Zone-NKL-Suaca",
-        Before: "ProcessID (before)",
-        After: "ProcessID (After)",
+      contentGetProcessId: "",
+      filter: {
+        name: "",
+        status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
       },
+      Id: "",
+      Name: "",
+      Level: 1,
+      Parent: "",
+      Before: "ProcessID (before)",
+      After: "ProcessID (After)",
     };
   }
   onChange = (event) => {
@@ -45,6 +47,7 @@ class QuanLyKhuVuc extends Component {
       [name]: value,
     });
   };
+  /*-------------- Gọi API hiển thị danh sách process (khu vực)------------------ */
   componentDidMount() {
     axios({
       method: "GET",
@@ -83,7 +86,7 @@ class QuanLyKhuVuc extends Component {
       });
   }
 
-  // sửa thông tin khu vực
+  /*-------------- nhận ID từ buton Chỉnh sửa và Xóa------------------------- */
   onUpdate = (Id) => {
     axios({
       method: "GET",
@@ -100,20 +103,124 @@ class QuanLyKhuVuc extends Component {
         this.setState({
           contentGetProcessId: temp,
         });
+        document.getElementById(
+          "NameProcess"
+        ).value = this.state.contentGetProcessId.Name;
       })
       .catch((err) => {
         console.log(err);
         console.log("Lỗi");
       });
   };
-  render() {
-    var {
-      contentItems,
-      keyword,
-      contentGetProcessId,
-      isDisplayActionEdit,
-    } = this.state;
 
+  /*-------------- Hàm xử lý gọi api xóa------------------------- */
+  onDeleteSave = (event) => {
+    event.preventDefault();
+    //Description = document.getElementById("info").value;
+    var { contentGetProcessId, Level, Before, After } = this.state;
+    var idEdit = contentGetProcessId.Id;
+    var Name = contentGetProcessId.Name;
+    var status = false;
+    valueNew =
+      '{"Id":"' +
+      idEdit +
+      '","Name":"' +
+      Name +
+      '","Level":' +
+      Level +
+      ',"Parent":"' +
+      idEdit +
+      '","status":"' +
+      status +
+      '","Before":"' +
+      Before +
+      '","After":"' +
+      After +
+      '"}';
+    axios({
+      method: "PUT",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/putkey?token=" +
+        `${Config.TOKEN}` +
+        "&classify=Process&key=" +
+        idEdit +
+        "&value=" +
+        valueNew +
+        "&Description=nkl",
+      data: null,
+    })
+      .then((res) => {
+        console.log(res);
+        alert("Sửa khu vực " + this.state.Name + " thành công !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  /*-------------- Hàm xử lý gọi api cập nhập------------------------- */
+  onUpdateSave = (event) => {
+    event.preventDefault();
+    //Description = document.getElementById("info").value;
+    var { contentGetProcessId, Name, Level, Before, After } = this.state;
+    var idEdit = contentGetProcessId.Id;
+    valueNew =
+      '{"Id":"' +
+      idEdit +
+      '","Name":"' +
+      Name +
+      '","Level":' +
+      Level +
+      ',"Parent":"' +
+      idEdit +
+      '","Before":"' +
+      Before +
+      '","After":"' +
+      After +
+      '"}';
+    console.log(idEdit);
+    console.log(valueNew);
+    axios({
+      method: "PUT",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/putkey?token=" +
+        `${Config.TOKEN}` +
+        "&classify=Process&key=" +
+        idEdit +
+        "&value=" +
+        valueNew +
+        "&Description=nkl",
+      data: null,
+    })
+      .then((res) => {
+        console.log(res);
+        alert("Sửa khu vực " + this.state.Name + " thành công !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  render() {
+    var { contentItems } = this.state;
+    var { Name, filter } = this.state;
+    if (filter) {
+      // xét điều kiện để filter
+      if (filter.name) {
+        contentItems = contentItems.filter((contentItems) => {
+          return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
+        });
+      }
+      contentItems = contentItems.filter((contentItems) => {
+        if (filter.status === -1) {
+          return contentItems;
+        } else {
+          return contentItems.status === (filter.status === 1 ? true : false);
+        }
+      });
+    }
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -131,49 +238,130 @@ class QuanLyKhuVuc extends Component {
           <TableContentKhuVuc>
             {this.showContentItems(contentItems)}
           </TableContentKhuVuc>
-          {/*content button tạo, sửa khu vực */}
+          {/*------------------ button tạo mới khu vực-------------------------*/}
           <ActionCreateKhuVuc></ActionCreateKhuVuc>
-          <ActionEditKhuVuc></ActionEditKhuVuc>
 
-
-
-
-          <div className="modal fade" id="modal-Delete">
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-hidden="true"
-                  >
-                    &times;
-                  </button>
-                  <h4 className="modal-title">Xóa khu vực</h4>
+          {/*------------------ button sửa khu vực-------------------------*/}
+          <div className="modal fade" id="modal-edit">
+            <form onSubmit={this.onUpdateSave}>
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-hidden="true"
+                    >
+                      &times;
+                    </button>
+                    <h4 className="modal-title">Chỉnh sửa khu vực</h4>
+                  </div>
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>ID khu vực: (chỉ xem)</h5>
+                      </label>
+                      <br />
+                      <input
+                        maxLength="30"
+                        minLength="5"
+                        type="text"
+                        className="form-control"
+                        id="IDProcess"
+                        name="Id"
+                        value={this.state.contentGetProcessId.Id}
+                        disabled
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>Tên khu vực:</h5>
+                      </label>
+                      <br />
+                      <input
+                        maxLength="30"
+                        minLength="5"
+                        type="text"
+                        className="form-control"
+                        id="NameProcess"
+                        name="Name"
+                        required
+                        placeholder="Nhập tên khu vực thay đổi"
+                        value={Name}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>Mô tả:</h5>
+                      </label>
+                      <textarea
+                        maxLength="50"
+                        name="infoDes"
+                        id="info"
+                        className="form-control"
+                        rows="3"
+                        placeholder="mô tả ngắn khi thay đổi"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="submit" className="btn btn-primary">
+                      Chỉnh sửa
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-default"
+                      data-dismiss="modal"
+                    >
+                      Thoát
+                    </button>
+                  </div>
                 </div>
-                <div className="modal-body">
-                  <h5>Bạn có đồng ý xóa khu vực này không?</h5>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    data-toggle="modal"
-                  >
-                    Xóa khu vực
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
-                  >
-                    Thoát
-                  </button>
+              </div>
+            </form>
+          </div>
+
+          {/*------------------ button Xóa khu vực-------------------------*/}
+          <form onSubmit={this.onDeleteSave}>
+            <div className="modal fade" id="modal-Delete">
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-hidden="true"
+                    >
+                      &times;
+                    </button>
+                    <h4 className="modal-title">Xóa khu vực</h4>
+                  </div>
+                  <div className="modal-body">
+                    <h5>Bạn có đồng ý xóa khu vực này không?</h5>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="Submit"
+                      className="btn btn-danger"
+                      data-toggle="modal"
+                    >
+                      Xóa khu vực
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-default"
+                      data-dismiss="modal"
+                    >
+                      Thoát
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </section>
       </div>
     );

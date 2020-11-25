@@ -6,12 +6,16 @@ class TableContentCongDoan extends Component {
         <thead>
           <tr className="tieude">
             <th>STT</th>
-            <th>Mã công đoạn</th>
-            <th>Tên công đoạn</th>
-            <th>Khu vực</th>
-            <th>Ngày tạo</th>
-            <th>Sửa công đoạn</th>
-            <th>Xóa công đoạn</th>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>KL vào Min</th>
+            <th>KL vào Max</th>
+            <th>KL ra Min</th>
+            <th>KL ra Max</th>
+            <th>Nhóm</th>
+            <th>Classify</th>
+            <th>Sửa</th>
+            <th>Xóa</th>
           </tr>
         </thead>
         <tbody>{this.props.children}</tbody>

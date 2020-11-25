@@ -12,8 +12,7 @@ class TableContentTramCan extends Component {
                 <th>Tên thiết bị</th>
                 <th>Type</th>
                 <th>Công đoạn</th>
-                <th>Khối lượng danh nghĩa (KG)</th>
-                <th>Giới hạn (KG)</th>
+                <th>Khối lượng thực (KG)</th>
                 <th>Chỉnh sửa trạm cân</th>
               </tr>
             </thead>

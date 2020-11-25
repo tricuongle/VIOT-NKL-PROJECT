@@ -5,8 +5,7 @@ class TableItemTongHop extends Component {
       <tr>
         <td>1</td>
         <td>Fillet</td>
-        <td>Đầu vào</td>
-        <td>Cân 1</td>
+        
         <td>
           <div>
             <select
@@ -14,7 +13,7 @@ class TableItemTongHop extends Component {
               className="form-control"
               required="required"
             >
-              <option value="0">Chọn mã cá</option>
+              <option value="0">Chọn công đoạn mã cá</option>
               <option value="1">EX1</option>
               <option value="2">EX2</option>
               <option value="3">EX3</option>
@@ -24,6 +23,7 @@ class TableItemTongHop extends Component {
             </select>
           </div>
         </td>
+        <td>1645</td>
         <td>1645</td>
       </tr>
     );

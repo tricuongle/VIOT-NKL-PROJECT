@@ -342,10 +342,12 @@ td {
 .tenDinhGia{
     float: left;
     margin-left: 10px;
+    width: 130px;
 }
 .khoiLuongMaCa{
     margin-left: 10px;
     float: left;
+    width: 130px;
 }
 .dinhGiaMaCa{
     margin-left: 10px;
@@ -374,4 +376,9 @@ td {
 }
 .btnXoaDinhMuc{
     margin-left: 10px;
+}
+.groupAndclassify{
+    margin-left: 20px;
+    float: left;
+    width: 250px;
 }

@@ -66,8 +66,12 @@ class TableContentItemCongDoan extends Component {
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
-        <td>{textName}</td>
-        <td></td>
+        <td>{contentItem.WeightInMin}</td>
+        <td>{contentItem.WeighInMax}</td>
+        <td>{contentItem.WeightOutMin}</td>
+        <td>{contentItem.WeighOutMax}</td>
+        <td>{contentItem.Group}</td>
+        <td>{contentItem.Classify}</td>
         <td>
           <button
             type="button"

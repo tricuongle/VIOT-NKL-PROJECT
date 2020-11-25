@@ -1,29 +1,110 @@
 import React, { Component } from "react";
+import * as Config from "../../../../untils/Config";
+import axios from "axios";
 
 class QLTTableContentItemThe extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      nameEmp: "",
+      nameModel: "",
+      nameProcess: "",
+    };
+  }
+
+  componentDidMount = () => {
+    var { contentItem } = this.props;
+    var nameEmp = contentItem.Employee;
+    var nameModel = contentItem.ModelId;
+    var nameProcess = contentItem.ProcessId;
+
+    /*------lấy tên công nhân----------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee&key=" +
+        nameEmp,
+      data: null,
+    })
+      .then((res) => {
+        var Object = JSON.parse(res.data);
+        this.setState({
+          nameEmp: Object.Name,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("lỗi lấy tên công nhân !");
+      });
+
+    /*----------láy tên khu vực ----------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process&key=" +
+        nameProcess,
+      data: null,
+    })
+      .then((res) => {
+        var Object = JSON.parse(res.data);
+        this.setState({
+          nameProcess: Object.Name,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("lỗi lấy tên công nhân !");
+      });
+    /*----------lấy tên công đoạn (mã cá)-------------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Model&key=" +
+        nameModel,
+      data: null,
+    })
+      .then((res) => {
+        var Object = JSON.parse(res.data);
+        this.setState({
+          nameModel: Object.Name,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("lỗi lấy tên công đoạn(mã cá) !");
+      });
+  };
+  getIDChange = () => {
+    var { nameEmp, nameProcess, nameModel } = this.state;
+    var { contentItem } = this.props;
+    var idCard = contentItem.Id;
+    var idEmpl = contentItem.Employee;
+    this.props.getIDChange(idCard,idEmpl, nameEmp, nameModel, nameProcess);
+  };
   render() {
     var { contentItem, index } = this.props;
-    //var statusEmployee = contentItem.Status ? "Sử dụng" : "chưa sử dụng";
+    var { nameEmp, nameProcess, nameModel } = this.state;
+    console.log(nameProcess);
+
     const dataDay = parseInt(contentItem.BirthDay);
-    //var BirthDay = new Date(dataDay).toLocaleDateString("en-US");
     return (
       <tr id="device2" className="edit form-check form-check-inlines">
-        <td>
-          <div className="form-group form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
-            />
-          </div>
-        </td>
+        <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
-        <td>{contentItem.Employee}</td>
-        <td>null</td>
+        <td>{nameEmp}</td>
         <td>{contentItem.Color}</td>
-        <td>{contentItem.CurrentRunModel}</td>
-        <td>{contentItem.RegistTime}</td>
-        <td>{contentItem.Status}</td>
+        <td>{nameModel}</td>
+        <td>{nameProcess}</td>
+        <td>{contentItem.Classify}</td>
         <td>
           <div className="infoCard ">
             <button
@@ -32,19 +113,23 @@ class QLTTableContentItemThe extends Component {
               data-toggle="modal"
               data-target="#modal-edit"
               id="id123"
+              onClick={this.getIDChange}
             >
               Sửa
             </button>
           </div>
         </td>
-        <td><button
+        <td>
+          <button
             type="button"
             className="btn btn-danger"
             data-toggle="modal"
             data-target="#modal-Delete"
+            onClick={this.getIDChange}
           >
             Xóa
-          </button></td>
+          </button>
+        </td>
       </tr>
     );
   }

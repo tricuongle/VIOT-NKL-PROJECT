@@ -37,7 +37,7 @@ class SearchCongNhan extends Component {
             Thêm công nhân
           </button>
         </div>
-        <div className="filterStatus">
+        {/*<div className="filterStatus">
           <select
             name="filterStatus"
             id="input"
@@ -49,7 +49,7 @@ class SearchCongNhan extends Component {
             <option value={0}>nghỉ việc</option>
             <option value={1}>đang làm</option>
           </select>
-        </div>
+        </div> */}
         {/*
         <div className="input-group inputSeach">
           <input

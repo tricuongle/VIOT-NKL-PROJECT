@@ -5,10 +5,9 @@ class TableContentItemsKhuVuc extends Component {
 onUpdate =() => {
   this.props.onUpdate(this.props.contentItem.Id);
 }
+
   render() {
     var { contentItem, index } = this.props;
-    const dataDay = parseInt(contentItem.TimeCreate);
-    var dayCreate = new Date(dataDay * 1000).toLocaleDateString("en-US");
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
@@ -32,6 +31,7 @@ onUpdate =() => {
             className="btn btn-danger"
             data-toggle="modal"
             data-target="#modal-Delete"
+            onClick= {this.onUpdate}
           >
             Xóa
           </button>
