@@ -10,52 +10,54 @@ class TableContentItemTramCan extends Component {
     super(props);
     this.state = {
       contentItemModelGetId: [],
+      nameItemModelGetId:'',
     };
   }
   /*----------------------get ID of table Model to call name Model ----------------------------- */
   componentDidMount() {
     var { contentItem } = this.props;
-    console.log(contentItem.Status.ModelId );
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}`+"/api/data/valuekey?token="+`${Config.TOKEN}`+"&Classify=Model&key=" +
-        contentItem.Status.ModelId +
-        "",
-      data: null,
-    })
-      .then((resProcess) => {
-        ObjValue = JSON.parse(resProcess.data);
-        console.log(ObjValue);
-        this.setState({
-          contentItemModelGetId: ObjValue
-        })
-       /* textName = ObjValue.Name;
-        ObjName = {
-          NameModel: textName,
-        };
-        contentItemss = Object.assign(ObjName, contentItem);
-        this.setState({
-          contentItemNew: contentItemss,
-        });*/
+    
+    var arrayIdProcess = contentItem.Status.ProcessId.split(" "); // tách chuỗi từ Process ID
+    console.log(arrayIdProcess);
+    console.log(arrayIdProcess.length);
+    var arrayName=[]
+    for( var k =0; k<=arrayIdProcess.length;k++){
+      axios({
+        method: "GET",
+        url: 
+          `${Config.API_URL}`+"/api/data/valuekey?token="+`${Config.TOKEN}`+"&Classify=Process&key=" +
+          arrayIdProcess[k]+
+          "",
+        data: null,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((resProcess) => {
+
+          ObjValue = JSON.parse(resProcess.data);
+          var nameProcess= ObjValue.Name;
+          arrayName.push(nameProcess)
+          this.setState({
+            nameItemModelGetId: arrayName
+          })
+          console.log(this.state.nameItemModelGetId);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
-  onEdit=()=>{
-    this.props.onEdit(this.props.contentItem.Id);
+  onGetIdEdit=()=>{
+    this.props.onGetIdEdit(this.props.contentItem.Id);
   }
   render() {
     var { contentItem, index } = this.props;
-    var { contentItemModelGetId } = this.state;
+    var { contentItemModelGetId,nameItemModelGetId } = this.state;
     return (
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
         <td>{contentItem.Status.Type}</td>
-        <td>{contentItemModelGetId.Name}</td>
+        <td>{nameItemModelGetId+" "}</td>
         <td>{contentItem.Status.Weigh}</td>
         <td>
           <button
@@ -63,7 +65,7 @@ class TableContentItemTramCan extends Component {
             className="btn btn-primary card card-primary card-outline container-fluid"
             data-toggle="modal"
             data-target="#modal-edit"
-            onClick={this.onEdit}
+            onClick={this.onGetIdEdit}
           >
             Chỉnh sửa
           </button>

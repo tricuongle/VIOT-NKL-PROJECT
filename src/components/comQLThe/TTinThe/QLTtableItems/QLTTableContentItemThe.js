@@ -93,8 +93,6 @@ class QLTTableContentItemThe extends Component {
   render() {
     var { contentItem, index } = this.props;
     var { nameEmp, nameProcess, nameModel } = this.state;
-    console.log(nameProcess);
-
     const dataDay = parseInt(contentItem.BirthDay);
     return (
       <tr id="device2" className="edit form-check form-check-inlines">

@@ -54,13 +54,13 @@ class ChonMaCa extends Component {
         console.log(err);
       });
   };
-  onGetValue = (Id, IdFishCode) => {
+  /*onGetValue = (Id, IdFishCode) => {
     console.log(Id);
     console.log(IdFishCode);
     axios({
       method: "GET",
       url:
-        +`${Config.API_URL}` +
+        `${Config.API_URL}` +
         "/api/data/valuekey?token=" +
         `${Config.TOKEN}` +
         "&Classify=Model&key=" +
@@ -68,22 +68,13 @@ class ChonMaCa extends Component {
       data: null,
     })
       .then((res) => {
-        console.log("KHOA");
-        console.log(res.data);
-        /*ArrayValue = [];
-          res.data.map((contentItem) => {
-            contentItem = JSON.parse(contentItem);
-            ArrayValue.push(contentItem);
-          });
-  
-          this.setState({
-            contentItems: ArrayValue,
-          });*/
+        var ObjValue = JSON.parse(res.data);
+        console.log(ObjValue);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  };*/
   render() {
     var { contentItems } = this.state;
     return (
@@ -117,7 +108,7 @@ class ChonMaCa extends Component {
             key={index}
             contentItem={contentItem}
             index={index}
-            onGetValue={this.onGetValue}
+           // onGetValue={this.onGetValue}
           />
         );
       });

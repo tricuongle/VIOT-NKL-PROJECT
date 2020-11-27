@@ -17,8 +17,8 @@ class QuanLyThongTinThe extends Component {
     this.state = {
       contentItems: [],
       contentGetCardId: "",
-      contentModel: "",
-      contentProcess: "",
+      contentModel: [],
+      contentProcess: [],
       filter: {
         name: "",
         status: -1,
@@ -65,7 +65,7 @@ class QuanLyThongTinThe extends Component {
         console.log(this.state.contentItems);
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 5,
+            pageLength: 7,
             processing: true,
             responsive: true,
             dom: "Bfrtip",
@@ -77,6 +77,7 @@ class QuanLyThongTinThe extends Component {
       });
   }
   getIDChange = (idCard, idEmpl, nameEmp, nameModel, nameProcess) => {
+    /*Lấy thông tin thẻ dựa vào Id */
     axios({
       method: "GET",
       url:
@@ -118,6 +119,7 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentModel: arrayValueModel,
         });
+        console.log(this.state.contentModel);
       })
       .catch((err) => {
         console.log(err);
@@ -141,6 +143,7 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentProcess: arrayValueProcess,
         });
+        console.log(this.state.contentModel);
       })
       .catch((err) => {
         console.log(err);
@@ -149,12 +152,36 @@ class QuanLyThongTinThe extends Component {
 
   onEditCard = (event) => {
     event.preventDefault();
+    console.log("okffffffffffff");
+    var Key = this.state.contentGetCardId.Id;
+    var value= '{"Id":"Card-01","Employee":"CN-NKL-01","Color":"Redssss","RegistTime":80923850984,"Status":"Release","ProcessId":"Zone-NKL-01","ModelId":"CD-NKL-01","Classify":"","RFID":"81007730F036","CurrentRecode":"53d19db7-4d41-4678-ae3c-e25f2718ab2a"}'
+    axios({
+      method: "PUT",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/key?token=" +
+        `${Config.TOKEN}` +
+        "&classify=Card&key=" +
+        Key,
+      data: {
+        'Value':
+          '{"Id":"Card-01","Employee":"CN-NKL-01","Color":"Redssss","RegistTime":80923850984,"Status":"Release","ProcessId":"Zone-NKL-01","ModelId":"CD-NKL-01","Classify":"","RFID":"81007730F036","CurrentRecode":"53d19db7-4d41-4678-ae3c-e25f2718ab2a"}',
+        'Description': "Ngọc Kim Loan",
+      },
+    })
+      .then((res) => {
+        console.log("ok");
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi rồi");
+      });
   };
   render() {
     var { contentItems, contentProcess, contentModel } = this.state;
-    console.log(contentItems);
+    /*console.log(contentItems);
     console.log(contentModel);
-    console.log(contentProcess);
+    console.log(contentProcess);*/
     return (
       <div>
         <section className="content">
@@ -162,8 +189,9 @@ class QuanLyThongTinThe extends Component {
             {this.showContentItems(contentItems)}
           </QLTTableContentThe>
 
-          <div className="modal fade" id="modal-edit">
-            <from onSubmit={this.onEditCard}>
+         
+            <div className="modal fade" id="modal-edit">
+            <form onSubmit={this.onEditCard}>
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -203,7 +231,7 @@ class QuanLyThongTinThe extends Component {
                         <h5> Khu vực:</h5>
                       </label>
                       <select className="form-control" id="idSelectFS">
-                        {/*this.showContentSelectProcess(contentProcess)*/}
+                        {this.showContentSelectProcess(contentProcess)}
                       </select>
                     </div>
                     <div className="form-group">
@@ -211,7 +239,7 @@ class QuanLyThongTinThe extends Component {
                         <h5> Công đoạn:</h5>
                       </label>
                       <select className="form-control" id="area">
-                        {/*this.showContentSelect(contentModel)*/}
+                        {this.showContentSelect(contentModel)}
                       </select>
                     </div>
                     <div className="form-group">
@@ -239,8 +267,9 @@ class QuanLyThongTinThe extends Component {
                   </div>
                 </div>
               </div>
-            </from>
-          </div>
+              </form>
+            </div>
+
 
           <div className="modal fade" id="modal-Delete">
             <div className="modal-dialog">
@@ -298,7 +327,7 @@ class QuanLyThongTinThe extends Component {
     }
     return result;
   }
- /* showContentSelect(contentModel) {
+  showContentSelect(contentModel) {
     var result = null;
     if (contentModel.length >= 0) {
       result = contentModel.map((contentItem, index) => {
@@ -307,7 +336,7 @@ class QuanLyThongTinThe extends Component {
     }
     return result;
   }
-  /*showContentSelectProcess(contentProcess) {
+  showContentSelectProcess(contentProcess) {
     var result = null;
     if (contentProcess.length >= 0) {
       result = contentProcess.map((contentItem, index) => {
@@ -319,6 +348,6 @@ class QuanLyThongTinThe extends Component {
       });
     }
     return result;
-  }*/
+  }
 }
 export default QuanLyThongTinThe;

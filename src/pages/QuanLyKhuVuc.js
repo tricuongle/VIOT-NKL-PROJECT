@@ -104,7 +104,7 @@ class QuanLyKhuVuc extends Component {
           contentGetProcessId: temp,
         });
         document.getElementById(
-          "NameProcess"
+          "IdNameProcess"
         ).value = this.state.contentGetProcessId.Name;
       })
       .catch((err) => {
@@ -152,7 +152,7 @@ class QuanLyKhuVuc extends Component {
     })
       .then((res) => {
         console.log(res);
-        alert("Sửa khu vực " + this.state.Name + " thành công !");
+        alert("Xóa khu vực " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
@@ -162,25 +162,35 @@ class QuanLyKhuVuc extends Component {
   /*-------------- Hàm xử lý gọi api cập nhập------------------------- */
   onUpdateSave = (event) => {
     event.preventDefault();
-    //Description = document.getElementById("info").value;
+    Description = document.getElementById("idInfoDes").value;
+    var Namee = this.state.contentGetProcessId.Name;
+    console.log(Namee);
     var { contentGetProcessId, Name, Level, Before, After } = this.state;
+    var nameNew;
+    if( Name==''){
+      nameNew= Namee;
+    }
+    else{
+      nameNew = Name;
+    }
     var idEdit = contentGetProcessId.Id;
     valueNew =
       '{"Id":"' +
       idEdit +
       '","Name":"' +
-      Name +
+      nameNew +
       '","Level":' +
       Level +
       ',"Parent":"' +
       idEdit +
-      '","Before":"' +
+      '","status":true,"Before":"' +
       Before +
       '","After":"' +
       After +
       '"}';
     console.log(idEdit);
     console.log(valueNew);
+    console.log(Description);
     axios({
       method: "PUT",
       url:
@@ -191,7 +201,7 @@ class QuanLyKhuVuc extends Component {
         idEdit +
         "&value=" +
         valueNew +
-        "&Description=nkl",
+        "&Description="+Description,
       data: null,
     })
       .then((res) => {
@@ -284,7 +294,7 @@ class QuanLyKhuVuc extends Component {
                         minLength="5"
                         type="text"
                         className="form-control"
-                        id="NameProcess"
+                        id="IdNameProcess"
                         name="Name"
                         required
                         placeholder="Nhập tên khu vực thay đổi"
@@ -299,7 +309,7 @@ class QuanLyKhuVuc extends Component {
                       <textarea
                         maxLength="50"
                         name="infoDes"
-                        id="info"
+                        id="idInfoDes"
                         className="form-control"
                         rows="3"
                         placeholder="mô tả ngắn khi thay đổi"

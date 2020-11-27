@@ -9,6 +9,7 @@ import axios from "axios";
 import TableContentItemCongDoan from "../components/comQLCongDoan/tableItemCongDoan/TableContentItemCongDoan";
 import TableContentCongDoan from "../components/comQLCongDoan/tableContentCongDoan/TableContentCongDoan";
 import ActionCreateCongDoan from '../components/comQLCongDoan/comQLCongDoanActions/ActionCreateCongDoan'
+import * as Config from '../untils/Config'
 var JsonValue;
 var JsonName;
 // mảng lưu giá trị của value từ api công đoạn
@@ -16,11 +17,6 @@ var ArrayValue = [];
 var ArrayNameProcess = [];
 // khi gọi về chỉ hiển thị id của khu vực, dùng id lấy tên
 var i;
-const LOCALHOST = "http://171.232.86.160:5000";
-const KEY = "";
-const CLASSIFY = "Model";
-const TOKEN =
-  "04c5077dc551934ebdc267fbc83357b9967e19d21fa9d8c4884fac130acb7dadc50e05c08b9980cd7a379f2c8fa39e50";
 class QuanLyCongDoan extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +28,7 @@ class QuanLyCongDoan extends Component {
     axios({
       method: "GET",
       url:
-      LOCALHOST+"/api/data/Values?token="+TOKEN+"&Classify="+CLASSIFY,
+      `${Config.API_URL}`+"/api/data/Values?token="+`${Config.TOKEN}`+"&Classify=Model",
       data: null,
     })
       .then((resModel) => {
