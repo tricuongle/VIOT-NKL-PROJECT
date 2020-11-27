@@ -1,7 +1,57 @@
 import React, { Component } from "react";
 import TableContentThongKe from "../components/comThongKe/tableContentThongKe/TableContentThongKe";
+import axios from "axios";
+import * as Config from "../untils/Config";
+import $, { event } from "jquery";
+import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableItemThongKe";
+
+var arrayRecode = [];
 class ThongKe extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      valueRecode: [],
+    };
+  }
+  
+  
+
+  componentDidMountt=()=> {
+    axios({
+      method: "GET",
+      url:
+      `${Config.API_URL}`+'/api/data/Values?token='+`${Config.TOKEN}`+'&Classify=Recode',
+      data: null,
+    })
+      .then((res) => {
+        console.log(res.data);
+        arrayRecode = [];
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          arrayRecode.push(contentItem);
+
+        });
+        this.setState({
+          valueRecode: arrayRecode,
+        });
+        // sử dụng thư viện datatable
+        /*$(document).ready(function () {
+          $("#tableData").DataTable({
+            pageLength: 7,
+            processing: true,
+            responsive: true,
+            dom: "Bfrtip",
+          });
+        });*/
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   render() {
+    setTimeout(this.componentDidMountt, 3000);
+    var { valueRecode } = this.state;
+    //console.log(valueRecode);
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -114,10 +164,27 @@ class ThongKe extends Component {
               </button>
             </div>
           </form>
-          <TableContentThongKe />
+          <TableContentThongKe>
+            {this.showContentItems(valueRecode)}
+          </TableContentThongKe>
         </section>
       </div>
     );
+  }
+  showContentItems(contentItems) {
+    var result = null;
+    if (contentItems.length >= 0) {
+      result = contentItems.map((contentItem, index) => {
+        return (
+          <TableItemThongKe
+            key={index}
+            contentItem={contentItem}
+            index={index}
+          />
+        );
+      });
+    }
+    return result;
   }
 }
 export default ThongKe;

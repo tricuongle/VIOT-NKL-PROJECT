@@ -12,6 +12,7 @@ class QLTTableContentCongNhan extends Component {
               <th>Tên công nhân</th>
               <th>Màu thẻ</th>
               <th>Công đoạn (mã cá)</th>
+              <th>Thêm</th>
             </tr>
           </thead>
           <tbody>{this.props.children}</tbody>

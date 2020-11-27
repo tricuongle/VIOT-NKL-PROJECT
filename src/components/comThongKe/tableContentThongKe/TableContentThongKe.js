@@ -3,25 +3,21 @@ import TableItemThongKe from "../TableItemThongKe/TableItemThongKe";
 class TableContentThongKe extends Component {
   render() {
     return (
-      <table id="data" className="table table-hover" width="100%">
+      <table id="tableData" className="table table-hover" width="100%">
         <thead>
           <tr className="tieude">
             <th>Ngày</th>
-            <th>Họ</th>
             <th>Tên</th>
-            <th>Mã số thẻ</th>
-            <th>Màu thẻ</th>
+            <th>Số thẻ</th>
             <th>Mã cá</th>
-            <th>Size</th>
+            <th>Type</th>
             <th>Khối lượng</th>
-            <th>Công đoạn</th>
-            <th>Thiết bị</th>
+            <th>Khu vực</th>
+            <th>Cân</th>
             <th>Hình ảnh</th>
           </tr>
         </thead>
-        <tbody>
-          <TableItemThongKe />
-        </tbody>
+        <tbody>{this.props.children}</tbody>
       </table>
     );
   }

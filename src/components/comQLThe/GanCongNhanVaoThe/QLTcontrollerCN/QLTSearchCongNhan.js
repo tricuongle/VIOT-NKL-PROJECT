@@ -42,28 +42,7 @@ class QLTSearchCongNhan extends Component {
             </button>
           </span>
         </div>
-        <div className="infoCard ">
-          <button
-            type="button"
-            className="btn btn-primary card card-primary card-outline container-fluid"
-            data-toggle="modal"
-            data-target="#modal-View"
-            id="id123"
-          >
-            Gán công nhân vào thẻ
-          </button>
-        </div>
-        <div className="infoCard ">
-          <button
-            type="button"
-            className="btn btn-primary card card-primary card-outline container-fluid"
-            data-toggle="modal"
-            data-target="#modal-View"
-            id="id123"
-          >
-            Bỏ gán thẻ
-          </button>
-        </div>
+        
       </form>
     );
   }
