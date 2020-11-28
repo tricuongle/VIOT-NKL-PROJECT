@@ -3,7 +3,7 @@ import TableItemTongHop from '../TableItemTongHop/TableItemTongHop'
 class TableContentTongHop extends Component {
   render() {
     return (
-      <table id="data" className="table table-hover">
+      <table id="tableData" className="table table-hover">
         <thead>
           <tr className="tieude">
             <th>STT</th>
@@ -13,9 +13,7 @@ class TableContentTongHop extends Component {
             <th>Khối lượng đầu ra (KG)</th>
           </tr>
         </thead>
-        <tbody>
-          <TableItemTongHop/>
-        </tbody>
+        <tbody>{this.props.children}</tbody>
       </table>
     );
   }

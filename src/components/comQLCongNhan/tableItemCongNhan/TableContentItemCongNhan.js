@@ -7,11 +7,9 @@ class TableContentItemCongNhan extends Component {
   render() {
     var { contentItem, index } = this.props;
     this.componentDidMount = () => {
-      this.props.onEdit(contentItem.Id); // truyền ra ngoài
+      this.props.onEdit(contentItem.Id); // truyền dữ liệu ra ngoài cha
     };
     var statusEmployee = contentItem.IsLock ? "đang làm việc" : "Đã nghỉ";
-    //const dataDay = parseInt(contentItem.BirthDay);
-    //var BirthDay = new Date(dataDay).toLocaleDateString("en-US")
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>

@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import SearchCongNhan from "../controllerCN/SearchCongNhan";
 
 class TableContentCongNhan extends Component {
- 
   render() {
     return (
       <div>
+         {/*-----gọi hàm tìm kiếm và filter------ */}
         <SearchCongNhan
           onSearch={this.props.onSearch}
           onFilter={this.props.onFilter}
@@ -23,7 +23,8 @@ class TableContentCongNhan extends Component {
               <th>Xóa</th>
             </tr>
           </thead>
-          <tbody>{this.props.children}</tbody>
+          {/*--------truyền đối tượng con-------- */}
+          <tbody>{this.props.children}</tbody> 
         </table>
       </div>
     );

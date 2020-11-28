@@ -49,7 +49,8 @@ class QuanLyCongNhan extends Component {
     });
   };
   // hàm lấy danh sách công nhân từ api
-  componentDidMount() {
+  componentDidMount = () => {
+    console.log("có");
     axios({
       method: "GET",
       url:
@@ -69,20 +70,59 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
+        console.log(this.state.contentItems);
         // sử dụng thư viện datatable
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 5,
+            pageLength: 7,
+            "bDestroy": true,
             processing: true,
             responsive: true,
             dom: "Bfrtip",
-          });
+
+          })
         });
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
+  componentDidMountt = () => {
+    console.log("có");
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee",
+      data: null,
+    })
+      .then((res) => {
+        ArrayValue = [];
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          ArrayValue.push(contentItem);
+        });
+
+        this.setState({
+          contentItems: ArrayValue,
+        });
+        console.log(this.state.contentItems);
+        // sử dụng thư viện datatable
+        $(document).ready(function () {
+          $("#tableData").DataTable({
+            pageLength: 5,
+            "bDestroy": false
+
+          })
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   onGetId = (Id) => {
     axios({
       method: "GET",
@@ -99,7 +139,7 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentGetEmployeeId: ObjValue,
         });
-        console.log(this.state.contentGetEmployeeId);
+        /*console.log(this.state.contentGetEmployeeId);
         document.getElementById(
           "NameEmp"
         ).value = this.state.contentGetEmployeeId.Name;
@@ -108,12 +148,13 @@ class QuanLyCongNhan extends Component {
         ).value = this.state.contentGetEmployeeId.CMND;
         document.getElementById(
           "DateEmp"
-        ).value = this.state.contentGetEmployeeId.BirthDay;
+        ).value = this.state.contentGetEmployeeId.BirthDay;*/
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  /*---------------sửa thông tin công nhân--------------- */
   onUpdateSave = (event) => {
     event.preventDefault();
     var {
@@ -140,8 +181,6 @@ class QuanLyCongNhan extends Component {
       '","CardNo":"","BirthDay":"' +
       BirthDay +
       '","User":"","PassWord":"","IsLock":true,"JobLevel":3,"Department":"","Description":"This Item For User Master Data"}';
-    console.log(idEdit);
-    console.log(valueNew);
     axios({
       method: "PUT",
       url:
@@ -163,6 +202,7 @@ class QuanLyCongNhan extends Component {
         console.log(err);
       });
   };
+  /*------------Xóa công nhân -------------------- */
   onDeleteSave = (event) => {
     event.preventDefault();
     var { contentGetEmployeeId } = this.state;
@@ -180,10 +220,10 @@ class QuanLyCongNhan extends Component {
       CMND +
       '","CardNo":"","BirthDay":"' +
       BirthDay +
-      '","User":"","PassWord":"","IsLock":'+status+',"JobLevel":3,"Department":"","Description":"This Item For User Master Data"}';
-    console.log("ok");
-    console.log(idEdit);
-    console.log(valueNew);
+      '","User":"","PassWord":"","IsLock":' +
+      status +
+      ',"JobLevel":3,"Department":"","Description":"This Item For User Master Data"}';
+
     axios({
       method: "PUT",
       url:
@@ -205,10 +245,18 @@ class QuanLyCongNhan extends Component {
         console.log(err);
       });
   };
-
+  reLoadTable = () => {
+    console.log("ok");
+    setTimeout(this.componentDidMount, 500);
+  };
+  reLoadTablee = () => {
+    console.log("ok");
+    setTimeout(this.componentDidMountt, 500);
+  };
   render() {
     var { contentItems, filter, Name, CMND, BirthDay } = this.state;
     if (filter) {
+      console.log("yes");
       // xét điều kiện để filter
       if (filter.name) {
         contentItems = contentItems.filter((contentItems) => {
@@ -238,6 +286,7 @@ class QuanLyCongNhan extends Component {
           </ol>
         </section>
         <section className="content">
+          {/*Hiện thông tin table */}
           <TableContentCongNhan onFilter={this.onFilter}>
             {this.showContentItems(contentItems)}
           </TableContentCongNhan>
@@ -306,7 +355,7 @@ class QuanLyCongNhan extends Component {
                       <input
                         maxLength="30"
                         minLength="5"
-                        type="numner"
+                        type="number"
                         className="form-control"
                         id="CNNDEmp"
                         name="CMND"
@@ -335,7 +384,11 @@ class QuanLyCongNhan extends Component {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={this.reLoadTable}
+                    >
                       Chỉnh sửa
                     </button>
                     <button
@@ -351,6 +404,7 @@ class QuanLyCongNhan extends Component {
             </form>
           </div>
 
+          {/*buton Delete Employee*/}
           <div className="modal fade" id="modal-Delete">
             <form onSubmit={this.onDeleteSave}>
               <div className="modal-dialog">
@@ -374,6 +428,7 @@ class QuanLyCongNhan extends Component {
                       type="submit"
                       className="btn btn-danger"
                       data-toggle="modal"
+                      onClick={this.reLoadTablee}
                     >
                       Xóa công nhân
                     </button>
@@ -393,7 +448,7 @@ class QuanLyCongNhan extends Component {
       </div>
     );
   }
-  // hàm đổ dữ liệu vào table
+  // hàm đổ dữ liệu vào table nhờ vòng loop
   showContentItems(contentItems) {
     var result = null;
     if (contentItems.length >= 0) {
@@ -403,7 +458,7 @@ class QuanLyCongNhan extends Component {
             key={index}
             contentItem={contentItem}
             index={index}
-            onGetId={this.onGetId}
+            onGetId={this.onGetId} // truyền ID
           />
         );
       });

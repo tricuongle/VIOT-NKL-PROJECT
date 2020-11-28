@@ -36,7 +36,7 @@ class QuanLyTramCan extends Component {
     }
   };
 
-  componentDidMount() {
+  componentDidMount=()=> {
     /*-----------------------function get list device to api ---------------------------------- */
     axios({
       method: "GET",
@@ -63,6 +63,8 @@ class QuanLyTramCan extends Component {
             processing: true,
             responsive: true,
             dom: "Bfrtip",
+            stateSave: true,
+            bDestroy: true,
           });
         });
       })
@@ -110,13 +112,12 @@ class QuanLyTramCan extends Component {
         var ObjectValueId;
         for (var k in ObjectValue) {
           if (ObjectValue[k].Id == IdDevice) {
-            ObjectValueId = ObjectValue[k]
+            ObjectValueId = ObjectValue[k];
           }
         }
-       this.setState({
+        this.setState({
           contentDevice: ObjectValueId,
         });
-        console.log(this.state.contentDevice.Id);
         document.getElementById(
           "IdnameDevice"
         ).value = this.state.contentDevice.Name;
@@ -141,73 +142,33 @@ class QuanLyTramCan extends Component {
       .selectedOptions;
     let idProcess = "";
     for (let i = 0; i < selectProcess.length; i++) {
-      idProcess += selectProcess[i].value + " ";
+      idProcess += selectProcess[i].value + ",";
     }
-    console.log(Id);
-    console.log(Type);
-    console.log(idProcess);
     axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
-        "/api/iotdevice/"+Id+"?token=" +
+        "/api/iotdevice/" +
+        Id +
+        "?token=" +
         `${Config.TOKEN}`,
       data: {
-        "ProcessId": idProcess,
-        "Type": Type
-    },
+        ProcessId: idProcess,
+        Type: Type,
+      },
     })
       .then((res) => {
         console.log("ok");
+        alert("Sửa thành công !");
       })
       .catch((err) => {
         console.log(err);
         console.log("Lỗi rồi");
       });
   };
-  /*-------------- Hàm xử lý gọi api cập nhập------------------------- */
-  /*onUpdateSave = (event) => {
-    event.preventDefault();
-    //Description = document.getElementById("info").value;
-    var { contentGetProcessId, Name, Level, Before, After } = this.state;
-    var idEdit = contentGetProcessId.Id;
-    valueNew =
-      '{"Id":"' +
-      idEdit +
-      '","Name":"' +
-      Name +
-      '","Level":' +
-      Level +
-      ',"Parent":"' +
-      idEdit +
-      '","Before":"' +
-      Before +
-      '","After":"' +
-      After +
-      '"}';
-    console.log(idEdit);
-    console.log(valueNew);
-    axios({
-      method: "PUT",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/putkey?token=" +
-        `${Config.TOKEN}` +
-        "&classify=Process&key=" +
-        idEdit +
-        "&value=" +
-        valueNew +
-        "&Description=nkl",
-      data: null,
-    })
-      .then((res) => {
-        console.log(res);
-        alert("Sửa khu vực " + this.state.Name + " thành công !");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };*/
+  temp =()=>{
+    console.log("hello !");
+  }
   render() {
     var { contentItems, contentProcess } = this.state;
     return (
@@ -327,7 +288,11 @@ class QuanLyTramCan extends Component {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={this.reLoadTable}
+                    >
                       Lưu thay đổi
                     </button>
                     <button

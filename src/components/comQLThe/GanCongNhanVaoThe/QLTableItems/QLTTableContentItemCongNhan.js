@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import * as Config from "../../../../untils/Config";
 var arrayValueModel = [];
+var idModel;
+var count;
 class QLTTableContentItemCongNhan extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ class QLTTableContentItemCongNhan extends Component {
       IdNewCard: "",
       idProcess: "",
       contentModel: [],
+      IdCountCard:'',
     };
   }
   componentDidMount = () => {
@@ -32,6 +35,23 @@ class QLTTableContentItemCongNhan extends Component {
       .catch((err) => {
         console.log(err);
       });
+
+      /*-------------tạo id card ----------------- */
+      axios({
+        method: "GET",
+        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}` +"&Classify=Card",
+        data: null,
+      })
+        .then((res) => {
+          count = res.data.length + 1;
+          var countString = "Card-0" + count;
+          this.setState({
+            IdCountCard: countString,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     /*-------lấy danh sách công đoạn mã cá------------ */
     axios({
       method: "GET",
@@ -46,50 +66,60 @@ class QLTTableContentItemCongNhan extends Component {
         arrayValueModel = [];
         for (var k in resModel.data) {
           var Object = JSON.parse(resModel.data[k]);
-          arrayValueModel.push(Object);
+          /*if (Object.status) {*/
+            arrayValueModel.push(Object);
+          /*}*/
         }
         console.log(arrayValueModel);
         this.setState({
           contentModel: arrayValueModel,
         });
-        console.log(this.state.contentModel);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  
+
+  getIdProcess=(temp)=>{
+ /*-------------- lấy id khu vực từ Model----------------- */
+ axios({
+  method: "GET",
+  url:
+    `${Config.API_URL}` +
+    "/api/data/valuekey?token=" +
+    `${Config.TOKEN}` +
+    "&Classify=Model&key=" +
+    temp,
+  data: null,
+})
+  .then((resModel) => {
+    var tam = JSON.parse(resModel.data)
+    var tam1= tam.ProcessId;
+    this.setState({
+      idProcess: tam1
+    })
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  }
+
   onAddCard = () => {
-    var { contentModel, IdNewCard, idProcess } = this.state;
+    var { contentModel, IdNewCard,IdCountCard,idModel ,idProcess} = this.state;
     var { contentItem } = this.props;
     var Color = document.getElementById("idColorCardSelect").value;
     var idModel = document.getElementById("idModelSelect").value;
-    /*-------------- lấy id khu vực từ Model----------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Model&key=" +
-        idModel,
-      data: null,
-    })
-      .then((resModel) => {
-        var temp = JSON.parse(resModel.data);
-        this.setState({
-          idProcess: temp
-        })
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
+   this.getIdProcess(idModel);
+   
+    console.log(IdCountCard); // id card
     console.log(IdNewCard.Id); // id newCard
     console.log(contentItem.Id); // id công nhân
     console.log(Color); // id màu
     console.log(idModel); // id công đoạn
-    console.log(idProcess); // id khu vực
+    console.log(idProcess); // id công đoạn
+
+   
+  
 
     /*----------Put = thêm thẻ-------tạo thẻ mới----------------- */
     /*axios({
@@ -97,10 +127,10 @@ class QLTTableContentItemCongNhan extends Component {
       url:
       `${Config.API_URL}`+'/api/data?token='+`${Config.TOKEN}`,
       data: {
-        "Key": "Card-01",
+        "Key": IdCountCard,
         "Classify": "Card",
-        "Value": "{\"Id\":\"Card-01\",\"Employee\":\""+contentItem.Id+"\",\"Color\":\""+Color+"\",\"RegistTime\":,\"Status\":\"Release\",\"ProcessId\":\"Zone-NKL-01\",\"ModelId\":\""+idModel+"\",\"Classify\":\"\",\"RFID\":\""+IdNewCard+"\",\"CurrentRecode\":\"\"}",
-        "Description": ""
+        "Value": "{\"Id\":\""+IdCountCard+"\",\"Employee\":\""+contentItem.Id+"\",\"Color\":\""+Color+"\",\"RegistTime\":,\"Status\":\"Release\",\"ProcessId\":\"Zone-NKL-01\",\"ModelId\":\""+idModel+"\",\"Classify\":\"\",\"RFID\":\""+IdNewCard+"\",\"CurrentRecode\":\"\"}",
+        "Description": "Card Ngọc Kim Loan"
       },
     })
       .then((res) => {
@@ -129,6 +159,7 @@ class QLTTableContentItemCongNhan extends Component {
         </td>
         <td>
           <select className="form-control" id="idModelSelect">
+          <option value="" >---Chọn mã cá---</option>
             {this.showContentSelectModel(contentModel)}
           </select>
         </td>

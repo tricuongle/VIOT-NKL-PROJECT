@@ -18,8 +18,6 @@ class TableContentItemTramCan extends Component {
     var { contentItem } = this.props;
     
     var arrayIdProcess = contentItem.Status.ProcessId.split(" "); // tách chuỗi từ Process ID
-    console.log(arrayIdProcess);
-    console.log(arrayIdProcess.length);
     var arrayName=[]
     for( var k =0; k<=arrayIdProcess.length;k++){
       axios({
@@ -31,14 +29,12 @@ class TableContentItemTramCan extends Component {
         data: null,
       })
         .then((resProcess) => {
-
           ObjValue = JSON.parse(resProcess.data);
           var nameProcess= ObjValue.Name;
           arrayName.push(nameProcess)
           this.setState({
             nameItemModelGetId: arrayName
           })
-          console.log(this.state.nameItemModelGetId);
         })
         .catch((err) => {
           console.log(err);

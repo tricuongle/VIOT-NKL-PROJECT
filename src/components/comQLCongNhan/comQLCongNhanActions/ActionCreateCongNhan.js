@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import moment from "moment";
-import { data } from "jquery";
 import * as Config from '../../../untils/Config'
 var count;
 var valueNew;
@@ -30,7 +28,7 @@ class ActionCreateCongNhan extends Component {
       [name]: value,
     });
   };
-// lấy số lượng ds công nhân và cộng 1 tạo id công nhân mới 
+/*----------lấy số lượng ds công nhân và cộng 1 tạo id công nhân mới------------*/
   componentDidMount = () => {
     axios({
       method: "GET",
@@ -48,6 +46,7 @@ class ActionCreateCongNhan extends Component {
         console.log(err);
       });
   };
+  /*-----------Hàm tạo mới công nhân --------------- */
   onSave = (event) => {
     event.preventDefault();
     var { CMND ,Id} = this.state;
@@ -68,12 +67,14 @@ class ActionCreateCongNhan extends Component {
     })
       .then((res) => {
         console.log(res);
-        alert("Thêm nhân viên " + this.state.Name + " thành công !");
+        alert("Thêm công nhân " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  /*----------Nội dụng xử lý giao diện-------------- */
   render() {
     var { Name, CMND, BirthDay, Id } = this.state;
     return (
@@ -146,7 +147,8 @@ class ActionCreateCongNhan extends Component {
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary"
+                 onClick={this.reLoadTable}>
                   Tạo mới
                 </button>
                 <button

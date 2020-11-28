@@ -4,19 +4,16 @@ import axios from "axios";
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableItemThongKe";
-
 var arrayRecode = [];
 class ThongKe extends Component {
   constructor(props) {
-    super(props);
+    super(props); 
     this.state = {
       valueRecode: [],
     };
   }
-  
-  
-
   componentDidMountt=()=> {
+    console.log("get data ok");
     axios({
       method: "GET",
       url:
@@ -24,7 +21,6 @@ class ThongKe extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res.data);
         arrayRecode = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
@@ -35,23 +31,26 @@ class ThongKe extends Component {
           valueRecode: arrayRecode,
         });
         // sử dụng thư viện datatable
-        /*$(document).ready(function () {
+        $(document).ready(function () {
           $("#tableData").DataTable({
             pageLength: 7,
             processing: true,
             responsive: true,
-            dom: "Bfrtip",
+            destroy: true,
+            dom: 'Bfrtip',
           });
-        });*/
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
+  
   render() {
+    // sau 3 giây load lại table
     setTimeout(this.componentDidMountt, 3000);
     var { valueRecode } = this.state;
-    //console.log(valueRecode);
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -171,6 +170,7 @@ class ThongKe extends Component {
       </div>
     );
   }
+  
   showContentItems(contentItems) {
     var result = null;
     if (contentItems.length >= 0) {
@@ -185,6 +185,8 @@ class ThongKe extends Component {
       });
     }
     return result;
+    
   }
+  
 }
 export default ThongKe;
