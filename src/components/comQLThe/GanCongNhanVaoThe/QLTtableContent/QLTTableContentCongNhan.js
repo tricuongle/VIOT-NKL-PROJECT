@@ -8,8 +8,10 @@ class QLTTableContentCongNhan extends Component {
         <table id="data" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
-              <th>Chọn thẻ</th>
+              <th>ID mã RFID thẻ</th>
               <th>Tên công nhân</th>
+              <th>CMND</th>
+              <th>Tình trạng</th>
               <th>Màu thẻ</th>
               <th>Công đoạn (mã cá)</th>
               <th>Thêm</th>

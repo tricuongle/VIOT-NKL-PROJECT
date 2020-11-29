@@ -74,7 +74,7 @@ class QuanLyCongNhan extends Component {
         // sử dụng thư viện datatable
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 7,
+            pageLength: 5,
             "bDestroy": true,
             processing: true,
             responsive: true,

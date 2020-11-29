@@ -10,14 +10,14 @@ class TableContentItemTramCan extends Component {
     super(props);
     this.state = {
       contentItemModelGetId: [],
-      nameItemModelGetId:'',
+      nameItemModelGetId:[],
     };
   }
   /*----------------------get ID of table Model to call name Model ----------------------------- */
   componentDidMount() {
     var { contentItem } = this.props;
     
-    var arrayIdProcess = contentItem.Status.ProcessId.split(" "); // tách chuỗi từ Process ID
+    var arrayIdProcess = contentItem.Status.ProcessId.split(","); // tách chuỗi từ Process ID
     var arrayName=[]
     for( var k =0; k<=arrayIdProcess.length;k++){
       axios({

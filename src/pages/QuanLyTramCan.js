@@ -36,7 +36,8 @@ class QuanLyTramCan extends Component {
     }
   };
 
-  componentDidMount=()=> {
+  componentDidMount =()=> {
+    console.log("ok");
     /*-----------------------function get list device to api ---------------------------------- */
     axios({
       method: "GET",
@@ -47,12 +48,11 @@ class QuanLyTramCan extends Component {
       .then((res) => {
         arrayValueDevice = [];
         var Objvalue = res.data;
-        for (var k in Objvalue) {
+       for (var k in Objvalue) {
           if (Objvalue[k].Capabilitie == "WeighingStation") {
             arrayValueDevice.push(Objvalue[k]);
           }
         }
-        if (Objvalue)
           this.setState({
             contentItems: arrayValueDevice,
           });
@@ -63,7 +63,6 @@ class QuanLyTramCan extends Component {
             processing: true,
             responsive: true,
             dom: "Bfrtip",
-            stateSave: true,
             bDestroy: true,
           });
         });
@@ -95,10 +94,7 @@ class QuanLyTramCan extends Component {
         console.log(err);
       });
   }
-  // get value of radio button
-  onChangeValue = (event) => {
-    console.log(event.target.value);
-  };
+  // sửa trạm cân------------------------------------------
   onGetIdEdit = (IdDevice) => {
     /*--------------láy thông tin theo id---------------- */
     axios({
@@ -133,6 +129,7 @@ class QuanLyTramCan extends Component {
     var Type = "";
     var checkbox = document.getElementsByName("Type");
     var Id = contentDevice.Id;
+
     for (var i = 0; i < checkbox.length; i++) {
       if (checkbox[i].checked === true) {
         Type = checkbox[i].value;
@@ -144,6 +141,7 @@ class QuanLyTramCan extends Component {
     for (let i = 0; i < selectProcess.length; i++) {
       idProcess += selectProcess[i].value + ",";
     }
+    console.log(idProcess);
     axios({
       method: "PUT",
       url:
@@ -166,9 +164,7 @@ class QuanLyTramCan extends Component {
         console.log("Lỗi rồi");
       });
   };
-  temp =()=>{
-    console.log("hello !");
-  }
+
   render() {
     var { contentItems, contentProcess } = this.state;
     return (

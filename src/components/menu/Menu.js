@@ -13,6 +13,7 @@ import QuanLyCongNhan from "../../pages/QuanLyCongNhan";
 import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
 import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02FilletXeBuom";
 import ThemThe from '../../pages/QuanLyThe/ThemThe'
+import DinhMuc from '../../pages/SanXuat/DinhMuc'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import $ from "jquery";
@@ -90,7 +91,7 @@ class Menu extends Component {
                     <i className="fa fa-dashboard"></i> <span>Tổng hợp</span>
                   </Link>
                 </li>
-                <li className="treeview">
+                {/*<li className="treeview">
                   <a>
                     <i className="fa fa-pie-chart"></i> <span>Giám sát</span>
                     <span className="pull-right-container">
@@ -127,8 +128,8 @@ class Menu extends Component {
                     <li className="">
                       <a href="../giam-sat/phu-pham-ban.html">Phụ phẩm - bán</a>
                     </li>
-                  </ul>
-                </li>
+                   </ul>
+                </li>*/}
                 <li className="">
                   <Link to="/Thong-ke" className="linkTo">
                     <i className="fa fa-calendar"></i>
@@ -150,9 +151,12 @@ class Menu extends Component {
                     <li className="">
                       <Link to="/Quan-ly-cong-doan">Tạo công đoạn mã cá</Link>
                     </li>
+                    <li className="">
+                      <Link to="/Dinh-muc-ma-ca">Thêm, sửa định mức giá</Link>
+                    </li>
                   </ul>
                 </li>
-                <li className="treeview">
+                {/*<li className="treeview">
                   <a>
                     <i className="fa fa-industry" aria-hidden="true"></i>
                     <span>Andon</span>
@@ -170,7 +174,7 @@ class Menu extends Component {
                       </Link>
                     </li>
                   </ul>
-                </li>
+              </li>*/}
                 <li className="">
                   <Link to="/Tinh-tien">
                     <i className="fa fa-money" aria-hidden="true"></i>
@@ -263,6 +267,7 @@ class Menu extends Component {
         <Route path="/Quan-ly-the" exact component={quanLyThe} />
         <Route path="/Them-the" exact component={themThe} />
         <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
+        <Route path="/Dinh-muc-ma-ca" exact component={dinhMuc}/>
       </Router>
     );
   }
@@ -310,5 +315,9 @@ const quanLyCongNhan = () => {
 const themThe = () => {
   return <ThemThe />;
 };
+const dinhMuc = () => {
+  return <DinhMuc />;
+};
+
 
 export default Menu;

@@ -54,6 +54,7 @@ class QuanLyThongTinThe extends Component {
       data: null,
     })
       .then((res) => {
+        console.log(res.data);
         ArrayValue = []; // load lại data
         for (var i = 0; i < res.data.length; i++) {
           JsonValue = JSON.parse(res.data[i]);
@@ -62,7 +63,6 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
-        console.log(this.state.contentItems);
         $(document).ready(function () {
           $("#tableData").DataTable({
             pageLength: 7,
@@ -73,6 +73,7 @@ class QuanLyThongTinThe extends Component {
         });
       })
       .catch((err) => {
+        console.log("lỗi lấy thông tin thẻ");
         console.log(err);
       });
   }
@@ -152,7 +153,6 @@ class QuanLyThongTinThe extends Component {
 
   onEditCard = (event) => {
     event.preventDefault();
-    console.log("okffffffffffff");
     var Key = this.state.contentGetCardId.Id;
     var value= '{"Id":"Card-01","Employee":"CN-NKL-01","Color":"Redssss","RegistTime":80923850984,"Status":"Release","ProcessId":"Zone-NKL-01","ModelId":"CD-NKL-01","Classify":"","RFID":"81007730F036","CurrentRecode":"53d19db7-4d41-4678-ae3c-e25f2718ab2a"}'
     axios({
@@ -188,8 +188,6 @@ class QuanLyThongTinThe extends Component {
           <QLTTableContentThe onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}
           </QLTTableContentThe>
-
-         
             <div className="modal fade" id="modal-edit">
             <form onSubmit={this.onEditCard}>
               <div className="modal-dialog">
@@ -238,7 +236,7 @@ class QuanLyThongTinThe extends Component {
                       <label htmlFor="area" id="areaDevice">
                         <h5> Công đoạn:</h5>
                       </label>
-                      <select className="form-control" id="area">
+                      <select className="form-control" id="idModel">
                         {this.showContentSelect(contentModel)}
                       </select>
                     </div>
@@ -246,10 +244,12 @@ class QuanLyThongTinThe extends Component {
                       <label htmlFor="area" id="areaDevice">
                         <h5> Màu thẻ:</h5>
                       </label>
-                      <select className="form-control" id="area">
-                        <option>Xanh</option>
-                        <option>Đỏ</option>
-                        <option>Vàng</option>
+                      <select className="form-control" id="idSelectMauThe">
+                        <option value='Xanh'>Xanh</option>
+                        <option value='Đỏ'>Đỏ</option>
+                        <option value='Vàng'>Vàng</option>
+                        <option value='Đen'>Đen</option>
+                        <option value='Trằng'>Trắng</option>
                       </select>
                     </div>
                   </div>

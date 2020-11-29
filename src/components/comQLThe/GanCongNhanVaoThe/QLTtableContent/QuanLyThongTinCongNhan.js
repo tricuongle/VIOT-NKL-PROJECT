@@ -16,6 +16,7 @@ class QuanLyThongTinCongNhan extends Component {
       contentItems: [],
       contentItemss: [],
       keyword: "",
+      status: 1,
     };
   }
   onChange = (event) => {
@@ -31,6 +32,7 @@ class QuanLyThongTinCongNhan extends Component {
       keyword: keyword.toLowerCase(),
     });
   };
+  /*------------Lấy thông tin công nhân ------------------- */
   componentDidMount() {
     axios({
       method: "GET",
@@ -53,7 +55,7 @@ class QuanLyThongTinCongNhan extends Component {
   }
 
   render() {
-    var { contentItemss, contentItems, keyword } = this.state;
+    var { contentItemss, contentItems, keyword ,status} = this.state;
     if (keyword) {
       // render ra nội dung
       contentItemss = contentItems.filter((contentItems) => {
@@ -64,10 +66,18 @@ class QuanLyThongTinCongNhan extends Component {
           contentItems.CardNo.toLowerCase().indexOf(keyword) !== -1
         );
       });
+      contentItems = contentItems.filter((contentItems) => {
+        if (status === -1) {
+          return contentItems;
+        } else {
+          return contentItems.status === (status === 1 ? true : false);
+        }
+      });
     }
     return (
       <div>
         <section className="content">
+        <p>Gợi ý: Gõ họ tên, hoặc số CMND để tìm công nhân.</p>
           <QLTTableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItemss)}
           </QLTTableContentCongNhan>

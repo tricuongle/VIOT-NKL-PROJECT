@@ -20,16 +20,13 @@ class TableContentItemCongDoan extends Component {
   }
   componentDidMount() {
     var { contentItem } = this.props;
-// lấy giá trị thời gian của công đoạn
+    // lấy giá trị thời gian của công đoạn
     axios({
       method: "GET",
-      url:
-      LOCALHOST+'/api/data?token='+TOKEN+'&Classify=Model',
+      url: LOCALHOST + "/api/data?token=" + TOKEN + "&Classify=Model",
       data: null,
     })
-      .then((resModel) => {
-      
-      })
+      .then((resModel) => {})
       .catch((err) => {
         console.log(err);
         console.log("Không lấy công đoạn !");
@@ -38,17 +35,20 @@ class TableContentItemCongDoan extends Component {
     axios({
       method: "GET",
       url:
-        LOCALHOST+"/api/data/valuekey?token="+TOKEN+"&Classify=Process&key=" +
+        LOCALHOST +
+        "/api/data/valuekey?token=" +
+        TOKEN +
+        "&Classify=Process&key=" +
         contentItem.ProcessId +
         "",
       data: null,
     })
       .then((resProcess) => {
-        ObjValue = JSON.parse(resProcess.data); 
-        textName = ObjValue.Name; 
-        ObjName = {NameProcesstoID : textName} 
-        contentItemss= Object.assign(ObjName, contentItem); 
-        this.setState({ 
+        ObjValue = JSON.parse(resProcess.data);
+        textName = ObjValue.Name;
+        ObjName = { NameProcesstoID: textName };
+        contentItemss = Object.assign(ObjName, contentItem);
+        this.setState({
           contentItemNamePro: contentItemss,
         });
       })
@@ -57,10 +57,11 @@ class TableContentItemCongDoan extends Component {
         console.log("Lỗi");
       });
   }
+  onUpdate = () => {
+    this.props.onUpdate(this.props.contentItem);
+  };
   render() {
     var { contentItem, index } = this.props;
-    var { contentItemNamePro } = this.state;
-    //var TimeCreateModel = new Date(textDateModel).toLocaleDateString();
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
@@ -78,6 +79,7 @@ class TableContentItemCongDoan extends Component {
             className="btn btn-primary card card-primary card-outline container-fluid"
             data-toggle="modal"
             data-target="#modal-edit"
+            onClick={this.onUpdate}
           >
             Sửa
           </button>
@@ -88,6 +90,7 @@ class TableContentItemCongDoan extends Component {
             className="btn btn-danger"
             data-toggle="modal"
             data-target="#modal-Delete"
+            onClick={this.onUpdate}
           >
             Xóa
           </button>

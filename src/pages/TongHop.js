@@ -12,7 +12,7 @@ class TongHop extends Component {
       valueRecode: [],
     };
   }
-  componentDidMount = () => {
+  componentDidMountt = () => {
     console.log("get data ok");
     axios({
       method: "GET",
@@ -33,7 +33,7 @@ class TongHop extends Component {
           valueRecode: arrayRecode,
         });
         // sử dụng thư viện datatable
-        $(document).ready(function () {
+        /*$(document).ready(function () {
           $("#tableData").DataTable({
             pageLength: 7,
             processing: true,
@@ -41,7 +41,7 @@ class TongHop extends Component {
             destroy: true,
             dom: "Bfrtip",
           });
-        });
+        });*/
       })
       .catch((err) => {
         console.log(err);
@@ -49,6 +49,7 @@ class TongHop extends Component {
   };
 
   render() {
+    setTimeout(this.componentDidMountt, 1000);
     var { valueRecode } = this.state;
     return (
       

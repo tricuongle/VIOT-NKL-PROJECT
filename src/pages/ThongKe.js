@@ -30,31 +30,32 @@ class ThongKe extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        // sử dụng thư viện datatable
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 7,
-            processing: true,
-            responsive: true,
-            destroy: true,
-            dom: 'Bfrtip',
-          });
-        });
+       
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  
   render() {
+     // sử dụng thư viện datatable
+     /*$(document).ready(function () {
+      $("#tableData").DataTable({
+        pageLength: 7,
+        processing: true,
+        responsive: true,
+        destroy: true,
+        dom: 'Bfrtip',
+      });
+    });*/
     // sau 3 giây load lại table
-    setTimeout(this.componentDidMountt, 3000);
+    setTimeout(this.componentDidMountt, 1000);
+    
     var { valueRecode } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>Thống kê</h1>
+          <h1>THỐNG KÊ</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
@@ -66,7 +67,7 @@ class ThongKe extends Component {
         </section>
 
         <section className="content">
-          <form id="dataTimKiem" className="filter-section form-inline">
+          {/*<form id="dataTimKiem" className="filter-section form-inline">
             <div className="filter-input">
               <label className="labNgay" htmlFor="filter-dateq">
                 Từ Ngày:
@@ -162,7 +163,7 @@ class ThongKe extends Component {
                 Lọc tìm kiếm
               </button>
             </div>
-          </form>
+           </form>*/}
           <TableContentThongKe>
             {this.showContentItems(valueRecode)}
           </TableContentThongKe>

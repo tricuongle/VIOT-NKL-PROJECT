@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-
-class QLTSearchCongNhan extends Component {
+class SearchKhuVuc extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,18 +15,29 @@ class QLTSearchCongNhan extends Component {
     });
   };
   onSearch = () => {
-    this.props.onSearch(this.state.keyword); // truyền ra ngoài
+    this.props.onSearch(this.state.keyword);
   };
   render() {
     var { keyword } = this.state;
     return (
       <form className="filter-section form-inline">
-        <div className="input-group inputSeach">
+        <div className="infoCard ">
+          <button
+            type="button"
+            className="btn btn-primary card card-primary card-outline container-fluid"
+            data-toggle="modal"
+            data-target="#modal-create"
+            id="id123"
+          >
+            Thêm khu vực
+          </button>
+        </div>
+        {/*<div className="input-group inputSeach">
           <input
             name="keyword"
             type="text"
             className="form-control"
-            placeholder="tìm kiếm công nhân"
+            placeholder="tìm kiếm"
             value={keyword}
             onChange={this.onChange}
           />
@@ -40,9 +50,9 @@ class QLTSearchCongNhan extends Component {
               Tìm kiếm
             </button>
           </span>
-        </div>
+    </div>*/}
       </form>
     );
   }
 }
-export default QLTSearchCongNhan;
+export default SearchKhuVuc;

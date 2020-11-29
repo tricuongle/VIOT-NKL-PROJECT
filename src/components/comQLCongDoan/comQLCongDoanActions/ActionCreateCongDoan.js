@@ -20,7 +20,6 @@ class ActionCreateCongDoan extends Component {
       WeightInMin: null,
       WeightOutMin: null,
       WeighOutMax: null,
-
       Classify: "",
       Group: "",
       status: true,
@@ -258,7 +257,7 @@ class ActionCreateCongDoan extends Component {
                     </div>
                   </div>
                   <table className="table table-hover">
-                    <thead>
+                   {/* <thead>
                       <tr>
                         <th>Tên định giá</th>
                         <th>Khối lượng rổ (KG)</th>
@@ -284,7 +283,7 @@ class ActionCreateCongDoan extends Component {
                           </button>
                         </td>
                       </tr>
-                    </tbody>
+                   </tbody>*/}
                   </table>
                 </div>
               </div>

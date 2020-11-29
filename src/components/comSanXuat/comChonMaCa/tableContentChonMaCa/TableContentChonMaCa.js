@@ -10,8 +10,6 @@ class TableContentChonMaCa extends Component {
             <tr className="tieude">
               <th>STT</th>
               <th>khu vực</th>
-              <th>Chọn mã cá</th>
-              <th>Chọn</th>
               <th>Mã cá đang làm</th>
             </tr>
           </thead>

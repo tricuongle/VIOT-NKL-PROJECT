@@ -81,7 +81,6 @@ class ActionCreateCongNhan extends Component {
         console.log(err);
       });
   };
-
   render() {
     var { Name } = this.state;
     return (
@@ -137,6 +136,7 @@ class ActionCreateCongNhan extends Component {
               </div>
               <div className="modal-footer">
                 <button type="submit" className="btn btn-primary">
+                  
                   Thêm khu vực
                 </button>
                 <button

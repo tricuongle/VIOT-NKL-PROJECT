@@ -8,7 +8,6 @@ import axios from "axios";
 import TableContentKhuVuc from "../components/comQLKhuVuc/tableContentKhuVuc/TableContentKhuVuc";
 import TableContentItemsKhuVuc from "../components/comQLKhuVuc/tableItemKhuVuc/TableContentItemsKhuVuc";
 import ActionCreateKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionCreateKhuVuc";
-import ActionEditKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionEditKhuVuc";
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 var JsonValue;
@@ -48,7 +47,7 @@ class QuanLyKhuVuc extends Component {
     });
   };
   /*-------------- Gọi API hiển thị danh sách process (khu vực)------------------ */
-  componentDidMount=()=> {
+  componentDidMount() {
     axios({
       method: "GET",
       url:
@@ -77,46 +76,6 @@ class QuanLyKhuVuc extends Component {
             processing: true,
             responsive: true,
             dom: "Bfrtip",
-            stateSave: true,
-            "bDestroy": true
-          });
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log("Lỗi");
-      });
-  }
-  componentDidMountt=()=> {
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Process",
-      data: null,
-    })
-      .then((res) => {
-        ArrayValue = []; // set mảng về 0 khi load lại
-        for (var i = 0; i < res.data.length; i++) {
-          JsonTime = JSON.parse(res.data[i].Time); // get time
-          JsonDes = res.data[i].Description; // get description
-          JsonValue = JSON.parse(res.data[i].Value); // get value
-          JsonValue["TimeCreate"] = JsonTime; // add on value to array
-          JsonValue["Description"] = JsonDes;
-          ArrayValue.push(JsonValue);
-        }
-        this.setState({
-          contentItems: ArrayValue,
-        });
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 5,
-            processing: true,
-            responsive: true,
-            dom: "Bfrtip",
-            stateSave: true,
           });
         });
       })
@@ -170,9 +129,9 @@ class QuanLyKhuVuc extends Component {
       Level +
       ',"Parent":"' +
       idEdit +
-      '","status":"' +
+      '","status":' +
       status +
-      '","Before":"' +
+      ',"Before":"' +
       Before +
       '","After":"' +
       After +
@@ -207,9 +166,10 @@ class QuanLyKhuVuc extends Component {
     console.log(Namee);
     var { contentGetProcessId, Name, Level, Before, After } = this.state;
     var nameNew;
-    if (Name == "") {
-      nameNew = Namee;
-    } else {
+    if( Name==''){
+      nameNew= Namee;
+    }
+    else{
       nameNew = Name;
     }
     var idEdit = contentGetProcessId.Id;
@@ -240,8 +200,7 @@ class QuanLyKhuVuc extends Component {
         idEdit +
         "&value=" +
         valueNew +
-        "&Description=" +
-        Description,
+        "&Description="+Description,
       data: null,
     })
       .then((res) => {
@@ -252,14 +211,10 @@ class QuanLyKhuVuc extends Component {
         console.log(err);
       });
   };
-  LoadTable = () => {
-    setTimeout(this.componentDidMount,1000);
-  };
-  LoadTablee = () => {
-    setTimeout(this.componentDidMountt,1000);
-  };
+  reLoadTable=()=>{
+    console.log('khoa ok');
+  }
   render() {
-    
     var { contentItems } = this.state;
     var { Name, filter } = this.state;
     if (filter) {
@@ -363,11 +318,7 @@ class QuanLyKhuVuc extends Component {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      onClick={this.LoadTable}
-                    >
+                    <button type="submit" className="btn btn-primary">
                       Chỉnh sửa
                     </button>
                     <button
@@ -407,7 +358,6 @@ class QuanLyKhuVuc extends Component {
                       type="Submit"
                       className="btn btn-danger"
                       data-toggle="modal"
-                      onClick={this.LoadTablee}
                     >
                       Xóa khu vực
                     </button>
@@ -437,6 +387,7 @@ class QuanLyKhuVuc extends Component {
             contentItem={contentItem}
             index={index}
             onUpdate={this.onUpdate}
+            reLoadTable={this.reLoadTable}
           />
         );
       });

@@ -84,7 +84,7 @@ class TableItemChonMaCa extends Component {
         };
         var valuetemp =
           '{"Id":"' +
-          contentModel.Id +   
+          contentModel.Id +
           '","Name":"' +
           contentModel.Name +
           '","ProcessId":"' +
@@ -106,7 +106,7 @@ class TableItemChonMaCa extends Component {
           '","status":' +
           contentModel.status +
           "}";
-          console.log(contentModel.Name);
+        console.log(contentModel.Name);
         /*axios({
           method: "PUT",
           url:
@@ -139,22 +139,6 @@ class TableItemChonMaCa extends Component {
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Name}</td>
-        <td>
-          <div>
-            <select className="form-control" id="idSelectFS">
-              {this.showContentSelect(contentFishCode)}
-            </select>
-          </div>
-        </td>
-        <td>
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={this.onGetValue}
-          >
-            Chọn
-          </button>
-        </td>
         <td>{NameFishYes + ""}</td>
       </tr>
     );
