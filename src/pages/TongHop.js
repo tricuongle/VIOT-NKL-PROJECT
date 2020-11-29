@@ -49,7 +49,7 @@ class TongHop extends Component {
   };
 
   render() {
-    setTimeout(this.componentDidMountt, 1000);
+    setTimeout(this.componentDidMountt, 500);
     var { valueRecode } = this.state;
     return (
       

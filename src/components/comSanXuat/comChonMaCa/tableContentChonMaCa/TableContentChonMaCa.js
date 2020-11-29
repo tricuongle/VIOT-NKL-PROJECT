@@ -11,6 +11,7 @@ class TableContentChonMaCa extends Component {
               <th>STT</th>
               <th>khu vực</th>
               <th>Mã cá đang làm</th>
+              <th>Loại bỏ công đoạn</th>
             </tr>
           </thead>
           <tbody>

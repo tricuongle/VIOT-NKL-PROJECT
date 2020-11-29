@@ -73,24 +73,14 @@ class TableItemTongHop extends Component {
         this.setState({
           RecodeInKG: temp.Weight,
         });
-        // sử dụng thư viện datatable
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 10,
-            processing: true,
-            responsive: true,
-            destroy: true,
-            dom: "Bfrtip",
-          });
-        });
       })
       .catch((err) => {
         console.log(err);
       });
   };
   render() {
-    var { contentItem, index  } = this.props;
-    var { RecodeInKG,idProcess,idModel } = this.state;
+    var { contentItem, index } = this.props;
+    var { RecodeInKG, idProcess, idModel } = this.state;
     return (
       <tr>
         <td>{index + 1}</td>

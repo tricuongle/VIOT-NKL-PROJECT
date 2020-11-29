@@ -7,17 +7,20 @@ import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableIte
 var arrayRecode = [];
 class ThongKe extends Component {
   constructor(props) {
-    super(props); 
+    super(props);
     this.state = {
       valueRecode: [],
     };
   }
-  componentDidMountt=()=> {
+  componentDidMount = () => {
     console.log("get data ok");
     axios({
       method: "GET",
       url:
-      `${Config.API_URL}`+'/api/data/Values?token='+`${Config.TOKEN}`+'&Classify=Recode',
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Recode",
       data: null,
     })
       .then((res) => {
@@ -25,21 +28,12 @@ class ThongKe extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           arrayRecode.push(contentItem);
-
         });
         this.setState({
           valueRecode: arrayRecode,
         });
-       
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  render() {
-     // sử dụng thư viện datatable
-     /*$(document).ready(function () {
+        // sử dụng thư viện datatable
+        /*$(document).ready(function () {
       $("#tableData").DataTable({
         pageLength: 7,
         processing: true,
@@ -48,9 +42,16 @@ class ThongKe extends Component {
         dom: 'Bfrtip',
       });
     });*/
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  render() {
     // sau 3 giây load lại table
-    setTimeout(this.componentDidMountt, 1000);
-    
+    setTimeout(this.componentDidMount, 500);
+
     var { valueRecode } = this.state;
     return (
       <div className="content-wrapper">
@@ -171,7 +172,7 @@ class ThongKe extends Component {
       </div>
     );
   }
-  
+
   showContentItems(contentItems) {
     var result = null;
     if (contentItems.length >= 0) {
@@ -186,8 +187,6 @@ class ThongKe extends Component {
       });
     }
     return result;
-    
   }
-  
 }
 export default ThongKe;

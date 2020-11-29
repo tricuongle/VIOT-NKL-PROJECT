@@ -13,7 +13,8 @@ class TableItemChonMaCa extends Component {
       contentItems: [],
       contentFishCode: [],
       contentModel: [],
-      NameFishYes: "",
+      NameFishYes: [],
+      arrayFSyes: [],
     };
   }
   // lấy danh sách mã cá (model)  gán vào select
@@ -38,12 +39,16 @@ class TableItemChonMaCa extends Component {
           contentFishCode: arrayValueFishCode,
         });
         arrayNameFishCode = [];
+        var arrtemp = [];
         for (var temp in this.state.contentFishCode) {
-          // so sách
+          // so sánh tìm khu vực trong công đoạn để xác định mã cá đã thêm
           if (this.state.contentFishCode[temp].ProcessId == contentItem.Id) {
+            var obj = this.state.contentFishCode[temp];
+            arrtemp.push(obj);
             arrayNameFishCode.push(this.state.contentFishCode[temp].Name); // lấy ds mã cá đã thêm
             this.setState({
               NameFishYes: arrayNameFishCode,
+              arrayFSyes: arrtemp,
             });
           }
         }
@@ -52,110 +57,32 @@ class TableItemChonMaCa extends Component {
         console.log(err);
       });
   };
-  GetValueFishcode = (IdFishCode) => {
+  onGetId = () => {
+    var { NameFishYes, arrayFSyes } = this.state;
     var { contentItem } = this.props;
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&classify=Model&key=" +
-        IdFishCode,
-      data: null,
-    })
-      .then((res) => {
-        Objvalue = JSON.parse(res.data);
-        this.setState({
-          contentModel: Objvalue,
-        });
-        var { contentModel } = this.state;
-        valueUpdateModel = {
-          Id: IdFishCode,
-          Name: contentModel.Name,
-          ProcessId: contentItem.Id,
-          CreateDate: contentModel.CreateDate,
-          WeighInMax: contentModel.WeighInMax,
-          WeightInMin: contentModel.WeightInMin,
-          WeightOutMin: contentModel.WeightOutMin,
-          WeighOutMax: contentModel.WeighOutMax,
-          Classify: contentModel.Classify,
-          Group: contentModel.Group,
-        };
-        var valuetemp =
-          '{"Id":"' +
-          contentModel.Id +
-          '","Name":"' +
-          contentModel.Name +
-          '","ProcessId":"' +
-          contentItem.Id +
-          '","CreateDate":"' +
-          contentModel.CreateDate +
-          '","WeighInMax":"' +
-          contentModel.WeighInMax +
-          '","WeightInMin":"' +
-          contentModel.WeightInMin +
-          '","WeightOutMin":"' +
-          contentModel.WeightOutMin +
-          '","WeighOutMax":"' +
-          contentModel.WeighOutMax +
-          '","Classify":"' +
-          contentModel.Classify +
-          '","Group":"' +
-          contentModel.Group +
-          '","status":' +
-          contentModel.status +
-          "}";
-        console.log(contentModel.Name);
-        /*axios({
-          method: "PUT",
-          url:
-         `${Config.API_URL}`+'/api/data/key?token='+`${Config.TOKEN}`+'&classify=Model&key='+IdFishCode,
-          data: {
-            "Value": valuetemp
-          },
-        })
-          .then((res) => {
-            alert("Chọn mã cá thành công !");
-          })
-          .catch((err) => {
-            console.log(err);
-          });*/
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  onGetValue = () => {
-    var IdFishCode = document.getElementById("idSelectFS").value;
-    //var valuesele= IdFishCode.options[IdFishCode.selectedIndex].value;// value ==id=Key
-    this.GetValueFishcode(IdFishCode);
-    console.log(IdFishCode);
+    this.props.onGetId(contentItem.Id, arrayFSyes, contentItem.Name);
   };
   render() {
-    var { contentFishCode, NameFishYes } = this.state;
+    var { NameFishYes } = this.state;
     var { contentItem, index } = this.props;
     return (
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Name}</td>
         <td>{NameFishYes + ""}</td>
+        <td>
+          <button
+            type="button"
+            className="btn btn-primary card card-primary card-outline container-fluid"
+            data-toggle="modal"
+            data-target="#modal-delete"
+            onClick={this.onGetId}
+          >
+            Loại bỏ
+          </button>
+        </td>
       </tr>
     );
-  }
-  // Hiển thị thông tin list mã cá cần chọn
-  showContentSelect(contentFishCode) {
-    var result = null;
-    if (contentFishCode.length >= 0) {
-      result = contentFishCode.map((contentItem, index) => {
-        return (
-          <option key={index} id={index} value={contentItem.Id}>
-            {contentItem.Name}
-          </option>
-        );
-      });
-    }
-    return result;
   }
 }
 export default TableItemChonMaCa;
