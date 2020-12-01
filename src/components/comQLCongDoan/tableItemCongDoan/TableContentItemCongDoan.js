@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-const LOCALHOST = "http://171.232.86.160:5000";
-const KEY = "";
-const TOKEN =
-  "04c5077dc551934ebdc267fbc83357b9967e19d21fa9d8c4884fac130acb7dadc50e05c08b9980cd7a379f2c8fa39e50";
+import * as Config from "../../../untils/Config";
+
 var textName;
 var ObjName;
 var ObjValue;
@@ -16,6 +14,7 @@ class TableContentItemCongDoan extends Component {
     super(props);
     this.state = {
       contentItemNamePro: [],
+      nameProcess: [],
     };
   }
   componentDidMount() {
@@ -23,7 +22,12 @@ class TableContentItemCongDoan extends Component {
     // lấy giá trị thời gian của công đoạn
     axios({
       method: "GET",
-      url: LOCALHOST + "/api/data?token=" + TOKEN + "&Classify=Model",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.API_URL}` +
+        "&Classify=Process&key=" +
+        contentItem.ProcessId,
       data: null,
     })
       .then((resModel) => {})
@@ -31,13 +35,13 @@ class TableContentItemCongDoan extends Component {
         console.log(err);
         console.log("Không lấy công đoạn !");
       });
-    // lấy giá trị name  theo id cửa khu vực
+    //----------------------- lấy giá trị name  theo id cửa khu vực ------------------
     axios({
       method: "GET",
       url:
-        LOCALHOST +
+        `${Config.API_URL}` +
         "/api/data/valuekey?token=" +
-        TOKEN +
+        `${Config.TOKEN}` +
         "&Classify=Process&key=" +
         contentItem.ProcessId +
         "",
@@ -46,11 +50,9 @@ class TableContentItemCongDoan extends Component {
       .then((resProcess) => {
         ObjValue = JSON.parse(resProcess.data);
         textName = ObjValue.Name;
-        ObjName = { NameProcesstoID: textName };
-        contentItemss = Object.assign(ObjName, contentItem);
         this.setState({
-          contentItemNamePro: contentItemss,
-        });
+            nameProcess: textName
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -62,6 +64,7 @@ class TableContentItemCongDoan extends Component {
   };
   render() {
     var { contentItem, index } = this.props;
+    var {nameProcess} = this.state
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
@@ -71,6 +74,7 @@ class TableContentItemCongDoan extends Component {
         <td>{contentItem.WeighInMax}</td>
         <td>{contentItem.WeightOutMin}</td>
         <td>{contentItem.WeighOutMax}</td>
+        <td>{nameProcess}</td>
         <td>{contentItem.Group}</td>
         <td>{contentItem.Classify}</td>
         <td>

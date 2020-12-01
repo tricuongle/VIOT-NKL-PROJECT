@@ -9,7 +9,7 @@ class TableContentDinhMuc extends Component {
           <thead>
             <tr className="tieude">
               <th>ID định mức giá</th>
-              <th >Tên công đoạn mã cá</th>
+              <th >Tên mã cá</th>
               <th >Tên định mức</th>
               <th>Khối lượng (KG)</th>
               <th>Đơn giá</th>

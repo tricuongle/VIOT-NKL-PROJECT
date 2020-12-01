@@ -13,6 +13,7 @@ class QuanLyTramCan extends Component {
     this.state = {
       contentItems: [],
       contentProcess: [],
+      contentSection: [],
       contentDevice: "",
     };
   }
@@ -23,6 +24,8 @@ class QuanLyTramCan extends Component {
     this.setState({
       [name]: value,
     });
+
+    /* xử lý mutiple với Type 4 và 5 */
     if (
       document.getElementById("idType4").checked ||
       document.getElementById("idType5").checked
@@ -36,8 +39,7 @@ class QuanLyTramCan extends Component {
     }
   };
 
-  componentDidMount =()=> {
-    console.log("ok");
+  componentDidMount = () => {
     /*-----------------------function get list device to api ---------------------------------- */
     axios({
       method: "GET",
@@ -48,14 +50,14 @@ class QuanLyTramCan extends Component {
       .then((res) => {
         arrayValueDevice = [];
         var Objvalue = res.data;
-       for (var k in Objvalue) {
+        for (var k in Objvalue) {
           if (Objvalue[k].Capabilitie == "WeighingStation") {
             arrayValueDevice.push(Objvalue[k]);
           }
         }
-          this.setState({
-            contentItems: arrayValueDevice,
-          });
+        this.setState({
+          contentItems: arrayValueDevice,
+        });
         // tabledata giao diện
         $(document).ready(function () {
           $("#tableData").DataTable({
@@ -68,9 +70,10 @@ class QuanLyTramCan extends Component {
         });
       })
       .catch((err) => {
+        console.log("Lỗi láy thông tin device ( cân)");
         console.log(err);
       });
-    /*-----------------------function get list Model to api ---------------------------------- */
+    /*-----------------------function get list process to api ---------------------------------- */
     axios({
       method: "GET",
       url:
@@ -92,11 +95,11 @@ class QuanLyTramCan extends Component {
       })
       .catch((err) => {
         console.log(err);
+        console.log("Lỗi láy thông tin công đoạn");
       });
-  }
-  // sửa trạm cân------------------------------------------
+  };
   onGetIdEdit = (IdDevice) => {
-    /*--------------láy thông tin theo id---------------- */
+    /*--------------láy thông tin theo id truyền vào từ hàng trong bảng---------------- */
     axios({
       method: "GET",
       url:
@@ -122,27 +125,56 @@ class QuanLyTramCan extends Component {
         console.log(err);
         console.log("Lỗi");
       });
+    /*-----------------Lấy thông tin section và đổ vào select----------------------------- */
+    axios({
+      method: "GET",
+      url: `${Config.API_URL}` + "/api/section/All?token=" + `${Config.TOKEN}`,
+      data: null,
+    })
+      .then((res) => {
+        var varrArraySection = [];
+        for (var k in res.data) {
+          if (res.data[k].Zone == 1) {
+            varrArraySection.push(res.data[k]);
+          }
+        }
+        this.setState({
+          contentSection: varrArraySection,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi lấy thông tin khu vực - sections");
+      });
   };
+  /*---------------------Chỉnh sửa thông tin câm ------------------------- */
   onEditDevice = (event) => {
     event.preventDefault();
     var { contentDevice } = this.state;
     var Type = "";
     var checkbox = document.getElementsByName("Type");
     var Id = contentDevice.Id;
-
+    var selectProcess = document.getElementById("idProcessList") // thêm công đoạn từ select vào một mảng
+      .selectedOptions;
+    let idProcess = "";
+    var idSection = document.getElementById("idSection").value; // lấy id section
+    for (let i = 0; i < selectProcess.length; i++) {
+      idProcess += selectProcess[i].value + ",";
+    }
     for (var i = 0; i < checkbox.length; i++) {
+      // quét vòng for trong nhóm radio.
       if (checkbox[i].checked === true) {
         Type = checkbox[i].value;
       }
     }
-    var selectProcess = document.getElementById("idProcessList")
-      .selectedOptions;
-    let idProcess = "";
-    for (let i = 0; i < selectProcess.length; i++) {
-      idProcess += selectProcess[i].value + ",";
-    }
-    console.log(idProcess);
-    axios({
+    
+    if (Type ==='') {
+      alert("Vui lòng chọn Type phù hợp!");
+    } else {
+      console.log(idSection);
+      console.log(idProcess);
+      console.log(Type);
+      axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
@@ -153,20 +185,21 @@ class QuanLyTramCan extends Component {
       data: {
         ProcessId: idProcess,
         Type: Type,
+        //SectionId: idSection
       },
     })
       .then((res) => {
-        console.log("ok");
         alert("Sửa thành công !");
       })
       .catch((err) => {
         console.log(err);
         console.log("Lỗi rồi");
       });
+    }
   };
 
   render() {
-    var { contentItems, contentProcess } = this.state;
+    var { contentItems, contentProcess, contentSection } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -212,6 +245,21 @@ class QuanLyTramCan extends Component {
                         id="IdnameDevice"
                         disabled
                       />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>Chọn khu vực</h5>
+                      </label>
+                      <br />
+                      <select
+                        name="SectionlId"
+                        id="idSection"
+                        className="form-control"
+                        required="required"
+                      >
+                        <option value="">---Chọn khu vực---</option>
+                        {this.showContentSelect(contentSection)}
+                      </select>
                     </div>
                     <div className="form-group">
                       <label htmlFor="area">
@@ -278,7 +326,12 @@ class QuanLyTramCan extends Component {
                       <label htmlFor="area" id="areaDevice">
                         <h5> Công đoạn:</h5>
                       </label>
-                      <select className="form-control" id="idProcessList">
+                      <select
+                        className="form-control"
+                        id="idProcessList"
+                        required="required"
+                      >
+                        <option value="">---Chọn công đoạn---</option>
                         {this.showContentSelect(contentProcess)}
                       </select>
                     </div>
@@ -330,7 +383,7 @@ class QuanLyTramCan extends Component {
     if (contentProcess.length >= 0) {
       result = contentProcess.map((contentItem, index) => {
         return (
-          <option key={index} value={contentItem.Id}>
+          <option key={index} name={contentItem.Name} value={contentItem.Id}>
             {contentItem.Name}
           </option>
         );

@@ -22,6 +22,9 @@ class QuanLyCongDoan extends Component {
     super(props);
     this.state = {
       contentItems: [],
+      contentProcess: [],
+
+      // giá trị obj của data
       valueModel: {
         Id: "",
         Name: "",
@@ -42,11 +45,9 @@ class QuanLyCongDoan extends Component {
     };
   }
   onChange = (event) => {
-    console.log("pk");
     var target = event.target;
     var name = target.name;
     var value = target.value;
-
     this.setState((preState) => ({
       valueModel: {
         ...preState.valueModel,
@@ -96,7 +97,34 @@ class QuanLyCongDoan extends Component {
         console.log(err);
         console.log("Lỗi");
       });
+    /*---------- lấy data đổ vào select để  Chọn khu vực----------------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process",
+      data: null,
+    })
+      .then((resProcess) => {
+        var arrayValueProcess = [];
+        for (var k in resProcess.data) {
+          var Object = JSON.parse(resProcess.data[k]);
+          if (Object.status == true) {
+            // lọc ra khu vực đã xóa
+            arrayValueProcess.push(Object);
+          }
+        }
+        this.setState({
+          contentProcess: arrayValueProcess,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+  /*--------------hàm truyền dữ liệu từ một hàng trong table---------------- */
   onUpdate = (content) => {
     var date = new Date();
     var dayCreate = date.valueOf();
@@ -200,7 +228,7 @@ class QuanLyCongDoan extends Component {
     setTimeout(this.componentDidMount, 2000);
   };
   render() {
-    var { contentItems, filter } = this.state;
+    var { contentItems, filter, valueModel, contentProcess } = this.state;
     if (filter) {
       // xét điều kiện để filter
       if (filter.name) {
@@ -219,14 +247,14 @@ class QuanLyCongDoan extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>QUẢN LÝ CÔNG ĐOẠN</h1>
+          <h1>QUẢN LÝ MÃ CÁ</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Quản lý công đoạn</li>
+            <li className="active">Quản lý MÃ CÁ</li>
           </ol>
         </section>
         <section className="content">
@@ -239,7 +267,7 @@ class QuanLyCongDoan extends Component {
                 data-target="#modal-create"
                 id="id123"
               >
-                Tạo mới công đoạn
+                Tạo mới mã cá
               </button>
             </div>
           </form>
@@ -263,19 +291,16 @@ class QuanLyCongDoan extends Component {
                     >
                       &times;
                     </button>
-                    <h4 className="modal-title ">
-                      Chỉnh sửa công đoạn (mã cá)
-                    </h4>
+                    <h4 className="modal-title ">CHỈNH SỬA MÃ CÁ</h4>
                   </div>
                   <div className="modal-body">
                     <div className="tenMaCa form-group">
                       <label htmlFor="devices">
-                        <h5>ID công đoạn (mã cá): Chỉ xem </h5>
+                        <h5>ID mã cá: ( Chỉ xem ) </h5>
                       </label>
                       <br />
                       <input
                         type="text"
-                        placeholder="tên công đoạn"
                         className="form-control"
                         id="idModel"
                         disabled
@@ -283,18 +308,35 @@ class QuanLyCongDoan extends Component {
                     </div>
                     <div className="tenMaCa form-group">
                       <label htmlFor="devices">
-                        <h5>Tên công đoạn (mã cá): </h5>
+                        <h5>Tên mã cá: </h5>
                       </label>
                       <br />
                       <input
                         type="text"
-                        placeholder="tên công đoạn"
+                        placeholder="Nhập tên mã cá"
                         className="form-control"
                         id="idNameModel"
                         Name="Name"
                         required
                         onChange={this.onChange}
                       />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>Chọn khu vực:</h5>
+                      </label>
+                      <br />
+                      <select
+                        name=""
+                        id="idProcess"
+                        className="form-control"
+                        required="required"
+                      >
+                        <option value="" defaultValue>
+                          ---Chọn khu vực---
+                        </option>
+                        {this.showContentSelect(contentProcess)}
+                      </select>
                     </div>
 
                     <div className="form-group">
@@ -306,7 +348,7 @@ class QuanLyCongDoan extends Component {
                           <br />
                           <input
                             type="number"
-                            placeholder="khối lượng KG"
+                            placeholder="khối lượng Kg"
                             className="form-control"
                             id="idWeightInMin"
                             name="WeightInMin"
@@ -325,7 +367,7 @@ class QuanLyCongDoan extends Component {
                             className="form-control"
                             id="idWeighInMax"
                             name="WeighInMax"
-                            placeholder="khối lượng KG"
+                            placeholder="khối lượng Kg"
                             required
                             onChange={this.onChange}
                             min={0}
@@ -338,7 +380,7 @@ class QuanLyCongDoan extends Component {
                           <br />
                           <input
                             type="number"
-                            placeholder="khối lượng KG"
+                            placeholder="khối lượng Kg"
                             className="form-control"
                             id="idWeightOutMin"
                             name="WeightOutMin"
@@ -357,7 +399,7 @@ class QuanLyCongDoan extends Component {
                             className="form-control"
                             id="idWeighOutMax"
                             name="WeighOutMax"
-                            placeholder="khối lượng KG"
+                            placeholder="khối lượng Kg"
                             required
                             onChange={this.onChange}
                             min={0}
@@ -372,7 +414,7 @@ class QuanLyCongDoan extends Component {
                             maxLength="30"
                             minLength="3"
                             type="text"
-                            placeholder="nhập tên nhóm"
+                            placeholder="nhập tên nhóm mã cá"
                             className="form-control"
                             id="idGroupp"
                             name="Group"
@@ -382,7 +424,7 @@ class QuanLyCongDoan extends Component {
                         </div>
                         <div className="groupAndclassify">
                           <label>
-                            <h5>Classify</h5>
+                            <h5>Classify (Loại)</h5>
                           </label>
                           <br />
                           <input
@@ -396,53 +438,18 @@ class QuanLyCongDoan extends Component {
                           />
                         </div>
                       </div>
-                      <table className="table table-hover">
-                        {/*<thead>
-                          <tr>
-                            <th>Tên định giá</th>
-                            <th>Khối lượng rổ (KG)</th>
-                            <th>Đơn giá (VNĐ)</th>
-                            <th>Sửa/xóa</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>Rổ abc</td>
-                            <td>5</td>
-                            <td>23000</td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-primary "
-                              >
-                                Sửa
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-danger btnXoaDinhMuc"
-                                onClick={this.btnXoaDinhMuc}
-                              >
-                                Xóa
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>*/}
-                      </table>
+                      {/*không tác dụng */}
+                      <table className="table table-hover"></table>
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      onClick={this.reLoadTable}
-                    >
-                      Tạo mới
+                    <button type="submit" className="btn btn-primary">
+                      Tạo mã cá mới
                     </button>
                     <button
                       type="button"
                       className="btn btn-default"
                       data-dismiss="modal"
-                      
                     >
                       Thoát
                     </button>
@@ -465,10 +472,10 @@ class QuanLyCongDoan extends Component {
                     >
                       &times;
                     </button>
-                    <h4 className="modal-title">Xóa công đoạn</h4>
+                    <h4 className="modal-title">XÓA MÃ CÁ</h4>
                   </div>
                   <div className="modal-body">
-                    <h5>Bạn có đồng ý xóa công đoạn này không?</h5>
+                    <h5>Bạn có đồng ý xóa mã cá này không?</h5>
                   </div>
                   <div className="modal-footer">
                     <button
@@ -477,7 +484,7 @@ class QuanLyCongDoan extends Component {
                       data-toggle="modal"
                       onClick={this.reLoadTable}
                     >
-                      Xóa công đoạn
+                      Xóa mã cá
                     </button>
                     <button
                       type="button"
@@ -511,20 +518,19 @@ class QuanLyCongDoan extends Component {
     }
     return result;
   }
-  /*showContentNameProcess(ContentNameProcess) {
+   // hàm hiển thị danh sách tên khu vực.
+   showContentSelect(contentProcess) {
     var result = null;
-    if (ContentNameProcess.length >= 0) {
-      result = ContentNameProcess.map((ContentNamePro, index) => {
+    if (contentProcess.length >= 0) {
+      result = contentProcess.map((contentItem, index) => {
         return (
-          <TableContentItemCongDoan
-            key={index}
-            ContentNamePro={ContentNamePro}
-            index={index}
-          />
+          <option key={index} value={contentItem.Id}>
+            {contentItem.Name}
+          </option>
         );
       });
     }
     return result;
-  }*/
+  }
 }
 export default QuanLyCongDoan;

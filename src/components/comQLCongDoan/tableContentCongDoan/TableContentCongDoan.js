@@ -12,6 +12,7 @@ class TableContentCongDoan extends Component {
             <th>KL vào Max</th>
             <th>KL ra Min</th>
             <th>KL ra Max</th>
+            <th>công đoạn</th>
             <th>Nhóm</th>
             <th>Classify</th>
             <th>Sửa</th>

@@ -235,14 +235,14 @@ class QuanLyKhuVuc extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>Quản lý khu vực</h1>
+          <h1>QUẢN LÝ CÔNG ĐOẠN</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Quản lý khu vực</li>
+            <li className="active">Quản lý công đoạn</li>
           </ol>
         </section>
         <section className="content">
@@ -266,12 +266,12 @@ class QuanLyKhuVuc extends Component {
                     >
                       &times;
                     </button>
-                    <h4 className="modal-title">Chỉnh sửa khu vực</h4>
+                    <h4 className="modal-title">CHỈNH SỬA CÔNG ĐOẠN</h4>
                   </div>
                   <div className="modal-body">
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>ID khu vực: (chỉ xem)</h5>
+                        <h5>ID công đoạn: (chỉ xem)</h5>
                       </label>
                       <br />
                       <input
@@ -287,7 +287,7 @@ class QuanLyKhuVuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Tên khu vực:</h5>
+                        <h5>Tên công đoạn:</h5>
                       </label>
                       <br />
                       <input
@@ -298,7 +298,7 @@ class QuanLyKhuVuc extends Component {
                         id="IdNameProcess"
                         name="Name"
                         required
-                        placeholder="Nhập tên khu vực thay đổi"
+                        placeholder="Nhập tên công đoạn thay đổi"
                         value={Name}
                         onChange={this.onChange}
                       />
@@ -319,7 +319,7 @@ class QuanLyKhuVuc extends Component {
                   </div>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-primary">
-                      Chỉnh sửa
+                      Chỉnh sửa công đoạn
                     </button>
                     <button
                       type="button"
@@ -348,10 +348,10 @@ class QuanLyKhuVuc extends Component {
                     >
                       &times;
                     </button>
-                    <h4 className="modal-title">Xóa khu vực</h4>
+                    <h4 className="modal-title">XÓA CÔNG ĐOẠN</h4>
                   </div>
                   <div className="modal-body">
-                    <h5>Bạn có đồng ý xóa khu vực này không?</h5>
+                    <h5>Bạn có đồng ý xóa công đoạn này không?</h5>
                   </div>
                   <div className="modal-footer">
                     <button
@@ -359,7 +359,7 @@ class QuanLyKhuVuc extends Component {
                       className="btn btn-danger"
                       data-toggle="modal"
                     >
-                      Xóa khu vực
+                      Xóa công đoạn
                     </button>
                     <button
                       type="button"

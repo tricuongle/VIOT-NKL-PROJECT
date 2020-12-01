@@ -97,12 +97,12 @@ class ActionCreateCongNhan extends Component {
                 >
                   &times;
                 </button>
-                <h4 className="modal-title">Tạo khu vực mới</h4>
+                <h4 className="modal-title">TẠO CÔNG ĐOẠN MỚI</h4>
               </div>
               <div className="modal-body">
                 <div className="form-group">
                   <label htmlFor="devices">
-                    <h5>Tên khu vực:</h5>
+                    <h5>Tên công đoạn:</h5>
                   </label>
                   <br />
                   <input
@@ -113,14 +113,14 @@ class ActionCreateCongNhan extends Component {
                     id="NameKhuVuc"
                     name="Name"
                     required
-                    placeholder="Nhập tên khu vực"
+                    placeholder="Nhập tên công đoạn"
                     value={Name}
                     onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
                   <label htmlFor="devices">
-                    <h5>Mô tả:</h5>
+                    <h5>Mô tả công đoạn:</h5>
                   </label>
                   <br />
 
@@ -130,14 +130,14 @@ class ActionCreateCongNhan extends Component {
                     id="info"
                     className="form-control"
                     rows="3"
-                    placeholder="mô tả ngắn gọn về hoạt động của khu vực"
+                    placeholder="mô tả ngắn gọn về hoạt động của công đoạn"
                   ></textarea>
                 </div>
               </div>
               <div className="modal-footer">
                 <button type="submit" className="btn btn-primary">
                   
-                  Thêm khu vực
+                  Thêm công đoạn
                 </button>
                 <button
                   type="button"

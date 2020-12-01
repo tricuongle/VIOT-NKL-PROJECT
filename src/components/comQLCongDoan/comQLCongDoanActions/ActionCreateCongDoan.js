@@ -7,38 +7,36 @@ import * as Config from "../../../untils/Config";
 var count;
 var valueNew;
 var Description;
-var contentNameProcess = []; // mảng chứa tên khu vực
 class ActionCreateCongDoan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Id: "",
-      Name: "",
-      ProcessId: "",
-      CreateDate: "",
-      WeighInMax: null,
-      WeightInMin: null,
-      WeightOutMin: null,
-      WeighOutMax: null,
-      Classify: "",
-      Group: "",
-      status: true,
-    };
-    this.state1 = {
-      Id: "",
-      NameProcess: "",
+      contentProcess :[],
+      valueMaCa: {
+        Id: "",
+        Name: "",
+        ProcessId: "",
+        CreateDate: "",
+        WeighInMax: null,
+        WeightInMin: null,
+        WeightOutMin: null,
+        WeighOutMax: null,
+        Classify: "",
+        Group: "",
+        status: true,
+      },
     };
   }
   onChange = (event) => {
-    // var temp = document.getElementById("idProcess").value; // lấy value chứa id của bảng khu vực
     var target = event.target;
     var name = target.name;
     var value = target.value;
-    this.setState({
-      // thay đổi giá trị
-      [name]: value,
-      //ProcessId: temp,
-    });
+    this.setState((preState) => ({
+      valueMaCa: {
+        ...preState.valueMaCa,
+        [name]: value,
+      },
+    }));
     var valueGroup = document.getElementById("idGroup").value;
     if (valueGroup != "") {
       document.getElementById("idClassify").disabled = false;
@@ -60,16 +58,19 @@ class ActionCreateCongDoan extends Component {
     })
       .then((res) => {
         count = res.data.length + 1;
-        var countString = "CD-NKL-0" + count;
-        this.setState({
-          Id: countString,
-        });
+        var countString = "MC-NKL-0" + count;
+        this.setState((preState) => ({
+          valueMaCa: {
+            ...preState.valueMaCa,
+            Id: countString, // sẵn gán id vào id valueMaCa
+          },
+        }));
       })
       .catch((err) => {
         console.log(err);
         console.log("Không lấy được số lượng công đoạn !");
       });
-    // lấy danh sách tên khu vực
+    /*---------- lấy data đổ vào select để  Chọn khu vực----------------- */
     axios({
       method: "GET",
       url:
@@ -80,21 +81,27 @@ class ActionCreateCongDoan extends Component {
       data: null,
     })
       .then((resProcess) => {
+        var arrayValueProcess = [];
         for (var k in resProcess.data) {
           var Object = JSON.parse(resProcess.data[k]);
-          contentNameProcess.push(Object);
+          if (Object.status == true) {
+            // lọc ra khu vực đã xóa
+            arrayValueProcess.push(Object);
+          }
         }
+        this.setState({
+          contentProcess: arrayValueProcess,
+        });
       })
       .catch((err) => {
         console.log(err);
-        console.log("Không lấy được tên khu vực !");
       });
   };
-
+  /*-----------------------hàm thêm mã cá và gán vào công đoạn ------------------------- */
   onSave = (event) => {
     event.preventDefault();
-    var { Id } = this.state;
-    valueNew = JSON.stringify(this.state);
+    var { Id } = this.state.valueMaCa;
+    valueNew = JSON.stringify(this.state.valueMaCa);
     console.log(valueNew);
     axios({
       method: "POST",
@@ -113,7 +120,7 @@ class ActionCreateCongDoan extends Component {
     })
       .then((res) => {
         console.log(res);
-        alert("Thêm công đoạn (mã cá) " + this.state.Name + " thành công !");
+        alert("Thêm mã cá " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
@@ -121,7 +128,7 @@ class ActionCreateCongDoan extends Component {
   };
 
   render() {
-    var { Name } = this.state;
+    var { Name, contentProcess } = this.state;
     return (
       <div className="modal fade" id="modal-create">
         <form onSubmit={this.onSave}>
@@ -136,12 +143,12 @@ class ActionCreateCongDoan extends Component {
                 >
                   &times;
                 </button>
-                <h4 className="modal-title ">Tạo mới công đoạn (mã cá)</h4>
+                <h4 className="modal-title ">TẠO MỚI MÃ CÁ</h4>
               </div>
               <div className="modal-body">
                 <div className="tenMaCa form-group">
                   <label htmlFor="devices">
-                    <h5>Tên công đoạn (mã cá): </h5>
+                    <h5>Tên mã cá: </h5>
                   </label>
                   <br />
                   <input
@@ -155,6 +162,24 @@ class ActionCreateCongDoan extends Component {
                     onChange={this.onChange}
                   />
                 </div>
+                <div className="form-group">
+                  <label htmlFor="devices">
+                    <h5>Chọn khu vực:</h5>
+                  </label>
+                  <br />
+                  <select
+                    name="ProcessId"
+                    id="idProcess"
+                    className="form-control"
+                    required="required"
+                    onChange={this.onChange}
+                  >
+                    <option value="" defaultValue>
+                      ---Chọn khu vực---
+                    </option>
+                    {this.showContentSelect(contentProcess)}
+                  </select>
+                </div>
 
                 <div className="form-group">
                   <div className="themDinhGia-group">
@@ -165,7 +190,7 @@ class ActionCreateCongDoan extends Component {
                       <br />
                       <input
                         type="number"
-                        placeholder="khối lượng KG"
+                        placeholder="khối lượng Kg"
                         className="form-control"
                         id="idWeightInMin"
                         name="WeightInMin"
@@ -184,7 +209,7 @@ class ActionCreateCongDoan extends Component {
                         className="form-control"
                         id="idWeighInMax"
                         name="WeighInMax"
-                        placeholder="khối lượng KG"
+                        placeholder="khối lượng Kg"
                         required
                         onChange={this.onChange}
                         min={0}
@@ -197,7 +222,7 @@ class ActionCreateCongDoan extends Component {
                       <br />
                       <input
                         type="number"
-                        placeholder="khối lượng KG"
+                        placeholder="khối lượng Kg"
                         className="form-control"
                         id="idWeightOutMin"
                         name="WeightOutMin"
@@ -216,7 +241,7 @@ class ActionCreateCongDoan extends Component {
                         className="form-control"
                         id="idWeighOutMax"
                         name="WeighOutMax"
-                        placeholder="khối lượng KG"
+                        placeholder="khối lượng Kg"
                         required
                         onChange={this.onChange}
                         min={0}
@@ -241,7 +266,7 @@ class ActionCreateCongDoan extends Component {
                     </div>
                     <div className="groupAndclassify">
                       <label>
-                        <h5>Classify</h5>
+                        <h5>Classify (Loại)</h5>
                       </label>
                       <br />
                       <input
@@ -249,42 +274,15 @@ class ActionCreateCongDoan extends Component {
                         className="form-control"
                         id="idClassify"
                         name="Classify"
-                        placeholder="khối lượng KG"
+                        placeholder="Nhập loại"
                         disabled
                         onChange={this.onChange}
                         min={0}
                       />
                     </div>
                   </div>
-                  <table className="table table-hover">
-                   {/* <thead>
-                      <tr>
-                        <th>Tên định giá</th>
-                        <th>Khối lượng rổ (KG)</th>
-                        <th>Đơn giá (VNĐ)</th>
-                        <th>Sửa/xóa</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Rổ abc</td>
-                        <td>5</td>
-                        <td>23000</td>
-                        <td>
-                          <button type="button" className="btn btn-primary ">
-                            Sửa
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-danger btnXoaDinhMuc"
-                            onClick={this.btnXoaDinhMuc}
-                          >
-                            Xóa
-                          </button>
-                        </td>
-                      </tr>
-                   </tbody>*/}
-                  </table>
+                  {/* */}
+                  <table className="table table-hover"></table>
                 </div>
               </div>
               <div className="modal-footer">
@@ -306,10 +304,10 @@ class ActionCreateCongDoan extends Component {
     );
   }
   // hàm hiển thị danh sách tên khu vực.
-  showContentSelect(contentNameProcess) {
+  showContentSelect(contentProcess) {
     var result = null;
-    if (contentNameProcess.length >= 0) {
-      result = contentNameProcess.map((contentItem, index) => {
+    if (contentProcess.length >= 0) {
+      result = contentProcess.map((contentItem, index) => {
         return (
           <option key={index} value={contentItem.Id}>
             {contentItem.Name}

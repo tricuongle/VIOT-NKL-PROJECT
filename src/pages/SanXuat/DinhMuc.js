@@ -20,6 +20,7 @@ class DinhMuc extends Component {
       idModel: "",
       nameModel: "",
       IDDinhGiaCreate: "",
+      //các giá trị của định mức trong Object
       valueDinhMuc: {
         ID: "",
         ModelId: "",
@@ -28,10 +29,6 @@ class DinhMuc extends Component {
         Weight: null,
         Price: null,
       },
-      /*filter: {
-        name: "",
-        status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
-      },*/
     };
   }
   onChange = (event) => {
@@ -59,7 +56,7 @@ class DinhMuc extends Component {
     })
       .then((res) => {
         var count = res.data.length + 1;
-        var IDcountString = "MC-NKL-0" + count;
+        var IDcountString = "DG-NKL-0" + count;
         ArrayValue = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
@@ -77,27 +74,16 @@ class DinhMuc extends Component {
         }));
         console.log(this.state.contentItems);
 
-
-          $("#tableData").dataTable({
-            dom: "Bfrtip",
-            pageLength: 7,
-          });
-           $("#tableData").dataTable({
-            dom: "Bfrtip",
-            pageLength: 7,
-            destroy: true,
-          });
-
         // sử dụng thư viện datatable
-        /*$(document).ready(function () {
+        $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 7,
+            pageLength: 5,
             bDestroy: true,
             processing: true,
             responsive: true,
             dom: "Bfrtip",
           });
-        });*/
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -130,7 +116,7 @@ class DinhMuc extends Component {
       });
   };
 
-  /*-------------- truyền data từ button tạo mới------------------------- */
+  /*-------------- truyền data khi ấn button tạo mới------------------------- */
   onUpdateDinhMuc = (ID, NameModel) => {
     console.log(ID);
     axios({
@@ -154,8 +140,8 @@ class DinhMuc extends Component {
         console.log(err);
       });
   };
-  /*---------------Xóa đinh mức giá-------------------------------- */
-  onDelDinhMuc =(ID, NameModel)=>{
+  /*---------------------Xóa đinh mức giá-------------------------------- */
+  onDelDinhMuc = (ID, NameModel) => {
     console.log(ID);
     axios({
       method: "GET",
@@ -182,37 +168,33 @@ class DinhMuc extends Component {
       .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
   /*---------------Tạo mới giá định mức-------------------------- */
   onCreateDinhMuc = (event) => {
-    var { valueDinhMuc } = this.state;
-    var stringValueDinhMuc = JSON.stringify(valueDinhMuc);
-
     event.preventDefault();
     console.log(stringValueDinhMuc);
-    if (valueDinhMuc.ModelId != "") {
-      axios({
-        method: "POST",
-        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
-        data: {
-          Key: valueDinhMuc.ID,
-          Classify: "FishCode",
-          Value: stringValueDinhMuc,
-          Description: "Định giá cho mã cá theo khối lượng",
-        },
+    var { valueDinhMuc } = this.state;
+    var stringValueDinhMuc = JSON.stringify(valueDinhMuc);
+    console.log(stringValueDinhMuc);
+    axios({
+      method: "POST",
+      url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+      data: {
+        Key: valueDinhMuc.ID,
+        Classify: "FishCode",
+        Value: stringValueDinhMuc,
+        Description: "Định giá cho mã cá theo khối lượng",
+      },
+    })
+      .then((resFishCode) => {
+        this.reLoadTable();
+        this.loadValue();
+        alert("Thêm đinh giá " + valueDinhMuc.Name + " mới thành công !");
       })
-        .then((resFishCode) => {
-          this.reLoadTable();
-          alert("Thêm đinh giá " + valueDinhMuc.Name + " mới thành công !");
-        })
-        .catch((err) => {
-          console.log("Tạo mới định giá lỗi");
-          console.log(err);
-        });
-    } else {
-      alert("Vui lòng chọn mã cá!");
-    }
+      .catch((err) => {
+        console.log("Tạo mới định giá lỗi");
+        console.log(err);
+      });
   };
   /*----------------------Chỉnh sửa giá định mức-------------------------- */
   onEditDinhMuc = (event) => {
@@ -271,10 +253,17 @@ class DinhMuc extends Component {
         console.log("Sửa định giá lỗi");
         console.log(err);
       });
-
   };
+  // load lại table
   reLoadTable = () => {
     setTimeout(this.componentDidMount, 500);
+  };
+  // trả value các input select về rỗng
+  loadValue = () => {
+    document.getElementById("idWeight").value = "";
+    document.getElementById("idPrice").value = "";
+    document.getElementById("idName").value = "";
+    document.getElementById("idModel").value = "";
   };
   render() {
     var {
@@ -308,14 +297,14 @@ class DinhMuc extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>TẠO ĐỊNH MỨC CHO MÃ CÁ</h1>
+          <h1>TẠO ĐỊNH MỨC GIÁ CHO MÃ CÁ</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Tạo định mức mã cá</li>
+            <li className="active">Tạo định giá mức mã cá</li>
           </ol>
         </section>
         <section className="content">
@@ -328,6 +317,7 @@ class DinhMuc extends Component {
           >
             Tạo định mức giá mới
           </button>
+          {/*-------------------tạo table đổ dữ liệu ------------------------------ */}
           <TableContentDinhMuc>
             {this.showContentItems(contentItems)}
           </TableContentDinhMuc>
@@ -342,15 +332,16 @@ class DinhMuc extends Component {
                       className="close"
                       data-dismiss="modal"
                       aria-hidden="true"
+                      onClick={this.loadValue}
                     >
                       &times;
                     </button>
-                    <h4 className="modal-title">Tạo định mức giá</h4>
+                    <h4 className="modal-title">TẠO ĐỊNH MỨC GIÁ</h4>
                   </div>
                   <div className="modal-body">
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Chọn công đoạn mã cá</h5>
+                        <h5>Chọn mã cá</h5>
                       </label>
                       <br />
                       <select
@@ -360,15 +351,13 @@ class DinhMuc extends Component {
                         required="required"
                         onChange={this.onChange}
                       >
-                        <option disabled selected value>
-                          ---Chọn mã cá---
-                        </option>
+                        <option value="">---Chọn mã cá---</option>
                         {this.showContentSelect(contentModelFS)}
                       </select>
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Tên định mức: vd: rổ 1</h5>
+                        <h5>Tên định mức ( ví dụ: rổ 1 )</h5>
                       </label>
                       <br />
                       <input
@@ -386,7 +375,7 @@ class DinhMuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Nhập khối lượng định mức quy định (KG)</h5>
+                        <h5>Nhập khối lượng định mức quy định</h5>
                       </label>
                       <br />
                       <input
@@ -395,7 +384,7 @@ class DinhMuc extends Component {
                         id="idWeight"
                         name="Weight"
                         required
-                        placeholder="khối lượng KG"
+                        placeholder="khối lượng Kg"
                         value={Weight}
                         onChange={this.onChange}
                         min={0}
@@ -403,7 +392,7 @@ class DinhMuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Giá định mức đạt được (VNĐ) </h5>
+                        <h5>Giá định mức đạt được </h5>
                       </label>
                       <br />
                       <input
@@ -414,7 +403,7 @@ class DinhMuc extends Component {
                         id="idPrice"
                         name="Price"
                         required
-                        placeholder="Nhập giá VNĐ"
+                        placeholder="Đơn vị Vnđ"
                         value={Price}
                         onChange={this.onChange}
                         min={0}
@@ -423,12 +412,13 @@ class DinhMuc extends Component {
                   </div>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-primary">
-                      Thêm giá định mức
+                      Thêm giá định mức mới
                     </button>
                     <button
                       type="button"
                       className="btn btn-default"
                       data-dismiss="modal"
+                      onClick={this.loadValue}
                     >
                       Thoát
                     </button>
@@ -457,7 +447,7 @@ class DinhMuc extends Component {
                   <div className="modal-body">
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>ID công đoạn mã cá (Chỉ xem)</h5>
+                        <h5>ID mã cá (Chỉ xem)</h5>
                       </label>
                       <br />
                       <input
@@ -474,7 +464,7 @@ class DinhMuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Tên công đoạn mã cá (chỉ xem)</h5>
+                        <h5>Tên mã cá (chỉ xem)</h5>
                       </label>
                       <br />
                       <input
@@ -493,7 +483,7 @@ class DinhMuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Tên định mức: vd: rổ 1</h5>
+                        <h5>Tên định mức ( ví dụ: rổ 1 )</h5>
                       </label>
                       <br />
                       <input
@@ -511,7 +501,7 @@ class DinhMuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Nhập khối lượng định mức quy định (KG)</h5>
+                        <h5>Nhập khối lượng định mức quy định</h5>
                       </label>
                       <br />
                       <input
@@ -520,7 +510,7 @@ class DinhMuc extends Component {
                         id="idWeight"
                         name="Weight"
                         required
-                        placeholder="khối lượng KG"
+                        placeholder="khối lượng Kg"
                         value={valueDinhMuc.Weight}
                         onChange={this.onChange}
                         min={0}
@@ -528,7 +518,7 @@ class DinhMuc extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Giá định mức đạt được (VNĐ) </h5>
+                        <h5>Giá định mức đạt được </h5>
                       </label>
                       <br />
                       <input
@@ -539,7 +529,7 @@ class DinhMuc extends Component {
                         id="idPrice"
                         name="Price"
                         required
-                        placeholder="Nhập giá VNĐ"
+                        placeholder="Đơn vị Vnđ"
                         value={valueDinhMuc.Price}
                         onChange={this.onChange}
                         min={0}
@@ -587,7 +577,6 @@ class DinhMuc extends Component {
                       type="submit"
                       className="btn btn-danger"
                       data-toggle="modal"
-
                     >
                       Xóa khu vực
                     </button>
@@ -607,9 +596,9 @@ class DinhMuc extends Component {
       </div>
     );
   }
+  // truyền dữ liệu ra component con
   showContentItems(contentItems) {
     var result = null;
-
     if (contentItems.length >= 0) {
       result = contentItems.map((contentItem, index) => {
         return (
@@ -618,13 +607,14 @@ class DinhMuc extends Component {
             index={index}
             contentItem={contentItem}
             onUpdateDinhMuc={this.onUpdateDinhMuc}
-            onDelDinhMuc ={this.onDelDinhMuc}
+            onDelDinhMuc={this.onDelDinhMuc}
           />
         );
       });
     }
     return result;
   }
+  // tạo tự động select option
   showContentSelect(content) {
     var result = null;
     if (content.length >= 0) {

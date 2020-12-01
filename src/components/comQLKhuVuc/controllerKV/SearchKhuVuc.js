@@ -29,7 +29,7 @@ class SearchKhuVuc extends Component {
             data-target="#modal-create"
             id="id123"
           >
-            Thêm khu vực
+            Thêm công đoạn mới
           </button>
         </div>
         {/*<div className="input-group inputSeach">

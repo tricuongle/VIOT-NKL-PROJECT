@@ -12,8 +12,8 @@ import QuanLyThe from "../../pages/QuanLyThe/QuanLyThe";
 import QuanLyCongNhan from "../../pages/QuanLyCongNhan";
 import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
 import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02FilletXeBuom";
-import ThemThe from '../../pages/QuanLyThe/ThemThe'
-import DinhMuc from '../../pages/SanXuat/DinhMuc'
+import ThemThe from "../../pages/QuanLyThe/ThemThe";
+import DinhMuc from "../../pages/SanXuat/DinhMuc";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import $ from "jquery";
@@ -145,14 +145,14 @@ class Menu extends Component {
                     </span>
                   </a>
                   <ul className="treeview-menu">
-                    <li className="">
+                    {/*<li className="">
                       <Link to="/Chon-ma-ca">Chọn mã cá</Link>
+                    </li>*/}
+                    <li className="">
+                      <Link to="/Quan-ly-cong-doan">Tạo mã cá</Link>
                     </li>
                     <li className="">
-                      <Link to="/Quan-ly-cong-doan">Tạo công đoạn mã cá</Link>
-                    </li>
-                    <li className="">
-                      <Link to="/Dinh-muc-ma-ca">Thêm, sửa định mức giá</Link>
+                      <Link to="/Dinh-muc-ma-ca">Tạo định mức giá mã cá</Link>
                     </li>
                   </ul>
                 </li>
@@ -209,7 +209,7 @@ class Menu extends Component {
                 <li className="">
                   <Link to="/Quan-Ly-Khu-Vuc">
                     <i className="fa fa fa-tasks" aria-hidden="true"></i>
-                    <span>Quản lý khu vực</span>
+                    <span>Quản lý công đoạn</span>
                   </Link>
                 </li>
                 <li className="">
@@ -267,7 +267,7 @@ class Menu extends Component {
         <Route path="/Quan-ly-the" exact component={quanLyThe} />
         <Route path="/Them-the" exact component={themThe} />
         <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
-        <Route path="/Dinh-muc-ma-ca" exact component={dinhMuc}/>
+        <Route path="/Dinh-muc-ma-ca" exact component={dinhMuc} />
       </Router>
     );
   }
@@ -318,6 +318,5 @@ const themThe = () => {
 const dinhMuc = () => {
   return <DinhMuc />;
 };
-
 
 export default Menu;

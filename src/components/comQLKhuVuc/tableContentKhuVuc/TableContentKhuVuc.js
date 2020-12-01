@@ -9,11 +9,11 @@ class TableContentKhuVuc extends Component {
           <thead>
             <tr className="tieude">
               <th>STT</th>
-              <th>ID</th>
-              <th>Tên khu vực</th>
+              <th>ID công đoạn</th>
+              <th>Tên công đoạn</th>
               <th>Mô tả</th>
-              <th>Sửa khu vực</th>
-              <th>Xóa khu vực</th>
+              <th>Sửa công đoạn</th>
+              <th>Xóa công đoạn</th>
             </tr>
           </thead>
           <tbody>{this.props.children}</tbody>
