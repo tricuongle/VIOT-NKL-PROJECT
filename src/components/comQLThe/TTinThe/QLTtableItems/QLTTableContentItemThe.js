@@ -83,31 +83,35 @@ class QLTTableContentItemThe extends Component {
         console.log("lỗi lấy tên công đoạn(mã cá) !");
       });
   };
+  // truyền dữ liệu ra ngoài
   getIDChange = () => {
-    var { nameEmp, nameProcess, nameModel } = this.state;
+    var { nameEmp, nameProcess } = this.state;
     var { contentItem } = this.props;
-    var idCard = contentItem.Id;
-    var idEmpl = contentItem.Employee;
-    this.props.getIDChange(idCard,idEmpl, nameEmp, nameModel, nameProcess);
+    this.props.getIDChange(contentItem, nameEmp, nameProcess);
+  };
+  // truyền id RFID để xóa
+  getIDDeleteChange = () => {
+    var {contentItem}= this.props
+    this.props.getIDDeleteChange(contentItem.RFID);
   };
   render() {
     var { contentItem, index } = this.props;
-    var { nameEmp, nameProcess, nameModel } = this.state;
+    var { nameEmp, nameProcess } = this.state;
     const dataDay = parseInt(contentItem.BirthDay);
     return (
       <tr id="device2" className="edit form-check form-check-inlines">
         <td>{index + 1}</td>
+        <td>{contentItem.RFID}</td>
         <td>{contentItem.Id}</td>
         <td>{nameEmp}</td>
         <td>{contentItem.Color}</td>
-        <td>{nameModel}</td>
         <td>{nameProcess}</td>
         <td>{contentItem.Classify}</td>
         <td>
           <div className="infoCard ">
             <button
               type="button"
-              className="btn btn-primary card card-primary card-outline container-fluid "
+              className="btn btn-primary card card-primary "
               data-toggle="modal"
               data-target="#modal-edit"
               id="id123"
@@ -121,9 +125,7 @@ class QLTTableContentItemThe extends Component {
           <button
             type="button"
             className="btn btn-danger"
-            data-toggle="modal"
-            data-target="#modal-Delete"
-            onClick={this.getIDChange}
+            onClick={this.getIDDeleteChange}
           >
             Xóa
           </button>

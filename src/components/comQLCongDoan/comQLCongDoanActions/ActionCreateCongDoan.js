@@ -37,6 +37,7 @@ class ActionCreateCongDoan extends Component {
         [name]: value,
       },
     }));
+    /*hiện ẩn thông tin khi gõ hoặc không gõ trường group */
     var valueGroup = document.getElementById("idGroup").value;
     if (valueGroup != "") {
       document.getElementById("idClassify").disabled = false;
@@ -164,7 +165,7 @@ class ActionCreateCongDoan extends Component {
                 </div>
                 <div className="form-group">
                   <label htmlFor="devices">
-                    <h5>Chọn khu vực:</h5>
+                    <h5>Chọn công đoạn:</h5>
                   </label>
                   <br />
                   <select
@@ -175,7 +176,7 @@ class ActionCreateCongDoan extends Component {
                     onChange={this.onChange}
                   >
                     <option value="" defaultValue>
-                      ---Chọn khu vực---
+                      ---Chọn công đoạn---
                     </option>
                     {this.showContentSelect(contentProcess)}
                   </select>

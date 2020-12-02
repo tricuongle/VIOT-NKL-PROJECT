@@ -17,6 +17,7 @@ class ThemThe extends Component {
         </section>
         <section className="content">
           <form className="filter-section form-inline"></form>
+          
           {<QuanLyThongTinCongNhan/>}
         </section>
       </div>

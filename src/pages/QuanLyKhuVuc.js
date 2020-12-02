@@ -151,7 +151,7 @@ class QuanLyKhuVuc extends Component {
     })
       .then((res) => {
         console.log(res);
-        alert("Xóa khu vực " + this.state.Name + " thành công !");
+        alert("Xóa công đoạn " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);

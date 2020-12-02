@@ -7,7 +7,7 @@ import * as Config from '../../../untils/Config'
 var count;
 var valueNew;
 var Description;
-class ActionCreateCongNhan extends Component {
+class ActionCreateKhuVuc extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +37,7 @@ class ActionCreateCongNhan extends Component {
     })
       .then((res) => {
         count = res.data.length + 1;
-        var countString = "Zone-NKL-0" + count;
+        var countString = "CD-NKL-0" + count;
         this.setState({
           Id: countString,
           Parent: countString
@@ -73,7 +73,7 @@ class ActionCreateCongNhan extends Component {
     })
       .then((res) => {
         console.log(res);
-        alert("Thêm khu vực " + this.state.Name + " thành công !");
+        alert("Thêm công đoạn " + this.state.Name + " thành công !");
         document.getElementById('NameKhuVuc').value='';
         document.getElementById('info').value='';
       })
@@ -154,4 +154,4 @@ class ActionCreateCongNhan extends Component {
     );
   }
 }
-export default ActionCreateCongNhan;
+export default ActionCreateKhuVuc;

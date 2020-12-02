@@ -12,51 +12,12 @@ class QLTTableContentItemCongNhan extends Component {
       idProcess: "",
       contentModel: [],
       IdCountCard: "",
+      arrayValueModel: [],
+      contentTypeSelect: [],
     };
   }
-  componentDidMount = () => {
-    /*------------Lấy Newcard ---------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/Values?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=NewCard",
-      data: null,
-    })
-      .then((res) => {
-        var valueObject = JSON.parse(res.data[0]);
-        this.setState({
-          IdNewCard: valueObject,
-        });
-      })
-
-      .catch((err) => {
-        console.log(err);
-      });
-
-    /*-------------tạo id card ----------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Card",
-      data: null,
-    })
-      .then((res) => {
-        count = res.data.length + 1;
-        var countString = "Card-0" + count;
-        this.setState({
-          IdCountCard: countString,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    /*-------lấy danh sách công đoạn mã cá------------ */
+  /*-------------------lấy classify từ mã cá dựa vào id công đoạn------------------------- */
+  getValueTypeInModel = (idProcess) => {
     axios({
       method: "GET",
       url:
@@ -66,13 +27,41 @@ class QLTTableContentItemCongNhan extends Component {
         "&Classify=Model",
       data: null,
     })
+      .then((res) => {
+        var arrayValueModel = [];
+        var valueModel = res.data;
+        for (var k in valueModel) {
+          var valueObj = JSON.parse(valueModel[k]);
+          if (idProcess === valueObj.ProcessId) {
+            arrayValueModel.push(JSON.parse(valueModel[k]));
+          }
+        }
+        this.setState({
+          contentTypeSelect: arrayValueModel,
+        });
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  componentDidMount = () => {
+    /*-------lấy danh sách công đoạn để đổ vào select------------ */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process",
+      data: null,
+    })
       .then((resModel) => {
         arrayValueModel = [];
         for (var k in resModel.data) {
           var Object = JSON.parse(resModel.data[k]);
           arrayValueModel.push(Object);
         }
-        console.log(arrayValueModel);
         this.setState({
           contentModel: arrayValueModel,
         });
@@ -83,150 +72,48 @@ class QLTTableContentItemCongNhan extends Component {
       });
   };
 
-  getIdProcess = (temp) => {
-    /*-------------- lấy id khu vực từ Model----------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Model&key=" +
-        temp,
-      data: null,
-    })
-      .then((resModel) => {
-        var tam = JSON.parse(resModel.data);
-        var tam1 = tam.ProcessId;
-        this.setState({
-          idProcess: tam1,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  /*-------------Hàm thêm thẻ vào công nhân------------- */
-  onAddCard = (event) => {
-    event.preventDefault();
-    var {
-      contentModel,
-      IdNewCard,
-      IdCountCard,
-      idModel,
-      idProcess,
-    } = this.state;
-    var { contentItem } = this.props;
-    var Color = document.getElementById("idColorCardSelect").value;
-    var idModel = document.getElementById("idModelSelect").value;
-    // bắt lỗi hết thẻ
-    if (IdNewCard == 0 ) {
-      alert("Dữ liệu thẻ đã hết, vui lòng quét thẻ mới !");
-    } else if(!contentItem.IsLock){
-      alert("Không thẻ thêm thẻ cho nhân viên đã nghỉ việc !");
-    }else{
-      /*----------lấy id Process từ Id Model ----------------*/
-      axios({
-        method: "GET",
-        url:
-          `${Config.API_URL}` +
-          "/api/data/valuekey?token=" +
-          `${Config.TOKEN}` +
-          "&Classify=Model&key=" +
-          idModel,
-        data: null,
-      })
-        .then((resModel) => {
-          var tempp = JSON.parse(resModel.data);
+  /*---------------truyền data từ tìm kiếm nhân viên ra ngoài ----------------------- */
+  OnGetValueColorProcessType = () => {
+    var {contentItem} = this.props
+    var nameColorCard = document.getElementById("idColorCardSelect").value;
+    var idProcess = document.getElementById("idModelSelect").value;
+    var nameType = document.getElementById("idTypeSelect").value;
 
-          this.setState({
-            idProcess: tempp,
-          });
-          var idProcessnew = this.state.idProcess.ProcessId;
-          var idClassifynew = this.state.idProcess.Classify;
-          var date = new Date();
-          var dateNew = date.valueOf();
-          console.log(dateNew);
-          var valueCard =
-            '{"Id":"' +
-            IdCountCard +
-            '","Employee":"' +
-            contentItem.Id +
-            '","Color":"' +
-            Color +
-            '","RegistTime":' +
-            dateNew +
-            ',"Status":"Release","ProcessId":"' +
-            idProcessnew +
-            '","ModelId":"' +
-            idModel +
-            '","Classify":"' +
-            idClassifynew +
-            '","RFID":"' +
-            IdNewCard.Id +
-            '","CurrentRecode":""}';
-          console.log(valueCard);
-          /*--------------Thêm thẻ mới --------------------- */
-          axios({
-            method: "POST",
-            url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
-            data: {
-              Key: IdCountCard,
-              Classify: "Card",
-              Value: valueCard,
-              Description: "Card Ngọc Kim Loan",
-            },
-          })
-            .then((res) => {
-              alert(
-                "Gán thẻ vào nhân viên " + contentItem.Name + " thành công"
-              );
-              /*---------Xóa thẻ RFID ở table newCard ----------- */
-              axios({
-                method: "DELETE",
-                url:
-                  `${Config.API_URL}` +
-                  "/api/data/key?token=" +
-                  `${Config.TOKEN}` +
-                  "&classify=NewCard&key=" +
-                  IdNewCard.Id,
-                data: null,
-              })
-                .then((res) => {
-                  console.log("Xóa thẻ RFID ở NewCard thành công");
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+    /*hiện ẩn thông tin khi gõ hoặc không gõ trường group */
+    var getValueTypeInModel = document.getElementById("idModelSelect").value;
 
-              console.log("ok");
-            })
-            .catch((err) => {
-              console.log("Không thêm thẻ được");
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("Vui lòng chọn công đoạn !");
-        });
+    //truyền id của mã cá trong select để lấy loại (classify)
+    this.getValueTypeInModel(getValueTypeInModel); 
+
+    if (getValueTypeInModel != "") {
+      document.getElementById("idTypeSelect").disabled = false;
+    } else {
+      document.getElementById("idTypeSelect").value = "";
+      document.getElementById("idTypeSelect").disabled = true;
     }
+    // truyền 4 giá trị ra ngoài hàm cha để tạo thẻ 
+    this.props.OnGetValueColorProcessType(contentItem.Id , nameColorCard, idProcess, nameType);
   };
 
   render() {
-    var { contentModel, IdNewCard } = this.state;
+    var { contentModel, contentTypeSelect } = this.state;
     var { contentItem } = this.props;
     var status = contentItem.IsLock ? "đang làm việc" : "đã nghỉ";
-    const dataDay = parseInt(contentItem.BirthDay);
+    //const dataDay = parseInt(contentItem.BirthDay);
     return (
       <tr id="device2" className="edit form-check form-check-inlines">
-        <td>{IdNewCard.Id}</td>
+        <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
         <td>{contentItem.CMND}</td>
         <td>{status}</td>
         <td>
-          <select className="form-control" id="idColorCardSelect">
-          
+          <select
+            className="form-control"
+            id="idColorCardSelect"
+            required
+            onChange={this.OnGetValueColorProcessType}
+          >
+            <option value="">---Chọn màu---</option>
             <option value="Trắng">Trắng</option>
             <option value="Xanh">Xanh</option>
             <option value="Đỏ">Đỏ</option>
@@ -235,32 +122,56 @@ class QLTTableContentItemCongNhan extends Component {
           </select>
         </td>
         <td>
-          <select className="form-control" id="idModelSelect">
-            <option value="">---Chọn mã cá---</option>
+          <select
+            className="form-control"
+            id="idModelSelect"
+            name="nameProcessSelect"
+            required
+            //onChange={this.onChange}
+            onChange={this.OnGetValueColorProcessType}
+          >
+            <option value="">---Chọn công đoạn---</option>
             {this.showContentSelectModel(contentModel)}
           </select>
         </td>
         <td>
-          <button
-            type="button"
-            className="btn btn-primary card card-primary card-outline container-fluid"
-            data-toggle="modal"
-            data-target="#modal-edit"
-            onClick={this.onAddCard}
-            id="btnThem"
+          <select
+            className="form-control"
+            id="idTypeSelect"
+            name="nameProcessType"
+            required
+            disabled
+            //onChange={this.onChange}
+            onChange={this.OnGetValueColorProcessType}
           >
-            Thêm thẻ
-          </button>
+            <option value="">---Chọn type---</option>
+            {this.showContentSelectType(contentTypeSelect)}
+          </select>
         </td>
       </tr>
     );
   }
+  // hàm đổ dữ liệu vào select chọn khu vực
   showContentSelectModel(contentModel) {
     var result = null;
     if (contentModel.length >= 0) {
       result = contentModel.map((contentItem, index) => {
         return (
           <option key={index} value={contentItem.Id}>
+            {contentItem.Name}
+          </option>
+        );
+      });
+    }
+    return result;
+  }
+  // hàm đổ dữ liệu vào select chọn Type
+  showContentSelectType(contentModel) {
+    var result = null;
+    if (contentModel.length >= 0) {
+      result = contentModel.map((contentItem, index) => {
+        return (
+          <option key={index} value={contentItem.Classify}>
             {contentItem.Name}
           </option>
         );
