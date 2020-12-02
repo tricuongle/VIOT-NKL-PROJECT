@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import * as Config from '../../../untils/Config'
+import * as Config from "../../../untils/Config";
 var textName;
 var ObjName;
 var ObjValue;
@@ -10,35 +10,36 @@ class TableContentItemTramCan extends Component {
     super(props);
     this.state = {
       contentItemModelGetId: [],
-      nameItemModelGetId:[],
-      nameSection: '',
+      nameItemModelGetId: [],
+      nameSection: "",
     };
   }
   /*----------------------get ID of table Model to call name Model ----------------------------- */
-  componentDidMount() {
+  componentDidMount = () => {
     var { contentItem } = this.props;
-    var textString = contentItem.Status.ProcessId +'';
-
-      var arrayIdProcess = textString.split(','); // tách chuỗi từ Process ID
-
-    console.log(arrayIdProcess);	
-    var arrayName=[]
-    for( var k =0; k<=arrayIdProcess.length;k++){
+    var textString = contentItem.Status.ProcessId + "";
+    var arrayIdProcess = textString.split(","); // tách chuỗi từ Process ID
+    console.log(arrayIdProcess);
+    var arrayName = [];
+    for (var k = 0; k <= arrayIdProcess.length; k++) {
       axios({
         method: "GET",
-        url: 
-          `${Config.API_URL}`+"/api/data/valuekey?token="+`${Config.TOKEN}`+"&Classify=Process&key=" +
-          arrayIdProcess[k]+
+        url:
+          `${Config.API_URL}` +
+          "/api/data/valuekey?token=" +
+          `${Config.TOKEN}` +
+          "&Classify=Process&key=" +
+          arrayIdProcess[k] +
           "",
         data: null,
       })
         .then((resProcess) => {
           ObjValue = JSON.parse(resProcess.data);
-          var nameProcess= ObjValue.Name;
-          arrayName.push(nameProcess)
+          var nameProcess = ObjValue.Name;
+          arrayName.push(nameProcess);
           this.setState({
-            nameItemModelGetId: arrayName
-          })
+            nameItemModelGetId: arrayName,
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -47,11 +48,16 @@ class TableContentItemTramCan extends Component {
     /*-----------------Lấy thông tin section và đổ vào select----------------------------- */
     axios({
       method: "GET",
-      url: `${Config.API_URL}` + "/api/Section?id="+contentItem.SectionId+"&token=" + `${Config.TOKEN}`,
+      url:
+        `${Config.API_URL}` +
+        "/api/Section?id=" +
+        contentItem.SectionId +
+        "&token=" +
+        `${Config.TOKEN}`,
       data: null,
     })
       .then((res) => {
-        var ObjvalueSection= res.data;
+        var ObjvalueSection = res.data;
         console.log(ObjvalueSection);
         /*this.setState({
           nameSection: ObjvalueSection,
@@ -61,20 +67,23 @@ class TableContentItemTramCan extends Component {
         console.log(err);
         console.log("Lỗi lấy thông tin khu vực theo id- sections");
       });
-  }
-  onGetIdEdit=()=>{
+  };
+
+  onGetIdEdit = () => {
     this.props.onGetIdEdit(this.props.contentItem.Id);
-  }
+  };
+
   render() {
     var { contentItem, index } = this.props;
-    var { contentItemModelGetId,nameItemModelGetId, nameSection } = this.state;
+    var { contentItemModelGetId, nameItemModelGetId, nameSection } = this.state;
+
     return (
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
         <td>{contentItem.Status.Type}</td>
-        <td>{nameItemModelGetId+" "}</td>
+        <td>{nameItemModelGetId + " "}</td>
         <td>{contentItem.SectionId}</td>
         <td>
           <button
@@ -88,7 +97,6 @@ class TableContentItemTramCan extends Component {
           </button>
         </td>
       </tr>
-      
     );
   }
 }

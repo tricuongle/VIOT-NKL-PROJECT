@@ -7,6 +7,7 @@ import $ from "jquery";
 import * as Config from "../untils/Config";
 var arrayValueProcess = [];
 var arrayValueDevice = [];
+var ObjValue;
 class QuanLyTramCan extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +16,9 @@ class QuanLyTramCan extends Component {
       contentProcess: [],
       contentSection: [],
       contentDevice: "",
+
+      // name process convert to ProcessID
+      nameProcessConvert: [],
     };
   }
   onChange = (event) => {
@@ -58,21 +62,71 @@ class QuanLyTramCan extends Component {
         this.setState({
           contentItems: arrayValueDevice,
         });
-        // tabledata giao diện
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 7,
-            processing: true,
-            responsive: true,
-            dom: "Bfrtip",
-            bDestroy: true,
-          });
-        });
+        //this.loopContentDevices(arrayValueDevice);
       })
       .catch((err) => {
         console.log("Lỗi láy thông tin device ( cân)");
         console.log(err);
       });
+  };
+
+  //------------- hàm gọi từng thiết bị cân--------------------------------------------
+  loopContentDevices = (contentItems) => {
+    for (var k in contentItems) {
+      var textString = contentItems[k].Status.ProcessId + "";
+
+      var arrayIdProcess = textString.split(","); // tách chuỗi từ Process ID
+      var stringName = "";
+      var arrayName = [];
+      for (var k = 0; k <= arrayIdProcess.length; k++) {
+        axios({
+          method: "GET",
+          url:
+            `${Config.API_URL}` +
+            "/api/data/valuekey?token=" +
+            `${Config.TOKEN}` +
+            "&Classify=Process&key=" +
+            arrayIdProcess[k] +
+            "",
+          data: null,
+        })
+          .then((resProcess) => {
+            ObjValue = JSON.parse(resProcess.data);
+            var nameProcess = ObjValue.Name;
+            stringName += nameProcess + ",";
+            //arrayName.push(nameProcess);
+            console.log(stringName);
+            this.setState((preState) => ({
+              contentItems: {
+                ...preState.contentItems,
+                Status: {
+                  ...preState.contentItems.Status,
+                  ProcessId: stringName,
+                },
+              },
+            }));
+            console.log(this.state.contentItems);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  };
+
+  abc = () => {
+    var {contentItems}= this.state;
+    console.log(contentItems);
+    <TableContentTramCan>
+      {this.showContentItems(contentItems)}
+    </TableContentTramCan>;
+  };
+  loadTable = () => {
+    setTimeout(this.abc, 500);
+    setTimeout(this.componentDidMount, 500);
+    
+  };
+  onGetIdEdit = (IdDevice) => {
     /*-----------------------function get list process to api ---------------------------------- */
     axios({
       method: "GET",
@@ -87,7 +141,9 @@ class QuanLyTramCan extends Component {
         arrayValueProcess = [];
         for (var k in resProcess.data) {
           var Object = JSON.parse(resProcess.data[k]);
-          arrayValueProcess.push(Object);
+          if (Object.status == true) {
+            arrayValueProcess.push(Object);
+          }
         }
         this.setState({
           contentProcess: arrayValueProcess,
@@ -97,8 +153,6 @@ class QuanLyTramCan extends Component {
         console.log(err);
         console.log("Lỗi láy thông tin công đoạn");
       });
-  };
-  onGetIdEdit = (IdDevice) => {
     /*--------------láy thông tin theo id truyền vào từ hàng trong bảng---------------- */
     axios({
       method: "GET",
@@ -167,34 +221,35 @@ class QuanLyTramCan extends Component {
         Type = checkbox[i].value;
       }
     }
-    
-    if (Type ==='') {
+
+    if (Type === "") {
       alert("Vui lòng chọn Type phù hợp!");
     } else {
       console.log(idSection);
       console.log(idProcess);
       console.log(Type);
       axios({
-      method: "PUT",
-      url:
-        `${Config.API_URL}` +
-        "/api/iotdevice/" +
-        Id +
-        "?token=" +
-        `${Config.TOKEN}`,
-      data: {
-        ProcessId: idProcess,
-        Type: Type,
-        //SectionId: idSection
-      },
-    })
-      .then((res) => {
-        alert("Sửa thành công !");
+        method: "PUT",
+        url:
+          `${Config.API_URL}` +
+          "/api/iotdevice/" +
+          Id +
+          "?token=" +
+          `${Config.TOKEN}`,
+        data: {
+          ProcessId: idProcess,
+          Type: Type,
+          //SectionId: idSection
+        },
       })
-      .catch((err) => {
-        console.log(err);
-        console.log("Lỗi rồi");
-      });
+        .then((res) => {
+          this.loadTable();
+          alert("Sửa thành công !");
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("Lỗi rồi");
+        });
     }
   };
 
@@ -360,6 +415,7 @@ class QuanLyTramCan extends Component {
       </div>
     );
   }
+
   // truyền dữ liệu vào table hiển thị lên
   showContentItems(contentItems) {
     var result = null;

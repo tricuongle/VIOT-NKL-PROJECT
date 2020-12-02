@@ -21,7 +21,7 @@ class SearchKhuVuc extends Component {
     var { keyword } = this.state;
     return (
       <form className="filter-section form-inline">
-        <div className="infoCard ">
+        {/*<div className="infoCard ">
           <button
             type="button"
             className="btn btn-primary card card-primary card-outline container-fluid"
@@ -32,7 +32,7 @@ class SearchKhuVuc extends Component {
             Thêm công đoạn mới
           </button>
         </div>
-        {/*<div className="input-group inputSeach">
+        <div className="input-group inputSeach">
           <input
             name="keyword"
             type="text"

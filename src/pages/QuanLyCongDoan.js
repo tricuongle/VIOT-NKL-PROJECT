@@ -316,7 +316,7 @@ class QuanLyCongDoan extends Component {
                         placeholder="Nhập tên mã cá"
                         className="form-control"
                         id="idNameModel"
-                        Name="Name"
+                        name="Name"
                         required
                         onChange={this.onChange}
                       />

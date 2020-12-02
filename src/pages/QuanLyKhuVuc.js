@@ -47,7 +47,7 @@ class QuanLyKhuVuc extends Component {
     });
   };
   /*-------------- Gọi API hiển thị danh sách process (khu vực)------------------ */
-  componentDidMount() {
+  componentDidMount = () => {
     axios({
       method: "GET",
       url:
@@ -83,7 +83,11 @@ class QuanLyKhuVuc extends Component {
         console.log(err);
         console.log("Lỗi");
       });
-  }
+  };
+  // hàm load lại trang
+  reLoadTable = () => {
+    setTimeout(this.componentDidMount, 500);
+  };
 
   /*-------------- nhận ID từ buton Chỉnh sửa và Xóa------------------------- */
   onUpdate = (Id) => {
@@ -150,7 +154,7 @@ class QuanLyKhuVuc extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res);
+        this.reLoadTable();
         alert("Xóa công đoạn " + this.state.Name + " thành công !");
       })
       .catch((err) => {
@@ -166,10 +170,9 @@ class QuanLyKhuVuc extends Component {
     console.log(Namee);
     var { contentGetProcessId, Name, Level, Before, After } = this.state;
     var nameNew;
-    if( Name==''){
-      nameNew= Namee;
-    }
-    else{
+    if (Name == "") {
+      nameNew = Namee;
+    } else {
       nameNew = Name;
     }
     var idEdit = contentGetProcessId.Id;
@@ -200,20 +203,19 @@ class QuanLyKhuVuc extends Component {
         idEdit +
         "&value=" +
         valueNew +
-        "&Description="+Description,
+        "&Description=" +
+        Description,
       data: null,
     })
       .then((res) => {
         console.log(res);
+        this.reLoadTable();
         alert("Sửa khu vực " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  reLoadTable=()=>{
-    console.log('khoa ok');
-  }
   render() {
     var { contentItems } = this.state;
     var { Name, filter } = this.state;
@@ -246,6 +248,28 @@ class QuanLyKhuVuc extends Component {
           </ol>
         </section>
         <section className="content">
+          <form className="filter-section form-inline">
+            <div className="infoCard ">
+              <button
+                type="button"
+                className="btn btn-primary card card-primary card-outline container-fluid"
+                data-toggle="modal"
+                data-target="#modal-create"
+                id="id123"
+              >
+                Thêm công đoạn mới
+              </button>
+            </div>
+            <div className="input-group inputSeach">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.reLoadTable}
+              >
+                Làm mới dữ liệu
+              </button>
+            </div>
+          </form>
           <TableContentKhuVuc>
             {this.showContentItems(contentItems)}
           </TableContentKhuVuc>
