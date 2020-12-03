@@ -30,6 +30,7 @@ class QuanLyThongTinCongNhan extends Component {
         colorCard: "",
         idProcess: "",
         typeModel: "",
+        status: '',
       },
     };
   }
@@ -89,13 +90,13 @@ class QuanLyThongTinCongNhan extends Component {
       .catch((err) => {
         console.log(err);
       });
-      //this.reloadTableNewCard();
   };
   reloadTableNewCard = () => {
     setTimeout(this.componentDidMount, 500);
   };
   /*-----------hàm nhận value newCard từ table newCard và lưu vào state----------------- */
-  OnGetValueColorProcessType = (idNameEmp, color, idProcess, Type) => {
+  OnGetValueColorProcessType = (idNameEmp,status , color, idProcess, Type) => {
+    console.log(status);
     this.createNameCard();
     this.setState((preState) => ({
       contentGetTableEmp: {
@@ -104,6 +105,7 @@ class QuanLyThongTinCongNhan extends Component {
         colorCard: color,
         idProcess: idProcess,
         typeModel: Type,
+        status: status
       },
     }));
   };
@@ -129,13 +131,12 @@ class QuanLyThongTinCongNhan extends Component {
         console.log(err);
       });
   };
-
   /*-------------Hàm thêm thẻ vào công nhân------------- */
   createNewCard = (idNewCard) => {
     var { contentGetTableEmp, nameCard } = this.state;
     var date = new Date();
     var dateNew = date.valueOf();
-    console.log(contentGetTableEmp.state);
+    console.log(contentGetTableEmp.status);
     if (
       contentGetTableEmp.idNameEmp == "" ||
       contentGetTableEmp.colorCard == "" ||
@@ -243,14 +244,13 @@ class QuanLyThongTinCongNhan extends Component {
       "Bạn có đồng ý xóa tất cả thông tin thẻ RFID  đã quét không?"
     );
     if (DeleteRFIDNewCard) {
-      /*axios({
+      axios({
         method: "DELETE",
         url:
           `${Config.API_URL}` +
-          "/api/data/key?token=" +
+          "/api/data/classify?token=" +
           `${Config.TOKEN}` +
-          "&classify=NewCard&key=" +
-          idNewCardRFID,
+          "&classify=NewCard",
         data: null,
       })
         .then((res) => {
@@ -259,7 +259,7 @@ class QuanLyThongTinCongNhan extends Component {
         })
         .catch((err) => {
           console.log(err);
-        });*/
+        });
     }
   }
 

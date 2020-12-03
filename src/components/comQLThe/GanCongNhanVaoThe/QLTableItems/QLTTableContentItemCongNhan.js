@@ -73,7 +73,6 @@ class QLTTableContentItemCongNhan extends Component {
         alert("Vui lòng chọn công đoạn (mã cá)");
       });
   };
-
   /*---------------truyền data từ tìm kiếm nhân viên ra ngoài ----------------------- */
   OnGetValueColorProcessType = () => {
     var { contentItem } = this.props;
@@ -96,6 +95,7 @@ class QLTTableContentItemCongNhan extends Component {
     // truyền 4 giá trị ra ngoài hàm cha để tạo thẻ
     this.props.OnGetValueColorProcessType(
       contentItem.Id,
+      contentItem.IsLock,
       nameColorCard,
       idProcess,
       nameType
