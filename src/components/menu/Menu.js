@@ -14,6 +14,7 @@ import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
 import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02FilletXeBuom";
 import ThemThe from "../../pages/QuanLyThe/ThemThe";
 import DinhMuc from "../../pages/SanXuat/DinhMuc";
+import RawData from '../../pages/RawData'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import $ from "jquery";
@@ -86,9 +87,14 @@ class Menu extends Component {
           <aside className="main-sidebar">
             <section className="sidebar">
               <ul className="sidebar-menu" data-widget="tree">
-                <li className="active">
+                <li className="">
                   <Link to="/Tong-hop" className="linkTo">
                     <i className="fa fa-dashboard"></i> <span>Tổng hợp</span>
+                  </Link>
+                </li>
+                <li className="">
+                  <Link to="/Raw-data" className="linkTo">
+                    <i className="fa fa-dashboard"></i> <span>Raw data</span>
                   </Link>
                 </li>
                 {/*<li className="treeview">
@@ -268,6 +274,7 @@ class Menu extends Component {
         <Route path="/Them-the" exact component={themThe} />
         <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
         <Route path="/Dinh-muc-ma-ca" exact component={dinhMuc} />
+        <Route path="/Raw-data" exact component={rawData} />
       </Router>
     );
   }
@@ -279,6 +286,7 @@ const filletVao = () => {
   return <FilletVao />;
 };
 const thongKe = () => {
+
   return <ThongKe />;
 };
 const tinhTien = () => {
@@ -310,6 +318,7 @@ const manghinhSX02FilletXeBuom = () => {
   return <ManghinhSX02FilletXeBuom />;
 };
 const quanLyCongNhan = () => {
+
   return <QuanLyCongNhan />;
 };
 const themThe = () => {
@@ -317,6 +326,9 @@ const themThe = () => {
 };
 const dinhMuc = () => {
   return <DinhMuc />;
+};
+const rawData = () => {
+  return <RawData />;
 };
 
 export default Menu;

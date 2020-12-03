@@ -26,17 +26,7 @@ class SearchCongNhan extends Component {
     var { keyword, filterStatus } = this.state;
     return (
       <form className="filter-section form-inline">
-        <div className="infoCard ">
-          <button
-            type="button"
-            className="btn btn-primary card card-primary card-outline container-fluid"
-            data-toggle="modal"
-            data-target="#modal-create"
-            id="id123"
-          >
-            Thêm công nhân
-          </button>
-        </div>
+        
         {/*<div className="filterStatus">
           <select
             name="filterStatus"

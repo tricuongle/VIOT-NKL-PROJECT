@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import TableContentTongHop from "../components/comTongHop/tableContentTongHop/TableContentTongHop";
-import TableItemTongHop from '../components/comTongHop/TableItemTongHop/TableItemTongHop'
+import TableItemTongHop from "../components/comTongHop/TableItemTongHop/TableItemTongHop";
 import axios from "axios";
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 var arrayRecode = [];
 class TongHop extends Component {
   constructor(props) {
-    super(props); 
+    super(props);
     this.state = {
       valueRecode: [],
     };
   }
-  componentDidMountt = () => {
+  componentDidMount = () => {
     console.log("get data ok");
     axios({
       method: "GET",
@@ -32,30 +32,19 @@ class TongHop extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        // sử dụng thư viện datatable
-        /*$(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 7,
-            processing: true,
-            responsive: true,
-            destroy: true,
-            dom: "Bfrtip",
-          });
-        });*/
       })
       .catch((err) => {
         console.log(err);
       });
+    setTimeout(this.componentDidMount, 3000);
   };
 
   render() {
-    setTimeout(this.componentDidMountt, 500);
     var { valueRecode } = this.state;
     return (
-      
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>TỔNG HỢP</h1>
+          <h1>TỔNG HỢP CÔNG ĐOẠN</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">

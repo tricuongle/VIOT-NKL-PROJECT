@@ -32,12 +32,11 @@ class TableItemTongHop extends Component {
         this.setState({
           idProcess: ObjValue,
         });
-        console.log(this.state.idProcess.Name);
       })
       .catch((err) => {
         console.log(err);
       });
-    /*---------------lấy tên Công đoạn mã cá theo tên--------------------- */
+    /*---------------lấy tên mã cá theo tên--------------------- */
     axios({
       method: "GET",
       url:
@@ -87,22 +86,6 @@ class TableItemTongHop extends Component {
         <td>{idProcess.Name}</td>
         <td>
           {idModel.Name}
-
-          {/*<div>
-            <select
-              id="input"
-              className="form-control"
-              required="required"
-            >
-              <option value="0">Chọn công đoạn mã cá</option>
-              <option value="1">EX1</option>
-              <option value="2">EX2</option>
-              <option value="3">EX3</option>
-              <option value="4">EX4</option>
-              <option value="5">EX5</option>
-              <option value="6">EX6</option>
-            </select>
-          </div>*/}
         </td>
         <td>{RecodeInKG} </td>
         <td>{contentItem.Weight} </td>

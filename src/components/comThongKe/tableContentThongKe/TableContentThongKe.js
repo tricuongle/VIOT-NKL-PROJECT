@@ -6,15 +6,20 @@ class TableContentThongKe extends Component {
       <table id="tableData" className="table table-hover" width="100%">
         <thead>
           <tr className="tieude">
+            <th>Mã scan</th>
             <th>Ngày</th>
-            <th>Tên</th>
+            <th>Tên công nhân</th>
+            <th>CNMD</th>
+            <th>Tên thẻ</th>
             <th>Số thẻ</th>
+            <th>Màu thẻ</th>
             <th>Mã cá</th>
-            <th>Type</th>
-            <th>Khối lượng</th>
+            <th>Loại</th>
+            <th>Weight</th>
             <th>Khu vực</th>
+            <th>Công đoạn</th>
             <th>Cân</th>
-            <th>Hình ảnh</th>
+            <th>Ảnh</th>   {/*14 cột */}
           </tr>
         </thead>
         <tbody>{this.props.children}</tbody>

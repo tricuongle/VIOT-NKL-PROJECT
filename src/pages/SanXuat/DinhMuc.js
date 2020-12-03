@@ -362,7 +362,6 @@ class DinhMuc extends Component {
                       <br />
                       <input
                         maxLength="30"
-                        minLength="2"
                         type="text"
                         className="form-control"
                         id="idName"
@@ -387,7 +386,8 @@ class DinhMuc extends Component {
                         placeholder="khối lượng Kg"
                         value={Weight}
                         onChange={this.onChange}
-                        min={0}
+                        step="0.01"
+                        min= '0'
                       />
                     </div>
                     <div className="form-group">
@@ -406,7 +406,7 @@ class DinhMuc extends Component {
                         placeholder="Đơn vị Vnđ"
                         value={Price}
                         onChange={this.onChange}
-                        min={0}
+                        min= '0'
                       />
                     </div>
                   </div>
@@ -476,7 +476,7 @@ class DinhMuc extends Component {
                         name="Name"
                         required
                         disabled
-                        placeholder=""
+                        placeholder="Nhập tên mã cá cần sửa"
                         value={nameModel}
                         onChange={this.onChange}
                       />
@@ -488,7 +488,6 @@ class DinhMuc extends Component {
                       <br />
                       <input
                         maxLength="30"
-                        minLength="2"
                         type="text"
                         className="form-control"
                         id="idName"
@@ -513,7 +512,8 @@ class DinhMuc extends Component {
                         placeholder="khối lượng Kg"
                         value={valueDinhMuc.Weight}
                         onChange={this.onChange}
-                        min={0}
+                        step="0.01"
+                        min= '0'
                       />
                     </div>
                     <div className="form-group">

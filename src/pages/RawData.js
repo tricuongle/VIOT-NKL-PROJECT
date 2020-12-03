@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import TableContentThongKe from "../components/comThongKe/tableContentThongKe/TableContentThongKe";
+import TableContentRawData from "../components/comRawData/tableContentRawData/TableContentRawData";
 import axios from "axios";
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
-import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableItemThongKe";
+import TableItemRawData from "../components/comRawData/TableItemRawData/TableItemRawData";
 var arrayRecode = [];
-var checkTable = 0;
-class ThongKe extends Component {
+class RawData extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,58 +13,7 @@ class ThongKe extends Component {
     };
   }
   componentDidMount = () => {
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/Values?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Recode",
-      data: null,
-    })
-      .then((res) => {
-        arrayRecode = [];
-        res.data.map((contentItem) => {
-          contentItem = JSON.parse(contentItem);
-          arrayRecode.push(contentItem);
-        });
-        this.setState({
-          valueRecode: arrayRecode,
-        });
-        $(document).ready(function () {
-          // Setup - add a text input to each footer cell
-          $("#tableData thead tr").clone(true).appendTo("#tableData thead");
-          $("#tableData thead tr:eq(1) th").each(function (i) {
-            var title = $(this).text();
-            $(this).html(
-              '<input type="text" placeholder="Search ' + title + '" />'
-            );
-
-            $("input", this).on("keyup change", function () {
-              if (table.column(i).search() !== this.value) {
-                table.column(i).search(this.value).draw();
-              }
-            });
-          });
-          var table = $("#tableData").DataTable({
-            lengthMenu: [
-              [10, 25, 50, -1],
-              [10, 25, 50, "All"],
-            ],
-            orderCellsTop: true,
-            fixedHeader: true,
-            scrollX: true,
-            scrollY: 200,
-
-            // dom: "Bfrtip",
-          });
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  componentDidMountt = () => {
+    console.log("get data ok");
     axios({
       method: "GET",
       url:
@@ -85,56 +33,44 @@ class ThongKe extends Component {
           valueRecode: arrayRecode,
         });
         // sử dụng thư viện datatable
-        $(document).ready(function () {
-          // Setup - add a text input to each footer cell
-          $("#tableData thead tr").clone(true).appendTo("#tableData thead");
-          $("#tableData thead tr:eq(1) th").each(function (i) {
-            /*--------------*/
-            $("input", this).on("keyup change", function () {
-              if (table.column(i).search() !== this.value) {
-                table.column(i).search(this.value).draw();
-              }
-            });
-          });
-          var table = $("#tableData").DataTable({
-            lengthMenu: [
-              [10, 25, 50, -1],
-              [10, 25, 50, "All"],
-            ],
-            orderCellsTop: true,
-            fixedHeader: true,
-            scrollX: true,
-            scrollY: 200,
-
-            // dom: "Bfrtip",
-          });
-        });
+        /*$(document).ready(function () {
+      $("#tableData").DataTable({
+        pageLength: 7,
+        processing: true,
+        responsive: true,
+        destroy: true,
+        dom: 'Bfrtip',
+      });
+    });*/
       })
       .catch((err) => {
         console.log(err);
       });
+      setTimeout(this.componentDidMount, 3000);
   };
 
   render() {
+ 
+
     var { valueRecode } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>THỐNG KÊ</h1>
+          <h1> RAW DATA - DỮ LIỆU QUÉT </h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i>Trang chủ
               </a>
             </li>
-            <li className="active">Thống kê</li>
+            <li className="active">Raw data</li>
           </ol>
         </section>
 
         <section className="content">
-          <form id="dataTimKiem" className="filter-section form-inline">
+          {/*<form id="dataTimKiem" className="filter-section form-inline">
             <div className="filter-input">
-              <label className="labNgay" htmlFor="filter-date">
+              <label className="labNgay" htmlFor="filter-dateq">
                 Từ Ngày:
               </label>
               <input
@@ -155,7 +91,7 @@ class ThongKe extends Component {
                 id="filter-date1"
               />
             </div>
-            {/*<div className=" filter-input">
+            <div className=" filter-input">
               <select
                 name=""
                 id="input"
@@ -218,7 +154,7 @@ class ThongKe extends Component {
                 <option value="5">EX5</option>
                 <option value="6">EX6</option>
               </select>
-            </div>*/}
+            </div>
             <div>
               <button
                 id="btnLoc"
@@ -228,20 +164,10 @@ class ThongKe extends Component {
                 Lọc tìm kiếm
               </button>
             </div>
-            <div>
-              <button
-                id="btnLoc"
-                type="button"
-                className="form-control btn-success"
-                onClick={this.componentDidMountt}
-              >
-                Làm mới dữ liệu
-              </button>
-            </div>
-          </form>
-          <TableContentThongKe>
+           </form>*/}
+          <TableContentRawData>
             {this.showContentItems(valueRecode)}
-          </TableContentThongKe>
+          </TableContentRawData>
         </section>
       </div>
     );
@@ -252,7 +178,7 @@ class ThongKe extends Component {
     if (contentItems.length >= 0) {
       result = contentItems.map((contentItem, index) => {
         return (
-          <TableItemThongKe
+          <TableItemRawData
             key={index}
             contentItem={contentItem}
             index={index}
@@ -263,4 +189,4 @@ class ThongKe extends Component {
     return result;
   }
 }
-export default ThongKe;
+export default RawData;

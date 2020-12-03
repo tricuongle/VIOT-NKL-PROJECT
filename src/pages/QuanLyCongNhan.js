@@ -8,6 +8,7 @@ import ActionCreateCongNhan from "../components/comQLCongNhan/comQLCongNhanActio
 import * as Config from "../untils/Config";
 var ArrayValue = [];
 var valueNew;
+var count = 0;
 class QuanLyCongNhan extends Component {
   constructor(props) {
     super(props);
@@ -70,23 +71,19 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
-        console.log(this.state.contentItems);
         // sử dụng thư viện datatable
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 5,
-            "bDestroy": true,
-            processing: true,
-            responsive: true,
-            dom: "Bfrtip",
-
-          })
-        });
+        if (count == 0) {
+          $("#tableData").DataTable({destroy:true});
+          count++;
+        } else {
+          $("#tableData").DataTable({});
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   componentDidMountt = () => {
     console.log("có");
     axios({
@@ -108,21 +105,13 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
-        console.log(this.state.contentItems);
         // sử dụng thư viện datatable
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 5,
-            "bDestroy": false
-
-          })
-        });
+          $("#tableData").DataTable({});
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
   onGetId = (Id) => {
     axios({
       method: "GET",
@@ -195,7 +184,7 @@ class QuanLyCongNhan extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res);
+        this.LoadData();
         alert("Sửa thông tin công nhân " + this.state.Name + " thành công !");
       })
       .catch((err) => {
@@ -238,25 +227,20 @@ class QuanLyCongNhan extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res);
+        this.LoadData();
         alert("Xóa thông tin công nhân " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  reLoadTable = () => {
-    console.log("ok");
+  // load dữ liệu lại
+  LoadData = () => {
     setTimeout(this.componentDidMount, 500);
-  };
-  reLoadTablee = () => {
-    console.log("ok");
-    setTimeout(this.componentDidMountt, 500);
   };
   render() {
     var { contentItems, filter, Name, CMND, BirthDay } = this.state;
     if (filter) {
-      console.log("yes");
       // xét điều kiện để filter
       if (filter.name) {
         contentItems = contentItems.filter((contentItems) => {
@@ -285,7 +269,30 @@ class QuanLyCongNhan extends Component {
             <li className="active">Quản lý công nhân</li>
           </ol>
         </section>
+
         <section className="content">
+          <form className="filter-section form-inline">
+            <div className="infoCard ">
+              <button
+                type="button"
+                className="btn btn-primary card card-primary card-outline container-fluid"
+                data-toggle="modal"
+                data-target="#modal-create"
+                id="id123"
+              >
+                Thêm nhân mới
+              </button>
+            </div>
+            <div className="input-group inputSeach">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.LoadData}
+              >
+                Làm mới dữ liệu
+              </button>
+            </div>
+          </form>
           {/*Hiện thông tin table */}
           <TableContentCongNhan onFilter={this.onFilter}>
             {this.showContentItems(contentItems)}
@@ -384,11 +391,7 @@ class QuanLyCongNhan extends Component {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      onClick={this.reLoadTable}
-                    >
+                    <button type="submit" className="btn btn-primary">
                       Chỉnh sửa
                     </button>
                     <button
@@ -428,7 +431,6 @@ class QuanLyCongNhan extends Component {
                       type="submit"
                       className="btn btn-danger"
                       data-toggle="modal"
-                      onClick={this.reLoadTablee}
                     >
                       Xóa công nhân
                     </button>
@@ -448,6 +450,7 @@ class QuanLyCongNhan extends Component {
       </div>
     );
   }
+
   // hàm đổ dữ liệu vào table nhờ vòng loop
   showContentItems(contentItems) {
     var result = null;

@@ -135,13 +135,15 @@ class QuanLyThongTinCongNhan extends Component {
     var { contentGetTableEmp, nameCard } = this.state;
     var date = new Date();
     var dateNew = date.valueOf();
+    console.log(contentGetTableEmp.state);
     if (
       contentGetTableEmp.idNameEmp == "" ||
       contentGetTableEmp.colorCard == "" ||
       contentGetTableEmp.idProcess == "" ||
-      contentGetTableEmp.typeModel == ""
+      contentGetTableEmp.typeModel == "" ||
+      contentGetTableEmp.status == false
     ) {
-      alert("Vui lòng chọn đầy đủ thông tin!");
+      alert("Vui lòng chọn đầy đủ thông tin, hoặc công nhân đã nghỉ!");
     } else {
       var valueCard =
         '{"Id":"' +

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TableItemTongHop from '../TableItemTongHop/TableItemTongHop'
 class TableContentTongHop extends Component {
   render() {
     return (
@@ -7,8 +6,8 @@ class TableContentTongHop extends Component {
         <thead>
           <tr className="tieude">
             <th>STT</th>
-            <th>Khu vực</th>
             <th>Công đoạn</th>
+            <th>Mã cá</th>
             <th>Khối lượng đầu vào (KG)</th>
             <th>Khối lượng đầu ra (KG)</th>
           </tr>

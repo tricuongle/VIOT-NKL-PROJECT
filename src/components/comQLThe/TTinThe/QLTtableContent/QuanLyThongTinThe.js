@@ -273,7 +273,7 @@ class QuanLyThongTinThe extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Tên nhân viên: (chỉ xem)</h5>
+                        <h5>Tên công nhân: (chỉ xem)</h5>
                       </label>
                       <input
                         type="text"
@@ -320,7 +320,7 @@ class QuanLyThongTinThe extends Component {
                         onChange={this.onChange}
                         disabled
                       >
-                        <option value="">---Chọn loại---</option>
+                        <option value="null">---Chọn loại---</option>
                         {this.showContentSelect(contentTypeSelect)}
                       </select>
                     </div>
@@ -331,11 +331,10 @@ class QuanLyThongTinThe extends Component {
                       <select
                         className="form-control"
                         id="idSelectMauThe"
-                        required
                         name="Color"
                         onChange={this.onChange}
                       >
-                        <option value="">---Chọn màu---</option>
+                        <option value="null">---Chọn màu---</option>
                         <option value="Xanh">Xanh</option>
                         <option value="Đỏ">Đỏ</option>
                         <option value="Vàng">Vàng</option>

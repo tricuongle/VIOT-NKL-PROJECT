@@ -89,7 +89,6 @@ class QuanLyCongDoan extends Component {
             processing: true,
             responsive: true,
             dom: "Bfrtip",
-            destroy: true,
           });
         });
       })
@@ -133,6 +132,7 @@ class QuanLyCongDoan extends Component {
         ...preState.valueModel,
         Id: content.Id,
         Name: content.Name,
+        ProcessId: content.Name,
         CreateDate: dayCreate,
         WeighInMax: content.WeighInMax,
         WeightInMin: content.WeightInMin,
@@ -167,6 +167,7 @@ class QuanLyCongDoan extends Component {
       },
     })
       .then((resModel) => {
+        setTimeout(this.componentDidMount,500);
         alert("Sửa công đoạn " + valueModel.Name + " thành công.");
         console.log("Sửa thành công");
       })
@@ -216,6 +217,7 @@ class QuanLyCongDoan extends Component {
       },
     })
       .then((resModel) => {
+        setTimeout(this.componentDidMount,500);
         alert("Xóa công đoạn " + valueModel.Name + " thành công.");
         console.log("Xóa công đoạn thành công");
       })
@@ -225,7 +227,7 @@ class QuanLyCongDoan extends Component {
       });
   };
   reLoadTable = () => {
-    setTimeout(this.componentDidMount, 2000);
+    setTimeout(this.componentDidMount, 1000);
   };
   render() {
     var { contentItems, filter, valueModel, contentProcess } = this.state;
@@ -268,6 +270,15 @@ class QuanLyCongDoan extends Component {
                 id="id123"
               >
                 Tạo mới mã cá
+              </button>
+            </div>
+            <div className="input-group inputSeach">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.reLoadTable}
+              >
+                Làm mới dữ liệu
               </button>
             </div>
           </form>
@@ -327,10 +338,11 @@ class QuanLyCongDoan extends Component {
                       </label>
                       <br />
                       <select
-                        name=""
+                        name="ProcessId"
                         id="idProcess"
                         className="form-control"
                         required="required"
+                        onChange={this.onChange}
                       >
                         <option value="" defaultValue>
                           ---Chọn khu vực---
@@ -444,7 +456,7 @@ class QuanLyCongDoan extends Component {
                   </div>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-primary">
-                      Tạo mã cá mới
+                     Thay đổi
                     </button>
                     <button
                       type="button"
@@ -482,7 +494,6 @@ class QuanLyCongDoan extends Component {
                       type="submit"
                       className="btn btn-danger"
                       data-toggle="modal"
-                      onClick={this.reLoadTable}
                     >
                       Xóa mã cá
                     </button>
@@ -518,8 +529,8 @@ class QuanLyCongDoan extends Component {
     }
     return result;
   }
-   // hàm hiển thị danh sách tên khu vực.
-   showContentSelect(contentProcess) {
+  // hàm hiển thị danh sách tên khu vực.
+  showContentSelect(contentProcess) {
     var result = null;
     if (contentProcess.length >= 0) {
       result = contentProcess.map((contentItem, index) => {

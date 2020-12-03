@@ -60,7 +60,9 @@ class QLTTableContentItemCongNhan extends Component {
         arrayValueModel = [];
         for (var k in resModel.data) {
           var Object = JSON.parse(resModel.data[k]);
-          arrayValueModel.push(Object);
+          if (Object.status == true) {
+            arrayValueModel.push(Object);
+          }
         }
         this.setState({
           contentModel: arrayValueModel,
@@ -74,7 +76,7 @@ class QLTTableContentItemCongNhan extends Component {
 
   /*---------------truyền data từ tìm kiếm nhân viên ra ngoài ----------------------- */
   OnGetValueColorProcessType = () => {
-    var {contentItem} = this.props
+    var { contentItem } = this.props;
     var nameColorCard = document.getElementById("idColorCardSelect").value;
     var idProcess = document.getElementById("idModelSelect").value;
     var nameType = document.getElementById("idTypeSelect").value;
@@ -83,7 +85,7 @@ class QLTTableContentItemCongNhan extends Component {
     var getValueTypeInModel = document.getElementById("idModelSelect").value;
 
     //truyền id của mã cá trong select để lấy loại (classify)
-    this.getValueTypeInModel(getValueTypeInModel); 
+    this.getValueTypeInModel(getValueTypeInModel);
 
     if (getValueTypeInModel != "") {
       document.getElementById("idTypeSelect").disabled = false;
@@ -91,8 +93,13 @@ class QLTTableContentItemCongNhan extends Component {
       document.getElementById("idTypeSelect").value = "";
       document.getElementById("idTypeSelect").disabled = true;
     }
-    // truyền 4 giá trị ra ngoài hàm cha để tạo thẻ 
-    this.props.OnGetValueColorProcessType(contentItem.Id , nameColorCard, idProcess, nameType);
+    // truyền 4 giá trị ra ngoài hàm cha để tạo thẻ
+    this.props.OnGetValueColorProcessType(
+      contentItem.Id,
+      nameColorCard,
+      idProcess,
+      nameType
+    );
   };
 
   render() {
@@ -113,7 +120,7 @@ class QLTTableContentItemCongNhan extends Component {
             required
             onChange={this.OnGetValueColorProcessType}
           >
-            <option value="">---Chọn màu---</option>
+            <option value="null">---Chọn màu---</option>
             <option value="Trắng">Trắng</option>
             <option value="Xanh">Xanh</option>
             <option value="Đỏ">Đỏ</option>
@@ -127,7 +134,6 @@ class QLTTableContentItemCongNhan extends Component {
             id="idModelSelect"
             name="nameProcessSelect"
             required
-            //onChange={this.onChange}
             onChange={this.OnGetValueColorProcessType}
           >
             <option value="">---Chọn công đoạn---</option>
@@ -141,10 +147,9 @@ class QLTTableContentItemCongNhan extends Component {
             name="nameProcessType"
             required
             disabled
-            //onChange={this.onChange}
             onChange={this.OnGetValueColorProcessType}
           >
-            <option value="">---Chọn type---</option>
+            <option value="null">---Chọn type---</option>
             {this.showContentSelectType(contentTypeSelect)}
           </select>
         </td>
@@ -172,7 +177,7 @@ class QLTTableContentItemCongNhan extends Component {
       result = contentModel.map((contentItem, index) => {
         return (
           <option key={index} value={contentItem.Classify}>
-            {contentItem.Name}
+            {contentItem.Classify}
           </option>
         );
       });
