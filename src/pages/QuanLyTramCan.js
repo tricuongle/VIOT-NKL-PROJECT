@@ -62,7 +62,7 @@ class QuanLyTramCan extends Component {
         this.setState({
           contentItems: arrayValueDevice,
         });
-        //this.loopContentDevices(arrayValueDevice);
+        console.log(this.state.contentItems)
       })
       .catch((err) => {
         console.log("Lỗi láy thông tin device ( cân)");
@@ -252,6 +252,9 @@ class QuanLyTramCan extends Component {
         });
     }
   };
+  reLoadComponent=(item)=>{
+   
+  }
 
   render() {
     var { contentItems, contentProcess, contentSection } = this.state;
@@ -270,6 +273,17 @@ class QuanLyTramCan extends Component {
         </section>
 
         <section className="content">
+        <form className="filter-section form-inline">
+            <div className="input-group inputSeach">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.reLoadComponent}
+              >
+                Làm mới dữ liệu
+              </button>
+            </div>
+          </form>
           <TableContentTramCan>
             {this.showContentItems(contentItems)}
           </TableContentTramCan>
@@ -427,6 +441,7 @@ class QuanLyTramCan extends Component {
             contentItem={contentItem}
             index={index}
             onGetIdEdit={this.onGetIdEdit}
+            reLoadComponent ={this.reLoadComponent}
           />
         );
       });

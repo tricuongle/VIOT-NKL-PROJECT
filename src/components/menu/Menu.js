@@ -4,7 +4,7 @@ import FilletVao from "../../pages/GiamSat/FilletVao";
 import ThongKe from "../../pages/ThongKe";
 import TinhTien from "../../pages/TinhTien";
 import QuanLyTramCan from "../../pages/QuanLyTramCan";
-import QuanLyKhuVuc from "../../pages/QuanLyKhuVuc";
+import QuanLyCongDoann from "../../pages/QuanLyCongDoann";
 import ChonMaCa from "../../pages/SanXuat/ChonMaCa";
 import TaoMaCa from "../../pages/SanXuat/TaoMaCa";
 import QuanLyCongDoan from "../../pages/QuanLyCongDoan";
@@ -213,7 +213,7 @@ class Menu extends Component {
                   </Link>
                 </li>*/}
                 <li className="">
-                  <Link to="/Quan-Ly-Khu-Vuc">
+                  <Link to="/Quan-Ly-cong-doann">
                     <i className="fa fa fa-tasks" aria-hidden="true"></i>
                     <span>Quản lý công đoạn</span>
                   </Link>
@@ -256,7 +256,7 @@ class Menu extends Component {
         <Route path="/Thong-ke" exact component={thongKe} />
         <Route path="/Tinh-tien" exact component={tinhTien} />
         <Route path="/Quan-Ly-Tram-Can" exact component={quanLyTramCan} />
-        <Route path="/Quan-Ly-Khu-Vuc" exact component={quanLyKhuVuc} />
+        <Route path="/Quan-Ly-cong-doann" exact component={quanLyCongDoann} />
         <Route path="/Chon-ma-ca" exact component={chonMaCa} />
         <Route path="/Tao-ma-ca" exact component={taoMaCa} />
         <Route
@@ -302,8 +302,8 @@ const quanLyCongDoan = () => {
 const quanLyTramCan = () => {
   return <QuanLyTramCan />;
 };
-const quanLyKhuVuc = () => {
-  return <QuanLyKhuVuc />;
+const quanLyCongDoann = () => {
+  return <QuanLyCongDoann />;
 };
 const chonMaCa = () => {
   return <ChonMaCa />;

@@ -20,7 +20,29 @@ class SearchThe extends Component {
   };
   render() {
     var { keyword } = this.state;
-    return <form className="filter-section form-inline"></form>;
+    return (
+      <form className="filter-section form-inline">
+        {/*<div className="input-group inputSeach">
+          <input
+            name="keyword"
+            type="text"
+            className="form-control"
+            placeholder="tìm kiếm"
+            value={keyword}
+            onChange={this.onChange}
+          />
+          <span className="input-group-btn">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.onSearch}
+            >
+              Tìm kiếm
+            </button>
+          </span>
+    </div>*/}
+      </form>
+    );
   }
 }
 export default SearchThe;

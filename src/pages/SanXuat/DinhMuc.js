@@ -474,7 +474,6 @@ class DinhMuc extends Component {
                         className="form-control"
                         id="idName"
                         name="Name"
-                        required
                         disabled
                         placeholder="Nhập tên mã cá cần sửa"
                         value={nameModel}
@@ -567,10 +566,10 @@ class DinhMuc extends Component {
                     >
                       &times;
                     </button>
-                    <h4 className="modal-title">Xóa khu vực</h4>
+                    <h4 className="modal-title">Xóa định mức</h4>
                   </div>
                   <div className="modal-body">
-                    <h5>Bạn có đồng ý xóa khu vực này không?</h5>
+                    <h5>Bạn có đồng ý xóa định mức giá này không?</h5>
                   </div>
                   <div className="modal-footer">
                     <button
@@ -578,7 +577,7 @@ class DinhMuc extends Component {
                       className="btn btn-danger"
                       data-toggle="modal"
                     >
-                      Xóa khu vực
+                      Xóa định mức
                     </button>
                     <button
                       type="button"

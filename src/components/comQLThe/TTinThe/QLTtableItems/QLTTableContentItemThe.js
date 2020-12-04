@@ -32,7 +32,7 @@ class QLTTableContentItemThe extends Component {
       .then((res) => {
         var Object = JSON.parse(res.data);
         this.setState({
-          nameEmp: Object.Name,
+          nameEmp: Object,
         });
       })
       .catch((err) => {
@@ -103,7 +103,7 @@ class QLTTableContentItemThe extends Component {
         <td>{index + 1}</td>
         <td>{contentItem.RFID}</td>
         <td>{contentItem.Id}</td>
-        <td>{nameEmp}</td>
+        <td>{nameEmp.Name}</td>
         <td>{contentItem.Color}</td>
         <td>{nameProcess}</td>
         <td>{contentItem.Classify}</td>

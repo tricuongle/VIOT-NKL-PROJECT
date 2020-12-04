@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import SearchKhuVuc from "../controllerKV/SearchKhuVuc";
-class TableContentKhuVuc extends Component {
+import SearchCongDoann from "../controllerKV/SearchCongDoann";
+class TableContentCongDoann extends Component {
   render() {
     return (
       <div>
-        <SearchKhuVuc onSearch={this.props.onSearch} />
+        <SearchCongDoann onSearch={this.props.onSearch} />
         <table id="tableData" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
@@ -22,4 +22,4 @@ class TableContentKhuVuc extends Component {
     );
   }
 }
-export default TableContentKhuVuc;
+export default TableContentCongDoann;

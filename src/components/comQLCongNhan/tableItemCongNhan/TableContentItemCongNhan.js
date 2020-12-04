@@ -17,7 +17,7 @@ class TableContentItemCongNhan extends Component {
         <td>{contentItem.Name}</td>
         <td>{contentItem.CMND}</td>
         <td>{contentItem.BirthDay}</td>
-        <td>{statusEmployee}</td>
+        <td>{statusEmployee}</td> 
         <td>
           <button
             type="button"

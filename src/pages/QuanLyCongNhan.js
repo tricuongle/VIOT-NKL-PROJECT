@@ -73,10 +73,15 @@ class QuanLyCongNhan extends Component {
         });
         // sử dụng thư viện datatable
         if (count == 0) {
-          $("#tableData").DataTable({destroy:true});
+          $("#tableData").DataTable({destroy:true,
+            scrollX: true,
+            scrollY: 300,});
           count++;
         } else {
-          $("#tableData").DataTable({});
+          $("#tableData").DataTable({
+            scrollX: true,
+            scrollY: 300,
+          });
         }
       })
       .catch((err) => {

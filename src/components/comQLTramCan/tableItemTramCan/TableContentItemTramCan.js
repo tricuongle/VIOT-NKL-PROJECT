@@ -40,6 +40,7 @@ class TableContentItemTramCan extends Component {
           this.setState({
             nameItemModelGetId: arrayName,
           });
+          console.log(this.state.nameItemModelGetId);
         })
         .catch((err) => {
           console.log(err);

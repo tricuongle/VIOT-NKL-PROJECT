@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class TableContentItemsKhuVuc extends Component {
+class TableContentItemsCongDoann extends Component {
 
 onUpdate =() => {
   this.props.onUpdate(this.props.contentItem.Id);
@@ -40,4 +40,4 @@ onUpdate =() => {
     );
   }
 }
-export default TableContentItemsKhuVuc;
+export default TableContentItemsCongDoann;

@@ -7,7 +7,7 @@ import * as Config from '../../../untils/Config'
 var count;
 var valueNew;
 var Description;
-class ActionCreateKhuVuc extends Component {
+class ActionCreateCongDoann extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,7 +74,7 @@ class ActionCreateKhuVuc extends Component {
       .then((res) => {
         console.log(res);
         alert("Thêm công đoạn " + this.state.Name + " thành công !");
-        document.getElementById('NameKhuVuc').value='';
+        document.getElementById('NameCongDoann').value='';
         document.getElementById('info').value='';
       })
       .catch((err) => {
@@ -110,7 +110,7 @@ class ActionCreateKhuVuc extends Component {
                     minLength="5"
                     type="text"
                     className="form-control"
-                    id="NameKhuVuc"
+                    id="NameCongDoann"
                     name="Name"
                     required
                     placeholder="Nhập tên công đoạn"
@@ -154,4 +154,4 @@ class ActionCreateKhuVuc extends Component {
     );
   }
 }
-export default ActionCreateKhuVuc;
+export default ActionCreateCongDoann;

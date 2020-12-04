@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-class SearchKhuVuc extends Component {
+class SearchCongDoann extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,4 +55,4 @@ class SearchKhuVuc extends Component {
     );
   }
 }
-export default SearchKhuVuc;
+export default SearchCongDoann;

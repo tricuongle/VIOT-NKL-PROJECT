@@ -5,9 +5,9 @@ import "jquery/dist/jquery.min.js";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import axios from "axios";
-import TableContentKhuVuc from "../components/comQLKhuVuc/tableContentKhuVuc/TableContentKhuVuc";
-import TableContentItemsKhuVuc from "../components/comQLKhuVuc/tableItemKhuVuc/TableContentItemsKhuVuc";
-import ActionCreateKhuVuc from "../components/comQLKhuVuc/comQLKhuVucActions/ActionCreateKhuVuc";
+import TableContentCongDoann from "../components/comQLCongDoann/tableContentCongDoann/TableContentCongDoann";
+import TableContentItemsCongDoann from "../components/comQLCongDoann/tableItemCongDoann/TableContentItemsCongDoann";
+import ActionCreateCongDoann from "../components/comQLCongDoann/comQLCongDoannActions/ActionCreateCongDoann";
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 var JsonValue;
@@ -20,7 +20,7 @@ var count;
 var valueNew;
 var Description;
 var IdProcessOld;
-class QuanLyKhuVuc extends Component {
+class QuanLyCongDoann extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -270,11 +270,11 @@ class QuanLyKhuVuc extends Component {
               </button>
             </div>
           </form>
-          <TableContentKhuVuc>
+          <TableContentCongDoann>
             {this.showContentItems(contentItems)}
-          </TableContentKhuVuc>
+          </TableContentCongDoann>
           {/*------------------ button tạo mới khu vực-------------------------*/}
-          <ActionCreateKhuVuc></ActionCreateKhuVuc>
+          <ActionCreateCongDoann></ActionCreateCongDoann>
 
           {/*------------------ button sửa khu vực-------------------------*/}
           <div className="modal fade" id="modal-edit">
@@ -406,7 +406,7 @@ class QuanLyKhuVuc extends Component {
     if (contentItems.length >= 0) {
       result = contentItems.map((contentItem, index) => {
         return (
-          <TableContentItemsKhuVuc
+          <TableContentItemsCongDoann
             key={index}
             contentItem={contentItem}
             index={index}
@@ -419,4 +419,4 @@ class QuanLyKhuVuc extends Component {
     return result;
   }
 }
-export default QuanLyKhuVuc;
+export default QuanLyCongDoann;
