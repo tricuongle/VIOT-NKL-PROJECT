@@ -23,6 +23,7 @@ class QuanLyMaCa extends Component {
     this.state = {
       contentItems: [],
       contentProcess: [],
+      contentValueFishcode: [],
 
       // giá trị obj của data
       valueModel: {
@@ -167,7 +168,7 @@ class QuanLyMaCa extends Component {
       },
     })
       .then((resModel) => {
-        setTimeout(this.componentDidMount,500);
+        setTimeout(this.componentDidMount, 500);
         alert("Sửa công đoạn " + valueModel.Name + " thành công.");
         console.log("Sửa thành công");
       })
@@ -179,6 +180,7 @@ class QuanLyMaCa extends Component {
   /*----------------DELETE công đoạn------------------------ */
   onDeleteMaCa = (event) => {
     event.preventDefault();
+    var arrayValueFishcode = [];
     var { valueModel } = this.state;
     var statusDELETE = false;
     var valueModelString =
@@ -204,7 +206,34 @@ class QuanLyMaCa extends Component {
       statusDELETE +
       "}";
     console.log(valueModelString);
+    /*lấy datta định mức theo mã cá */
     axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=FishCode",
+      data: null,
+    })
+      .then((res) => {
+        var arrayValue = res.data;
+        for (var k in arrayValue) {
+          var temp = JSON.parse(arrayValue[k]);
+          if (temp.ModelId == valueModel.Id && temp.Status == true) {
+            arrayValueFishcode.push(temp);
+          }
+        }
+        this.setState({
+          contentValueFishcode: arrayValueFishcode
+        })
+        console.log(this.state.contentValueFishcode);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    /*--------------Xóa mã cá (status chuyển về sai)--------------------------------- */
+     axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
@@ -220,6 +249,24 @@ class QuanLyMaCa extends Component {
         setTimeout(this.componentDidMount,500);
         alert("Xóa công đoạn " + valueModel.Name + " thành công.");
         console.log("Xóa công đoạn thành công");
+        /*Xóa thay đổi status định mức mã cá == sai */
+    /* axios({
+          method: "GET",
+          url:
+            `${Config.API_URL}` +
+            "/api/data/Values?token=" +
+            `${Config.TOKEN}` +
+            "&Classify=Process",
+          data: null,
+        })
+          .then((resProcess) => {
+            
+           
+          })
+          .catch((err) => {
+            console.log(err);
+          });*/
+
       })
       .catch((err) => {
         console.log(err);
@@ -334,7 +381,7 @@ class QuanLyMaCa extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Chọn khu vực:</h5>
+                        <h5>Chọn công đoạn:</h5>
                       </label>
                       <br />
                       <select
@@ -345,7 +392,7 @@ class QuanLyMaCa extends Component {
                         onChange={this.onChange}
                       >
                         <option value="" defaultValue>
-                          ---Chọn khu vực---
+                          ---Chọn công đoạn---
                         </option>
                         {this.showContentSelect(contentProcess)}
                       </select>
@@ -456,7 +503,7 @@ class QuanLyMaCa extends Component {
                   </div>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-primary">
-                     Thay đổi
+                      Thay đổi
                     </button>
                     <button
                       type="button"

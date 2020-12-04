@@ -20,7 +20,7 @@ class RawData extends Component {
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Recode",
+        "&Classify=Record-Out",
       data: null,
     })
       .then((res) => {

@@ -67,6 +67,8 @@ class QuanLyThongTinThe extends Component {
             processing: true,
             responsive: true,
             dom: "Bfrtip",
+            scrollX: true,
+            scrollY: 300,
           });
         });
       })
@@ -123,6 +125,7 @@ class QuanLyThongTinThe extends Component {
 
     /*-------------gán giá trị cho pop edit---------------- */
     document.getElementById("idCard").value = contentItem.RFID;
+    console.log(nameEmp);
     document.getElementById("idNameEml").value = nameEmp;
     document.getElementById("idNameCard").value = contentItem.Id;
 
@@ -140,7 +143,10 @@ class QuanLyThongTinThe extends Component {
         arrayValueProcess = [];
         for (var k in resProcess.data) {
           var Object = JSON.parse(resProcess.data[k]);
-          arrayValueProcess.push(Object);
+          if(Object.status == true){
+            arrayValueProcess.push(Object);
+          }
+          
         }
         this.setState({
           contentProcess: arrayValueProcess,
@@ -310,7 +316,7 @@ class QuanLyThongTinThe extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="area" id="areaDevice">
-                        <h5> Type (Loại):</h5>
+                        <h5> Classify (Loại):</h5>
                       </label>
                       <select
                         className="form-control"
@@ -386,7 +392,7 @@ class QuanLyThongTinThe extends Component {
     var result = null;
     if (contentModel.length >= 0) {
       result = contentModel.map((contentItem, index) => {
-        return <option key={index}>{contentItem.Name}</option>;
+        return <option key={index} value={contentItem.Classify}>{contentItem.Classify}</option>;
       });
     }
     return result;

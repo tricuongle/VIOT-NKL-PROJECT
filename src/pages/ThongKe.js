@@ -20,7 +20,7 @@ class ThongKe extends Component {
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Recode",
+        "&Classify=Record-In",
       data: null,
     })
       .then((res) => {
@@ -104,7 +104,7 @@ class ThongKe extends Component {
             orderCellsTop: true,
             fixedHeader: true,
             scrollX: true,
-            scrollY: 200,
+            scrollY: 350, 
 
             // dom: "Bfrtip",
           });

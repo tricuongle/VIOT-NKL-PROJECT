@@ -46,6 +46,29 @@ class ActionCreateCongNhan extends Component {
         console.log(err);
       });
   };
+   /*-----------Hàm kiểm tra mã số công nhân trùng không --------------- */
+   /*checkCardNoEmp = (cardNo) => {
+    axios({
+      method: "GET",
+      url:
+      `${Config.API_URL}` +
+        "/api/data/Add?token=" +
+        `${Config.TOKEN}` +
+        "&key=" +
+        Id +
+        "&Value=" +
+        valueNew +
+        "&Description=NKL&classify=Employee",
+      data: null,
+    })
+      .then((res) => {
+        console.log(res);
+        alert("Thêm công nhân " + this.state.Name + " thành công !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   /*-----------Hàm tạo mới công nhân --------------- */
   onSave = (event) => {
     event.preventDefault();
@@ -76,7 +99,7 @@ class ActionCreateCongNhan extends Component {
 
   /*----------Nội dụng xử lý giao diện-------------- */
   render() {
-    var { Name, CMND, BirthDay, Id } = this.state;
+    var { Name, CMND, BirthDay, Id, CardNo } = this.state;
     return (
       <div className="modal fade" id="modal-create">
         <form onSubmit={this.onSave}>
@@ -109,6 +132,22 @@ class ActionCreateCongNhan extends Component {
                     name="Name"
                     required
                     value={Name}
+                    onChange={this.onChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="devices">
+                    <h5>Mã số công nhân:</h5>
+                  </label>
+                  <br />
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="NumCardNo"
+                    name="CardNo"
+                    placeholder="nhập mã số công nhân"
+                    required
+                    value={CardNo}
                     onChange={this.onChange}
                   />
                 </div>

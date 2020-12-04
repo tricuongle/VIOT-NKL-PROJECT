@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SearchCongDoann from "../controllerKV/SearchCongDoann";
+import SearchCongDoann from "../controllerCDn/SearchCongDoann";
 class TableContentCongDoann extends Component {
   render() {
     return (
