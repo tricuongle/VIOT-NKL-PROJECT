@@ -81,12 +81,14 @@ class TableItemRawData extends Component {
     var { idEmployee, idProcess, idModel } = this.state;
     const unixTime = contentItem.ReadTime;
     const date = new Date(unixTime * 1000);
-    var dateFormat = require("dateformat");
+    var dateFormat = require("dateformat"); 
     var dateNew = dateFormat(date, "dd-mm-yyyy");
+    var dateNewTime = dateFormat(date, "HH:MM");
     var img = `${Config.API_URL}` + "/api/images/" + contentItem.Image + ".jpg";
     return (
       <tr>
         <td>{dateNew}</td>
+        <td>{dateNewTime}</td>
         <td>{idEmployee.Name}</td>
         <td>{contentItem.CardId}</td>
         <td>{idModel.Name}</td>

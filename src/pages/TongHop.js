@@ -3,7 +3,6 @@ import TableContentTongHop from "../components/comTongHop/tableContentTongHop/Ta
 import TableItemTongHop from "../components/comTongHop/TableItemTongHop/TableItemTongHop";
 import axios from "axios";
 import * as Config from "../untils/Config";
-import $, { event } from "jquery";
 var arrayRecode = [];
 class TongHop extends Component {
   constructor(props) {
@@ -13,14 +12,13 @@ class TongHop extends Component {
     };
   }
   componentDidMount = () => {
-    console.log("get data ok");
     axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Recode",
+        "&Classify=Record-Out",
       data: null,
     })
       .then((res) => {
@@ -36,7 +34,8 @@ class TongHop extends Component {
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(this.componentDidMount, 3000);
+    console.log("<--Lần quét table tổng hợp");
+    setTimeout(this.componentDidMount, 2000);
   };
 
   render() {

@@ -36,7 +36,7 @@ class TableItemTongHop extends Component {
       .catch((err) => {
         console.log(err);
       });
-    /*---------------lấy tên mã cá theo tên--------------------- */
+    /*---------------lấy tên mã cá theo id--------------------- */
     axios({
       method: "GET",
       url:
@@ -63,8 +63,8 @@ class TableItemTongHop extends Component {
         `${Config.API_URL}` +
         "/api/data/valuekey?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Recode&key=" +
-        contentItem.RecodeIn,
+        "&Classify=Record-In&key=" +
+        contentItem.RecordIn,
       data: null,
     })
       .then((res) => {
@@ -84,9 +84,7 @@ class TableItemTongHop extends Component {
       <tr>
         <td>{index + 1}</td>
         <td>{idProcess.Name}</td>
-        <td>
-          {idModel.Name}
-        </td>
+        <td>{idModel.Name}</td>
         <td>{RecodeInKG} </td>
         <td>{contentItem.Weight} </td>
       </tr>

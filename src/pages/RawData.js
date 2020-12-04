@@ -13,7 +13,28 @@ class RawData extends Component {
     };
   }
   componentDidMount = () => {
-    console.log("get data ok");
+    /*axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Record-In",
+      data: null,
+    })
+      .then((res) => {
+        arrayRecode = [];
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          arrayRecode.push(contentItem);
+        });
+        this.setState({
+          valueRecode: arrayRecode,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });*/
     axios({
       method: "GET",
       url:
@@ -32,21 +53,12 @@ class RawData extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        // sử dụng thư viện datatable
-        /*$(document).ready(function () {
-      $("#tableData").DataTable({
-        pageLength: 7,
-        processing: true,
-        responsive: true,
-        destroy: true,
-        dom: 'Bfrtip',
-      });
-    });*/
       })
       .catch((err) => {
         console.log(err);
       });
-      setTimeout(this.componentDidMount, 3000);
+      setTimeout(this.componentDidMount, 2000);
+      console.log("<-- số lần quét Raw data (2s/lần)");
   };
 
   render() {

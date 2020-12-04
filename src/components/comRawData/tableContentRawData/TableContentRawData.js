@@ -6,6 +6,7 @@ class TableContentRawData extends Component {
         <thead>
           <tr className="tieude">
             <th>Ngày</th>
+            <th>Giờ</th>
             <th>Tên</th>
             <th>Số thẻ</th>
             <th>Mã cá</th>
