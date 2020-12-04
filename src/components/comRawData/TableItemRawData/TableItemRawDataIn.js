@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import * as Config from "../../../untils/Config";
-class TableItemRawData extends Component {
+class TableItemRawDataIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -98,11 +98,11 @@ class TableItemRawData extends Component {
         <td>{contentItem.DeviceId}</td>
         <td>
           <a href={img} target="_blank">
-            Hình ảnh
+            Xem
           </a>
         </td>
       </tr>
     );
   }
 }
-export default TableItemRawData;
+export default TableItemRawDataIn;
