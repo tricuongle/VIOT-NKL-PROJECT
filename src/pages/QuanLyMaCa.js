@@ -6,9 +6,9 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import axios from "axios";
-import TableContentItemCongDoan from "../components/comQLCongDoan/tableItemCongDoan/TableContentItemCongDoan";
-import TableContentCongDoan from "../components/comQLCongDoan/tableContentCongDoan/TableContentCongDoan";
-import ActionCreateCongDoan from "../components/comQLCongDoan/comQLCongDoanActions/ActionCreateCongDoan";
+import TableContentItemMaCa from "../components/comQLMaCa/tableItemMaCa/TableContentItemMaCa";
+import TableContentMaCa from "../components/comQLMaCa/tableContentMaCa/TableContentMaCa";
+import ActionCreateMaCa from "../components/comQLMaCa/comQLMaCaActions/ActionCreateMaCa";
 import * as Config from "../untils/Config";
 var JsonValue;
 var JsonName;
@@ -17,7 +17,7 @@ var ArrayValue = [];
 var ArrayNameProcess = [];
 // khi gọi về chỉ hiển thị id của khu vực, dùng id lấy tên
 var i;
-class QuanLyCongDoan extends Component {
+class QuanLyMaCa extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -148,7 +148,7 @@ class QuanLyCongDoan extends Component {
     document.getElementById("idClassifyy").value = content.Classify;
   };
   /*-----------------Edit Công đoạn ------------------*/
-  onEditCongDoan = (event) => {
+  onEditMaCa = (event) => {
     event.preventDefault();
     var { valueModel } = this.state;
     //delete ValueModel.contentItems;
@@ -177,7 +177,7 @@ class QuanLyCongDoan extends Component {
       });
   };
   /*----------------DELETE công đoạn------------------------ */
-  onDeleteCongDoan = (event) => {
+  onDeleteMaCa = (event) => {
     event.preventDefault();
     var { valueModel } = this.state;
     var statusDELETE = false;
@@ -282,15 +282,15 @@ class QuanLyCongDoan extends Component {
               </button>
             </div>
           </form>
-          <TableContentCongDoan>
+          <TableContentMaCa>
             {this.showContentItems(contentItems)}
-          </TableContentCongDoan>
+          </TableContentMaCa>
 
           {/*button thêm công đoạn*/}
-          <ActionCreateCongDoan></ActionCreateCongDoan>
+          <ActionCreateMaCa></ActionCreateMaCa>
           {/*----------------Chỉnh sửa công đoạn---------------------------------- */}
           <div className="modal fade" id="modal-edit">
-            <form onSubmit={this.onEditCongDoan}>
+            <form onSubmit={this.onEditMaCa}>
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header ">
@@ -472,7 +472,7 @@ class QuanLyCongDoan extends Component {
           </div>
           {/*-------------Xóa công đoạn---------------------- */}
           <div className="modal fade" id="modal-Delete">
-            <form onSubmit={this.onDeleteCongDoan}>
+            <form onSubmit={this.onDeleteMaCa}>
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -518,7 +518,7 @@ class QuanLyCongDoan extends Component {
     if (contentItems.length >= 0) {
       result = contentItems.map((contentItem, index) => {
         return (
-          <TableContentItemCongDoan
+          <TableContentItemMaCa
             key={index}
             contentItem={contentItem}
             index={index}
@@ -544,4 +544,4 @@ class QuanLyCongDoan extends Component {
     return result;
   }
 }
-export default QuanLyCongDoan;
+export default QuanLyMaCa;

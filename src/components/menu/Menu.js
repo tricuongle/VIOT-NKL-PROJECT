@@ -7,7 +7,7 @@ import QuanLyTramCan from "../../pages/QuanLyTramCan";
 import QuanLyCongDoann from "../../pages/QuanLyCongDoann";
 import ChonMaCa from "../../pages/SanXuat/ChonMaCa";
 import TaoMaCa from "../../pages/SanXuat/TaoMaCa";
-import QuanLyCongDoan from "../../pages/QuanLyCongDoan";
+import QuanLyMaCa from "../../pages/QuanLyMaCa";
 import QuanLyThe from "../../pages/QuanLyThe/QuanLyThe";
 import QuanLyCongNhan from "../../pages/QuanLyCongNhan";
 import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
@@ -155,7 +155,7 @@ class Menu extends Component {
                       <Link to="/Chon-ma-ca">Chọn mã cá</Link>
                     </li>*/}
                     <li className="">
-                      <Link to="/Quan-ly-cong-doan">Tạo mã cá</Link>
+                      <Link to="/Quan-ly-ma-ca">Tạo mã cá</Link>
                     </li>
                     <li className="">
                       <Link to="/Dinh-muc-ma-ca">Tạo định mức giá mã cá</Link>
@@ -269,7 +269,7 @@ class Menu extends Component {
           exact
           component={manghinhSX02FilletXeBuom}
         />
-        <Route path="/Quan-ly-cong-doan" exact component={quanLyCongDoan} />
+        <Route path="/Quan-ly-ma-ca" exact component={quanLyMaCa} />
         <Route path="/Quan-ly-the" exact component={quanLyThe} />
         <Route path="/Them-the" exact component={themThe} />
         <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
@@ -295,8 +295,8 @@ const tinhTien = () => {
 const quanLyThe = () => {
   return <QuanLyThe />;
 };
-const quanLyCongDoan = () => {
-  return <QuanLyCongDoan />;
+const quanLyMaCa = () => {
+  return <QuanLyMaCa />;
 };
 
 const quanLyTramCan = () => {

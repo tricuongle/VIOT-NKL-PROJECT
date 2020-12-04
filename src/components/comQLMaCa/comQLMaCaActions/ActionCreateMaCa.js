@@ -7,7 +7,7 @@ import * as Config from "../../../untils/Config";
 var count;
 var valueNew;
 var Description;
-class ActionCreateCongDoan extends Component {
+class ActionCreateMaCa extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -319,4 +319,4 @@ class ActionCreateCongDoan extends Component {
     return result;
   }
 }
-export default ActionCreateCongDoan;
+export default ActionCreateMaCa;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-class TableContentCongDoan extends Component {
+class TableContentMaCa extends Component {
   render() {
     return (
       <table id="tableData" className="table table-hover" width="100%">
@@ -25,4 +25,4 @@ class TableContentCongDoan extends Component {
   }
 }
 
-export default TableContentCongDoan;
+export default TableContentMaCa;

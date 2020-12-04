@@ -9,7 +9,7 @@ var contentItemss;
 // biến lấy giá trị model
 var textDateModel;
 var ObjModelValue;
-class TableContentItemCongDoan extends Component {
+class TableContentItemMaCa extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,4 +103,4 @@ class TableContentItemCongDoan extends Component {
     );
   }
 }
-export default TableContentItemCongDoan;
+export default TableContentItemMaCa;
