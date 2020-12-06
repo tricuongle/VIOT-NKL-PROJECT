@@ -399,7 +399,7 @@ td {
     padding: 5px;
   }
   
-  /* Clearfix (clear floats) */
+  //Clearfix (clear floats) 
   .row::after {
     content: "";
     clear: both;
@@ -427,5 +427,5 @@ td {
     overflow-x:scroll;
 }
 th {
-    cursor: pointer;
-  }
+  cursor: pointer;
+}

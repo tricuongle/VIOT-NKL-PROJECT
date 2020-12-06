@@ -4,7 +4,7 @@ class TableContentRawDataOut extends Component {
     return (
       <div className="column">
         <h4>CÂN ĐẦU RA</h4>
-        <table id="tableData" className="table table-hover" width="100%">
+        <table id="tableDataOut" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
               <th>Ngày</th>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import * as Config from "../../../untils/Config";
+import $, { event } from "jquery";
 class TableItemRawDataOut extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +15,7 @@ class TableItemRawDataOut extends Component {
   }
 
   componentDidMount = () => {
+   
     var { contentItem } = this.props;
     /*---------------lấy tên nhân viên theo tên--------------------- */
     axios({

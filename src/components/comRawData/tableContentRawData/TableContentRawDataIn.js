@@ -1,11 +1,14 @@
 import React, { Component } from "react";
+import $, { event } from "jquery";
 class TableContentRawDataIn extends Component {
+  
   render() {
+
     return (
- 
+        
         <div className="column">
           <h4>CÂN ĐẦU VÀO</h4>
-          <table id="tableData" className="table table-hover" width="100%">
+          <table id="tableDataIn" className="table table-hover" width="100%">
             <thead>
               <tr className="tieude">
                 <th>Ngày</th>

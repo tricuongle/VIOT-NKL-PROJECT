@@ -17,7 +17,6 @@ class RawData extends Component {
     };
   }
   componentDidMount = () => {
-   
     axios({
       method: "GET",
       url:
@@ -32,6 +31,10 @@ class RawData extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           arrayRecode.push(contentItem);
+          this.setState({
+            valueRecodeOut: arrayRecode,
+          });
+           
           /*-------- */
           axios({
             method: "GET",
@@ -56,15 +59,12 @@ class RawData extends Component {
               console.log(err);
             });
         });
-        this.setState({
-          valueRecodeOut: arrayRecode,
-        });
       })
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(this.componentDidMount, 2000);
-    console.log("<-- số lần quét Raw data (2s/lần)");
+    //setTimeout(this.componentDidMount, 2000);
+    //console.log("<-- số lần quét Raw data (2s/lần)");
   };
 
   render() {
