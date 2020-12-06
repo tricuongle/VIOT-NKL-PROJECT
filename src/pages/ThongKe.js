@@ -41,46 +41,14 @@ class ThongKe extends Component {
           valuetemp: arrayRecode,
         });
         lengthRE = this.state.valueRecode.length;
-        var table = $(document).ready(function () {
-          $("#tableData").DataTable({
-            searching: false,
-            ordering: false,
-            //dom: "Bfrtip",
-            //pageLength: 10,
-            fixedHeader: true,
-            scrollY: 500,
-            scrollX: true,
-          });
+        $("#tableData").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 450,
+          paging: false,
         });
-
-        /*$(document).ready(function () {
-          // Setup - add a text input to each footer cell
-          $("#tableData thead tr").clone(true).appendTo("#tableData thead");
-          $("#tableData thead tr:eq(1) th").each(function (i) {
-            var title = $(this).text();
-            $(this).html(
-              '<input type="text" placeholder="Search ' + title + '" />'
-            );
-
-            $("input", this).on("keyup change", function () {
-              if (table.column(i).search() !== this.value) {
-                table.column(i).search(this.value).draw();
-              }
-            });
-          });
-          var table = $("#tableData").DataTable({
-            lengthMenu: [
-              [10, 25, 50, -1],
-              [10, 25, 50, "All"],
-            ],
-            orderCellsTop: true,
-            fixedHeader: true,
-            scrollX: true,
-            scrollY: 200,
-
-            // dom: "Bfrtip",
-          });
-        });*/
       })
 
       .catch((err) => {
@@ -96,7 +64,9 @@ class ThongKe extends Component {
       [name]: value,
     });
   };
-  LoadData = () => {
+
+  // --------------------load dữ liệu lại-------------------------
+  dataTableLoad = () => {
     axios({
       method: "GET",
       url:
@@ -115,38 +85,24 @@ class ThongKe extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            searching: false,
-            ordering: false,
-            dom: "Bfrtip",
-            pageLength: 10,
-            fixedHeader: true,
-            scrollY: 500,
-            scrollX: true,
-            destroy: true,
-          });
-        });
       })
+
       .catch((err) => {
         console.log(err);
       });
   };
-  LoadDataButton = () => {
-    console.log("yes");
-    $("#tableData").dataTable({
-      clear: true,
-      draw: function () {
-        console.log("Redraw occurred at: " + new Date().getTime());
-      },
+  LoadData = () => {
+    this.setState({
+      valueRecode: load,
     });
+    this.dataTableLoad();
   };
   // lọc ngày
   FilterDate = () => {
     var { valueRecode, dateIn, dateOut } = this.state;
     if (valueRecode.length != lengthRE) {
       console.log("relo");
-      this.LoadData();
+      this.dataTableLoad();
     }
     var arrayRecodeToDate = [];
     var dateFormat = require("dateformat");
@@ -163,6 +119,7 @@ class ThongKe extends Component {
       valueRecode: arrayRecodeToDate,
     });
   };
+  /*------------------------------------- */
   render() {
     var { valueRecode, dateIn, dateOut, valueRecode1 } = this.state;
     return (
@@ -286,7 +243,7 @@ class ThongKe extends Component {
                 id="btnLoc"
                 type="button"
                 className="form-control btn-success"
-                onClick={this.LoadDataButton}
+                onClick={this.LoadData}
               >
                 Làm mới dữ liệu
               </button>

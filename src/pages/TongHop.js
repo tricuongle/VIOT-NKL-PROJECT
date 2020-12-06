@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import TableContentTongHop from "../components/comTongHop/tableContentTongHop/TableContentTongHop";
 import TableItemTongHop from "../components/comTongHop/TableItemTongHop/TableItemTongHop";
 import axios from "axios";
+
 import * as Config from "../untils/Config";
+import $, { event } from "jquery";
 var arrayRecode = [];
 class TongHop extends Component {
   constructor(props) {
@@ -30,12 +32,21 @@ class TongHop extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
+        $("#tableData").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: false,
+          scrollY: 450,
+          paging: false,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
-    console.log("<--Lần quét table tổng hợp");
-    setTimeout(this.componentDidMount, 2000);
+     
+    //console.log("<--Lần quét table tổng hợp");
+    //setTimeout(this.componentDidMount, 2000);
   };
 
   render() {

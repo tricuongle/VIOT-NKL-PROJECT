@@ -80,9 +80,17 @@ class TableItemTongHop extends Component {
   render() {
     var { contentItem, index } = this.props;
     var { RecodeInKG, idProcess, idModel } = this.state;
+    var dateFormat = require("dateformat");
+    if (contentItem.ReadTime != undefined) {
+      const unixTimeOut = contentItem.ReadTime;
+      const dateOut = new Date(unixTimeOut * 1000);
+      var dateNewOut = dateFormat(dateOut, "dd-mm-yyyy");
+      var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
+    }
     return (
-      <tr>
+      <tr id="device2" className="edit">
         <td>{index + 1}</td>
+        <td>{dateNewOut}</td>
         <td>{idProcess.Name}</td>
         <td>{idModel.Name}</td>
         <td>{RecodeInKG} </td>
