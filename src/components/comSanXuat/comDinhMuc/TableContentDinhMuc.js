@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import SearchDinhMuc from '../comDinhMuc/SearchDinhMuc'
 //import SearchKhuVuc from "../controllerKV/SearchKhuVuc";
 class TableContentDinhMuc extends Component {
   render() {
     return (
       <div>
-        {/*<SearchKhuVuc onSearch={this.props.onSearch} />*/}
+        <SearchDinhMuc onSearch={this.props.onSearch} />
         <table id="tableData" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">

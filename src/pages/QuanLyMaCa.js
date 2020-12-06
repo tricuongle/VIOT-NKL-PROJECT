@@ -364,7 +364,7 @@ class QuanLyMaCa extends Component {
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Quản lý MÃ CÁ</li>
+            <li className="active">Quản lý mã cá</li>
           </ol>
         </section>
         <section className="content">

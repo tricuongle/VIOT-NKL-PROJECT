@@ -11,12 +11,14 @@ import TableContentDinhMuc from "../../components/comSanXuat/comDinhMuc/TableCon
 import TableItemDinhMuc from "../../components/comSanXuat/comDinhMuc/TableItemDinhMuc";
 var ArrayValue = [];
 var arrayValueFishCode = [];
+var load = [];
 class DinhMuc extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contentItems: [],
       contentModelFS: [],
+      keyword: "",
       idModel: "",
       nameModel: "",
       IDDinhGiaCreate: "",
@@ -31,6 +33,11 @@ class DinhMuc extends Component {
       },
     };
   }
+  onSearch = (keyword) => {
+    this.setState({
+      keyword: keyword.toLowerCase(),
+    });
+  };
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -77,11 +84,11 @@ class DinhMuc extends Component {
         // sử dụng thư viện datatable
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 5,
-            bDestroy: true,
-            processing: true,
-            responsive: true,
+            searching: false,
+            ordering: false,
             dom: "Bfrtip",
+            scrollX: true,
+            scrollY: 450,
           });
         });
       })
@@ -172,10 +179,8 @@ class DinhMuc extends Component {
   /*---------------Tạo mới giá định mức-------------------------- */
   onCreateDinhMuc = (event) => {
     event.preventDefault();
-    console.log(stringValueDinhMuc);
     var { valueDinhMuc } = this.state;
     var stringValueDinhMuc = JSON.stringify(valueDinhMuc);
-    console.log(stringValueDinhMuc);
     axios({
       method: "POST",
       url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
@@ -187,9 +192,9 @@ class DinhMuc extends Component {
       },
     })
       .then((resFishCode) => {
-        this.reLoadTable();
         this.loadValue();
         alert("Thêm đinh giá " + valueDinhMuc.Name + " mới thành công !");
+        this.LoadData();
       })
       .catch((err) => {
         console.log("Tạo mới định giá lỗi");
@@ -216,8 +221,8 @@ class DinhMuc extends Component {
       },
     })
       .then((resFishCode) => {
-        this.reLoadTable(); // SAU 1S THÌ LOAD LẠI DATA
         alert("Sửa đinh giá " + valueDinhMuc.Name + "thành công !");
+        this.LoadData();
       })
       .catch((err) => {
         alert("Lỗi xảy ra");
@@ -245,18 +250,14 @@ class DinhMuc extends Component {
       },
     })
       .then((resFishCode) => {
-        this.reLoadTable(); // SAU 1S THÌ LOAD LẠI DATA
         alert("Sửa đinh giá " + valueDinhMuc.Name + "thành công !");
+        this.LoadData();
       })
       .catch((err) => {
         alert("Lỗi xảy ra");
         console.log("Sửa định giá lỗi");
         console.log(err);
       });
-  };
-  // load lại table
-  reLoadTable = () => {
-    setTimeout(this.componentDidMount, 500);
   };
   // trả value các input select về rỗng
   loadValue = () => {
@@ -265,6 +266,43 @@ class DinhMuc extends Component {
     document.getElementById("idName").value = "";
     document.getElementById("idModel").value = "";
   };
+
+  // --------------------load dữ liệu lại-------------------------
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=FishCode",
+      data: null,
+    })
+      .then((res) => {
+        var count = res.data.length + 1;
+        ArrayValue = [];
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          if (contentItem.Status == true) {
+            // lọc ra mã cá đã xóa
+            ArrayValue.push(contentItem);
+          }
+        });
+        this.setState({
+          contentItems: ArrayValue,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  LoadData = () => {
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+  };
+  /*------------------------------------- */
   render() {
     var {
       contentItems,
@@ -272,6 +310,7 @@ class DinhMuc extends Component {
       ModelId,
       ID,
       Status,
+      keyword,
       Name,
       Weight,
       Price,
@@ -279,21 +318,19 @@ class DinhMuc extends Component {
       valueDinhMuc,
       nameModel,
     } = this.state;
-    /*if (filter) {
-      // xét điều kiện để filter
-      if (filter.name) {
-        contentItems = contentItems.filter((contentItems) => {
-          return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
-        });
-      }
+
+    /*tìm theo thông tin */
+    if (keyword) {
+      // render ra nội dung khi tìm kiếm
       contentItems = contentItems.filter((contentItems) => {
-        if (filter.status === -1) {
-          return contentItems;
-        } else {
-          return contentItems.status === (filter.status === 1 ? true : false);
-        }
+        return (
+          contentItems.ID.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Weight.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Weight.toLowerCase().indexOf(keyword) !== -1
+        );
       });
-    }*/
+    }
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -308,17 +345,21 @@ class DinhMuc extends Component {
           </ol>
         </section>
         <section className="content">
-          <button
-            type="button"
-            className="btn btn-primary card card-primary card-outline container-fluid"
-            data-toggle="modal"
-            data-target="#modal-create"
-            id="id123"
-          >
-            Tạo định mức giá mới
-          </button>
+          <form className="filter-section form-inline">
+            <div className="input-group inputSeach">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.LoadData}
+              >
+                Làm mới dữ liệu
+              </button>
+              <p>Làm mới dữ liệu khi tạo công nhân mới.</p>
+            </div>
+          </form>
+
           {/*-------------------tạo table đổ dữ liệu ------------------------------ */}
-          <TableContentDinhMuc>
+          <TableContentDinhMuc onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}
           </TableContentDinhMuc>
           {/*------------------ button tạo mới định mức giá-------------------------*/}
@@ -387,7 +428,7 @@ class DinhMuc extends Component {
                         value={Weight}
                         onChange={this.onChange}
                         step="0.01"
-                        min= '0'
+                        min="0"
                       />
                     </div>
                     <div className="form-group">
@@ -406,7 +447,7 @@ class DinhMuc extends Component {
                         placeholder="Đơn vị Vnđ"
                         value={Price}
                         onChange={this.onChange}
-                        min= '0'
+                        min="0"
                       />
                     </div>
                   </div>
@@ -512,7 +553,7 @@ class DinhMuc extends Component {
                         value={valueDinhMuc.Weight}
                         onChange={this.onChange}
                         step="0.01"
-                        min= '0'
+                        min="0"
                       />
                     </div>
                     <div className="form-group">
