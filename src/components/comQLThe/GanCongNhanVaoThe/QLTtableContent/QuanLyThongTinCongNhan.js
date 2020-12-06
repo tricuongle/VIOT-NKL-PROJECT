@@ -8,10 +8,10 @@ import QLTTableContentCongNhan from "./QLTTableContentCongNhan";
 import QLTTableContentNewCard from "./QLTTableContentNewCard";
 import QLTTableContentItemNewCard from "../QLTableItems/QLTTableContentItemNewCard";
 import * as Config from "../../../../untils/Config";
-
+import $, { data } from "jquery";
 var JsonValue;
 var ArrayValue = [];
-
+var load = [];
 class QuanLyThongTinCongNhan extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +29,7 @@ class QuanLyThongTinCongNhan extends Component {
         colorCard: "",
         idProcess: "",
         typeModel: "",
-        status: '',
+        status: "",
       },
     };
   }
@@ -62,7 +62,13 @@ class QuanLyThongTinCongNhan extends Component {
         this.setState({
           contentNewCard: arrayNewCard,
         });
-        console.log(this.state.contentNewCard);
+        $("#tableData").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 150,
+        });
       })
 
       .catch((err) => {
@@ -94,7 +100,7 @@ class QuanLyThongTinCongNhan extends Component {
     setTimeout(this.componentDidMount, 500);
   };
   /*-----------hàm nhận value newCard từ table newCard và lưu vào state----------------- */
-  OnGetValueColorProcessType = (idNameEmp,status , color, idProcess, Type) => {
+  OnGetValueColorProcessType = (idNameEmp, status, color, idProcess, Type) => {
     console.log(status);
     this.createNameCard();
     this.setState((preState) => ({
@@ -104,7 +110,7 @@ class QuanLyThongTinCongNhan extends Component {
         colorCard: color,
         idProcess: idProcess,
         typeModel: Type,
-        status: status
+        status: status,
       },
     }));
   };
@@ -138,9 +144,9 @@ class QuanLyThongTinCongNhan extends Component {
     console.log(contentGetTableEmp.status);
     if (
       contentGetTableEmp.idNameEmp == "" ||
-      contentGetTableEmp.colorCard == "" ||
+      //contentGetTableEmp.colorCard == "" ||
       contentGetTableEmp.idProcess == "" ||
-      contentGetTableEmp.typeModel == "" ||
+      // contentGetTableEmp.typeModel == "" ||
       contentGetTableEmp.status == false
     ) {
       alert("Vui lòng chọn đầy đủ thông tin, hoặc công nhân đã nghỉ!");
@@ -231,14 +237,14 @@ class QuanLyThongTinCongNhan extends Component {
       data: null,
     })
       .then((res) => {
-        setTimeout(this.componentDidMount, 500);
+        this.LoadData();
         console.log("Xóa thẻ RFID thành công!");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  deleteAllNewCard=()=>{
+  deleteAllNewCard = () => {
     var DeleteRFIDNewCard = window.confirm(
       "Bạn có đồng ý xóa tất cả thông tin thẻ RFID  đã quét không?"
     );
@@ -253,15 +259,48 @@ class QuanLyThongTinCongNhan extends Component {
         data: null,
       })
         .then((res) => {
-          setTimeout(this.componentDidMount, 500);
           console.log("Xóa thẻ RFID thành công!");
+          this.LoadData();
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }
+  };
+  // --------------------load dữ liệu lại-------------------------
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=NewCard",
+      data: null,
+    })
+      .then((res) => {
+        var valueNewCard = res.data;
+        var arrayNewCard = [];
+        for (var k = 0; k < valueNewCard.length; k++) {
+          var ObjValueNewCard = JSON.parse(valueNewCard[k]);
+          arrayNewCard.push(ObjValueNewCard);
+        }
+        this.setState({
+          contentNewCard: arrayNewCard,
+        });
+      })
 
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  LoadData = () => {
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+  };
+  /*------------------------------------- */
   render() {
     //setTimeout(this.componentDidMount,500);
     var {
@@ -310,7 +349,7 @@ class QuanLyThongTinCongNhan extends Component {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={this.reloadTableNewCard}
+                onClick={this.LoadData}
               >
                 Làm mới dữ liệu
               </button>

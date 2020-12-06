@@ -5,7 +5,7 @@ class QLTTableContentNewCard extends Component {
     return (
       <div>
         {/*<QLTSearchCongNhan onSearch={this.props.onSearch} />*/}
-        <table id="data" className="table table-hover" width="100%">
+        <table id="tableData" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
               <th>Số thứ tự thẻ RFID</th>

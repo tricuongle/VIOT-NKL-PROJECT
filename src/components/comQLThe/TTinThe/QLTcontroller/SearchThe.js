@@ -7,6 +7,7 @@ class SearchThe extends Component {
       keyword: "",
     };
   }
+
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -22,12 +23,12 @@ class SearchThe extends Component {
     var { keyword } = this.state;
     return (
       <form className="filter-section form-inline">
-        {/*<div className="input-group inputSeach">
+        <div className="input-group inputSeach">
           <input
             name="keyword"
             type="text"
             className="form-control"
-            placeholder="tìm kiếm"
+            placeholder="Gõ mọi thông tin để tìm"
             value={keyword}
             onChange={this.onChange}
           />
@@ -40,7 +41,7 @@ class SearchThe extends Component {
               Tìm kiếm
             </button>
           </span>
-    </div>*/}
+        </div>
       </form>
     );
   }

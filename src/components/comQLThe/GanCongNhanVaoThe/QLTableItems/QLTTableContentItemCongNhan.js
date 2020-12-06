@@ -120,7 +120,7 @@ class QLTTableContentItemCongNhan extends Component {
             required
             onChange={this.OnGetValueColorProcessType}
           >
-            <option value="null">---Chọn màu---</option>
+            <option  value="-">---Chọn màu---</option>
             <option value="Trắng">Trắng</option>
             <option value="Xanh">Xanh</option>
             <option value="Đỏ">Đỏ</option>
@@ -145,11 +145,10 @@ class QLTTableContentItemCongNhan extends Component {
             className="form-control"
             id="idTypeSelect"
             name="nameProcessType"
-            required
             disabled
             onChange={this.OnGetValueColorProcessType}
           >
-            <option value="null">---Chọn type---</option>
+            <option value="-">---Chọn type---</option>
             {this.showContentSelectType(contentTypeSelect)}
           </select>
         </td>

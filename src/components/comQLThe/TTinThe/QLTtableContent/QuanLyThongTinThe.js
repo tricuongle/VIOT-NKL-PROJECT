@@ -12,6 +12,7 @@ var JsonValue;
 var ArrayValue = [];
 var arrayValueModel = [];
 var arrayValueProcess = [];
+var load = [];
 class QuanLyThongTinThe extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,7 @@ class QuanLyThongTinThe extends Component {
       contentModel: [],
       contentProcess: [],
       contentTypeSelect: [],
+      keyword: '',
       filter: {
         name: "",
         status: -1,
@@ -40,6 +42,11 @@ class QuanLyThongTinThe extends Component {
       },
     };
   }
+  onSearch = (keyword) => {
+    this.setState({
+      keyword: keyword.toLowerCase(),
+    });
+  };
   /*---------get thông tin thẻ---------*/
   componentDidMount = () => {
     axios({
@@ -61,24 +68,18 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 7,
-            processing: true,
-            responsive: true,
-            dom: "Bfrtip",
-            scrollX: true,
-            scrollY: 300,
-          });
+        $("#tableData").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 300,
         });
       })
       .catch((err) => {
         console.log("lỗi lấy thông tin thẻ");
         console.log(err);
       });
-  };
-  reLoadTable = () => {
-    setTimeout(this.componentDidMount, 500);
   };
   // hàm thay đổi giá trị
   onChange = (event) => {
@@ -143,10 +144,9 @@ class QuanLyThongTinThe extends Component {
         arrayValueProcess = [];
         for (var k in resProcess.data) {
           var Object = JSON.parse(resProcess.data[k]);
-          if(Object.status == true){
+          if (Object.status == true) {
             arrayValueProcess.push(Object);
           }
-          
         }
         this.setState({
           contentProcess: arrayValueProcess,
@@ -170,7 +170,7 @@ class QuanLyThongTinThe extends Component {
         data: null,
       })
         .then((res) => {
-          this.reLoadTable();
+          this.LoadData();
         })
         .catch((err) => {});
     }
@@ -225,27 +225,74 @@ class QuanLyThongTinThe extends Component {
       },
     })
       .then((res) => {
-        this.reLoadTable();
         alert("Thay đổi thông tin thẻ " + valueCard.Id + " thành công!");
+        this.LoadData();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  // --------------------load dữ liệu lại-------------------------
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Card",
+      data: null,
+    })
+      .then((res) => {
+        console.log(res.data);
+        ArrayValue = []; // load lại data
+        for (var i = 0; i < res.data.length; i++) {
+          JsonValue = JSON.parse(res.data[i]);
+          ArrayValue.push(JsonValue);
+        }
+        this.setState({
+          contentItems: ArrayValue,
+        });
+      })
+      .catch((err) => {
+        console.log("lỗi lấy thông tin thẻ");
+        console.log(err);
+      });
+  };
+  LoadData = () => {
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+  };
+  /*------------------------------------- */
   render() {
-    var { contentItems, contentProcess, contentTypeSelect } = this.state;
+    var { contentItems, contentProcess, contentTypeSelect, keyword } = this.state;
+    if (keyword) {
+      // render ra nội dung khi tìm kiếm
+      contentItems = contentItems.filter((contentItems) => {
+        return (
+          contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Color.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.ProcessId.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Classify.toLowerCase().indexOf(keyword) !== -1 
+        );
+      }); 
+    }
     return (
       <div>
         <section className="content">
-        <div className="input-group inputSeach">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.reLoadTable}
-              >
-                Làm mới dữ liệu
-              </button>
-            </div>
+        <form className="filter-section form-inline">
+          <div className="input-group inputSeach">
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={this.LoadData}
+            >
+              Làm mới dữ liệu
+            </button>
+          </div>
+          </form>
           {/*-----------------Giao diện table-------------------------------- */}
           <QLTTableContentThe onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}
@@ -392,7 +439,11 @@ class QuanLyThongTinThe extends Component {
     var result = null;
     if (contentModel.length >= 0) {
       result = contentModel.map((contentItem, index) => {
-        return <option key={index} value={contentItem.Classify}>{contentItem.Classify}</option>;
+        return (
+          <option key={index} value={contentItem.Classify}>
+            {contentItem.Classify}
+          </option>
+        );
       });
     }
     return result;
