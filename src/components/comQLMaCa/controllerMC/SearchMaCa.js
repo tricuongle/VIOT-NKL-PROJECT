@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class SearchCongNhan extends Component {
+class SearchMaCa extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,7 +49,7 @@ class SearchCongNhan extends Component {
                 data-target="#modal-create"
                 id="id123"
               >
-                Thêm công nhân mới
+                Thêm mã cá mới
               </button>
             </div>
             
@@ -57,4 +57,4 @@ class SearchCongNhan extends Component {
     );
   }
 }
-export default SearchCongNhan;
+export default SearchMaCa;

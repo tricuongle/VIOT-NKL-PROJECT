@@ -1,8 +1,14 @@
 import React, { Component } from "react";
+import SearchCongNhan from '../controllerMC/SearchMaCa'
 class TableContentMaCa extends Component {
   render() {
     return (
-      <table id="tableData" className="table table-hover" width="100%">
+      <div>
+        <SearchCongNhan
+          onSearch={this.props.onSearch}
+          onFilter={this.props.onFilter}
+        />
+        <table id="tableData" className="table table-hover" width="100%">
         <thead>
           <tr className="tieude">
             <th>STT</th>
@@ -21,6 +27,8 @@ class TableContentMaCa extends Component {
         </thead>
         <tbody>{this.props.children}</tbody>
       </table>
+      </div>
+      
     );
   }
 }

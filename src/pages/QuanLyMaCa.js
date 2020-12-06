@@ -15,6 +15,7 @@ var JsonName;
 // mảng lưu giá trị của value từ api công đoạn
 var ArrayValue = [];
 var ArrayNameProcess = [];
+var load = [];
 // khi gọi về chỉ hiển thị id của khu vực, dùng id lấy tên
 var i;
 class QuanLyMaCa extends Component {
@@ -24,6 +25,7 @@ class QuanLyMaCa extends Component {
       contentItems: [],
       contentProcess: [],
       contentValueFishcode: [],
+      keyword: "",
 
       // giá trị obj của data
       valueModel: {
@@ -45,6 +47,11 @@ class QuanLyMaCa extends Component {
       },
     };
   }
+  onSearch = (keyword) => {
+    this.setState({
+      keyword: keyword.toLowerCase(),
+    });
+  };
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -85,12 +92,13 @@ class QuanLyMaCa extends Component {
           contentItems: ArrayValue,
         });
         $(document).ready(function () {
+          // sử dụng thư viện datatable
           $("#tableData").DataTable({
-            pageLength: 10,
-            processing: true,
-            responsive: true,
-            fixedHeader: true,
+            searching: false,
+            ordering: false,
             dom: "Bfrtip",
+            scrollX: true,
+            scrollY: 450,
           });
         });
       })
@@ -169,9 +177,8 @@ class QuanLyMaCa extends Component {
       },
     })
       .then((resModel) => {
-        setTimeout(this.componentDidMount, 500);
         alert("Sửa công đoạn " + valueModel.Name + " thành công.");
-        console.log("Sửa thành công");
+        this.LoadData();
       })
       .catch((err) => {
         console.log(err);
@@ -226,15 +233,14 @@ class QuanLyMaCa extends Component {
           }
         }
         this.setState({
-          contentValueFishcode: arrayValueFishcode
-        })
-        console.log(this.state.contentValueFishcode);
+          contentValueFishcode: arrayValueFishcode,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
     /*--------------Xóa mã cá (status chuyển về sai)--------------------------------- */
-     axios({
+    axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
@@ -247,11 +253,10 @@ class QuanLyMaCa extends Component {
       },
     })
       .then((resModel) => {
-        setTimeout(this.componentDidMount,500);
         alert("Xóa công đoạn " + valueModel.Name + " thành công.");
-        console.log("Xóa công đoạn thành công");
+        this.LoadData();
         /*Xóa thay đổi status định mức mã cá == sai */
-    /* axios({
+        /* axios({
           method: "GET",
           url:
             `${Config.API_URL}` +
@@ -267,33 +272,88 @@ class QuanLyMaCa extends Component {
           .catch((err) => {
             console.log(err);
           });*/
-
       })
       .catch((err) => {
         console.log(err);
         console.log("Lỗi");
       });
   };
-  reLoadTable = () => {
-    setTimeout(this.componentDidMount, 1000);
+  // --------------------load dữ liệu lại-------------------------
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Model",
+      data: null,
+    })
+      .then((resModel) => {
+        ArrayValue = [];
+        ArrayNameProcess = [];
+        for (i = 0; i < resModel.data.length; i++) {
+          JsonValue = JSON.parse(resModel.data[i]);
+          ArrayValue.push(JsonValue);
+          ArrayNameProcess.push(ArrayValue[i].ProcessId);
+        }
+        this.setState({
+          contentItems: ArrayValue,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi");
+      });
   };
+  LoadData = () => {
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+  };
+  /*------------------------------------- */
+
   render() {
-    var { contentItems, filter, valueModel, contentProcess } = this.state;
-    if (filter) {
+    var {
+      contentItems,
+      filter,
+      valueModel,
+      keyword,
+      contentProcess,
+    } = this.state;
+    if (keyword) {
+      // render ra nội dung khi tìm kiếm
+      contentItems = contentItems.filter((contentItems) => {
+        return (
+          contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.WeighInMax.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.WeightInMin.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.WeightOutMin.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.WeighOutMax.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Classify.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Group.toLowerCase().indexOf(keyword) !== -1
+        );
+      });
+    }
+    // lọc tìm theo status
+    contentItems = contentItems.filter((contentItems) => {
+      if (filter.status === -1) {
+        return contentItems;
+      } else {
+        return contentItems.status === (filter.status === 1 ? true : false);
+      }
+    });
+    /*if (filter) {
       // xét điều kiện để filter
       if (filter.name) {
         contentItems = contentItems.filter((contentItems) => {
           return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
         });
       }
-      contentItems = contentItems.filter((contentItems) => {
-        if (filter.status === -1) {
-          return contentItems;
-        } else {
-          return contentItems.status === (filter.status === 1 ? true : false);
-        }
-      });
-    }
+      
+    }*/
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -309,28 +369,18 @@ class QuanLyMaCa extends Component {
         </section>
         <section className="content">
           <form className="filter-section form-inline">
-            <div className="">
-              <button
-                type="button"
-                className="btn btn-primary card card-primary card-outline container-fluid"
-                data-toggle="modal"
-                data-target="#modal-create"
-                id="id123"
-              >
-                Tạo mới mã cá
-              </button>
-            </div>
             <div className="input-group inputSeach">
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={this.reLoadTable}
+                onClick={this.LoadData}
               >
                 Làm mới dữ liệu
               </button>
+              <p>Làm mới dữ liệu khi thêm mã cá mới.</p>
             </div>
           </form>
-          <TableContentMaCa>
+          <TableContentMaCa onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}
           </TableContentMaCa>
 
