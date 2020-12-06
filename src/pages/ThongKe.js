@@ -6,11 +6,18 @@ import $, { event } from "jquery";
 import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableItemThongKe";
 var arrayRecode = [];
 var checkTable = 0;
+var load = [];
+var lengthRE = null;
 class ThongKe extends Component {
   constructor(props) {
     super(props);
     this.state = {
       valueRecode: [],
+      valueRecode1: [],
+      valueRecodeDate: [],
+      valuetemp: [],
+      dateIn: "",
+      dateOut: "",
     };
   }
   componentDidMount = () => {
@@ -20,7 +27,7 @@ class ThongKe extends Component {
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Record-In",
+        "&Classify=Record-Out",
       data: null,
     })
       .then((res) => {
@@ -31,8 +38,23 @@ class ThongKe extends Component {
         });
         this.setState({
           valueRecode: arrayRecode,
+          valuetemp: arrayRecode,
         });
-        $(document).ready(function () {
+        lengthRE = this.state.valueRecode.length;
+        var table = $(document).ready(function () {
+          $("#tableData").DataTable({
+            searching: false,
+            ordering: false,
+            //dom: "Bfrtip",
+            pageLength: 10,
+            fixedHeader: true,
+            scrollY: 500,
+            scrollX: true,
+            clear: true,
+          });
+        });
+
+        /*$(document).ready(function () {
           // Setup - add a text input to each footer cell
           $("#tableData thead tr").clone(true).appendTo("#tableData thead");
           $("#tableData thead tr:eq(1) th").each(function (i) {
@@ -59,20 +81,30 @@ class ThongKe extends Component {
 
             // dom: "Bfrtip",
           });
-        });
+        });*/
       })
+
       .catch((err) => {
         console.log(err);
       });
   };
-  componentDidMountt = () => {
+
+  onChange = (event) => {
+    var target = event.target;
+    var name = target.name;
+    var value = target.value;
+    this.setState({
+      [name]: value,
+    });
+  };
+  LoadData = () => {
     axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Recode",
+        "&Classify=Record-Out",
       data: null,
     })
       .then((res) => {
@@ -84,29 +116,16 @@ class ThongKe extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        // sử dụng thư viện datatable
         $(document).ready(function () {
-          // Setup - add a text input to each footer cell
-          $("#tableData thead tr").clone(true).appendTo("#tableData thead");
-          $("#tableData thead tr:eq(1) th").each(function (i) {
-            /*--------------*/
-            $("input", this).on("keyup change", function () {
-              if (table.column(i).search() !== this.value) {
-                table.column(i).search(this.value).draw();
-              }
-            });
-          });
-          var table = $("#tableData").DataTable({
-            lengthMenu: [
-              [10, 25, 50, -1],
-              [10, 25, 50, "All"],
-            ],
-            orderCellsTop: true,
+          $("#tableData").DataTable({
+            searching: false,
+            ordering: false,
+            dom: "Bfrtip",
+            pageLength: 10,
             fixedHeader: true,
+            scrollY: 500,
             scrollX: true,
-            scrollY: 350, 
-
-            // dom: "Bfrtip",
+            destroy: true,
           });
         });
       })
@@ -114,9 +133,39 @@ class ThongKe extends Component {
         console.log(err);
       });
   };
+  LoadDataButton = () => {
+    console.log("yes");
+    $("#tableData").dataTable({
+      clear: true,
+      draw: function () {
+        console.log("Redraw occurred at: " + new Date().getTime());
+      },
+    });
+  };
+  // lọc ngày
+  FilterDate = () => {
+    var { valueRecode, dateIn, dateOut } = this.state;
+    if (valueRecode.length != lengthRE) {
+      console.log("relo");
+      this.LoadData();
+    }
+    var arrayRecodeToDate = [];
+    var dateFormat = require("dateformat");
+    for (var k in valueRecode) {
+      const unixTime = valueRecode[k].ReadTime;
+      const date = new Date(unixTime * 1000);
+      var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
+      if (date >= new Date(dateIn) && date <= new Date(dateOut)) {
+        arrayRecodeToDate.push(valueRecode[k]);
+      }
+    }
 
+    this.setState({
+      valueRecode: arrayRecodeToDate,
+    });
+  };
   render() {
-    var { valueRecode } = this.state;
+    var { valueRecode, dateIn, dateOut, valueRecode1 } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -140,8 +189,10 @@ class ThongKe extends Component {
               <input
                 type="date"
                 className="form-control form-group"
-                name="filter-date"
-                id="filter-date"
+                name="dateIn"
+                id="filter-dateIn"
+                value={dateIn}
+                onChange={this.onChange}
               />
             </div>
             <div className="filter-input">
@@ -151,8 +202,10 @@ class ThongKe extends Component {
               <input
                 type="date"
                 className="form-control form-group"
-                name="filter-date"
-                id="filter-date1"
+                name="dateOut"
+                id="filter-dateOut"
+                value={dateOut}
+                onChange={this.onChange}
               />
             </div>
             {/*<div className=" filter-input">
@@ -224,6 +277,7 @@ class ThongKe extends Component {
                 id="btnLoc"
                 type="button"
                 className="form-control form-group btn btn-primary"
+                onClick={this.FilterDate}
               >
                 Lọc tìm kiếm
               </button>
@@ -233,7 +287,7 @@ class ThongKe extends Component {
                 id="btnLoc"
                 type="button"
                 className="form-control btn-success"
-                onClick={this.componentDidMountt}
+                onClick={this.LoadDataButton}
               >
                 Làm mới dữ liệu
               </button>
@@ -255,6 +309,7 @@ class ThongKe extends Component {
           <TableItemThongKe
             key={index}
             contentItem={contentItem}
+            IdRecordIn={contentItem.RecordIn}
             index={index}
           />
         );

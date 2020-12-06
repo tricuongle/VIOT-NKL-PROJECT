@@ -20,6 +20,7 @@ class SearchCongNhan extends Component {
     });
   };
   onSearch = () => {
+    console.log(this.state.keyword);
     this.props.onSearch(this.state.keyword); // truyền ra ngoài
   };
   render() {
@@ -39,7 +40,7 @@ class SearchCongNhan extends Component {
             <option value={0}>nghỉ việc</option>
             <option value={1}>đang làm</option>
           </select>
-        </div> */}
+    </div> */}
         {/*
         <div className="input-group inputSeach">
           <input

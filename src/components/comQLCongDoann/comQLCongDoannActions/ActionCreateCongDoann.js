@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import moment from "moment";
-import { data } from "jquery";
 import * as Config from '../../../untils/Config'
 
 var count;

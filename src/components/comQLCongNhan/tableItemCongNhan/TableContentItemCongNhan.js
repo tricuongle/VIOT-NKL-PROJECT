@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class TableContentItemCongNhan extends Component {
   onGetId = () => {
-    this.props.onGetId(this.props.contentItem.Id);
+    this.props.onGetId(this.props.contentItem);
   };
   render() {
     var { contentItem, index } = this.props;
@@ -15,6 +15,8 @@ class TableContentItemCongNhan extends Component {
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
+        <td>{contentItem.gender}</td>
+        <td>{contentItem.CardNo}</td>
         <td>{contentItem.CMND}</td>
         <td>{contentItem.BirthDay}</td>
         <td>{statusEmployee}</td> 

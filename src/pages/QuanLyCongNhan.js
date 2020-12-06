@@ -8,15 +8,17 @@ import ActionCreateCongNhan from "../components/comQLCongNhan/comQLCongNhanActio
 import * as Config from "../untils/Config";
 var ArrayValue = [];
 var valueNew;
+var load = [];
 var count = 0;
 class QuanLyCongNhan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contentItems: [],
+      contentItemss: [],
       contentGetEmployeeId: "",
       filter: {
-        name: "",
+        keyword: "",
         status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
       },
       BirthDay: "",
@@ -28,6 +30,7 @@ class QuanLyCongNhan extends Component {
       IsLock: true,
       JobLevel: 3,
       Name: "",
+      gender: "",
       PassWord: "",
       User: "",
     };
@@ -39,6 +42,15 @@ class QuanLyCongNhan extends Component {
     this.setState({
       [name]: value,
     });
+  };/*
+  onSearch = (keyword) => {
+    console.log(keyword);
+    this.setState({
+      filter: {
+        keyword: keyword.toLowerCase(),
+      },
+     
+    });
   };
   // hàm filter nội dung (tất cả, đã nghỉ, đang làm)
   onFilter = (filterStatus) => {
@@ -48,10 +60,9 @@ class QuanLyCongNhan extends Component {
         status: filterStatus,
       },
     });
-  };
+  };*/
   // hàm lấy danh sách công nhân từ api
   componentDidMount = () => {
-    console.log("có");
     axios({
       method: "GET",
       url:
@@ -72,52 +83,19 @@ class QuanLyCongNhan extends Component {
           contentItems: ArrayValue,
         });
         // sử dụng thư viện datatable
-        if (count == 0) {
-          $("#tableData").DataTable({destroy:true,
-            scrollX: true,
-            scrollY: 300,});
-          count++;
-        } else {
-          $("#tableData").DataTable({
-            scrollX: true,
-            scrollY: 300,
-          });
-        }
+        $("#tableData").DataTable({
+          "ordering": false,
+          //"searching": false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 300,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  componentDidMountt = () => {
-    console.log("có");
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/Values?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Employee",
-      data: null,
-    })
-      .then((res) => {
-        ArrayValue = [];
-        res.data.map((contentItem) => {
-          contentItem = JSON.parse(contentItem);
-          ArrayValue.push(contentItem);
-        });
-
-        this.setState({
-          contentItems: ArrayValue,
-        });
-        // sử dụng thư viện datatable
-          $("#tableData").DataTable({});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  onGetId = (Id) => {
+  onGetId = (content) => {
     axios({
       method: "GET",
       url:
@@ -125,7 +103,7 @@ class QuanLyCongNhan extends Component {
         "/api/data/valuekey?token=" +
         `${Config.TOKEN}` +
         "&Classify=Employee&key=" +
-        Id,
+        content.Id,
       data: null,
     })
       .then((res) => {
@@ -133,16 +111,11 @@ class QuanLyCongNhan extends Component {
         this.setState({
           contentGetEmployeeId: ObjValue,
         });
-        /*console.log(this.state.contentGetEmployeeId);
-        document.getElementById(
-          "NameEmp"
-        ).value = this.state.contentGetEmployeeId.Name;
-        document.getElementById(
-          "CNNDEmp"
-        ).value = this.state.contentGetEmployeeId.CMND;
-        document.getElementById(
-          "DateEmp"
-        ).value = this.state.contentGetEmployeeId.BirthDay;*/
+
+        /*-----------điền thông tin khi sửa */
+        document.getElementById("NameEmp").value = content.Name;
+        document.getElementById("CNNDEmp").value = content.CMND;
+        document.getElementById("DateEmp").value = content.BirthDay;
       })
       .catch((err) => {
         console.log(err);
@@ -157,6 +130,7 @@ class QuanLyCongNhan extends Component {
       CMND,
       CardNo,
       BirthDay,
+      gender,
       User,
       PassWord,
       IsLock,
@@ -170,9 +144,13 @@ class QuanLyCongNhan extends Component {
       idEdit +
       '","Name":"' +
       Name +
+      '","gender":"' +
+      gender +
       '","CMND":"' +
       CMND +
-      '","CardNo":"","BirthDay":"' +
+      '","CardNo":"' +
+      CardNo +
+      '","BirthDay":"' +
       BirthDay +
       '","User":"","PassWord":"","IsLock":true,"JobLevel":3,"Department":"","Description":"This Item For User Master Data"}';
     axios({
@@ -189,8 +167,8 @@ class QuanLyCongNhan extends Component {
       data: null,
     })
       .then((res) => {
-        this.LoadData();
         alert("Sửa thông tin công nhân " + this.state.Name + " thành công !");
+        this.LoadData();
       })
       .catch((err) => {
         console.log(err);
@@ -240,16 +218,55 @@ class QuanLyCongNhan extends Component {
       });
   };
   // load dữ liệu lại
-  LoadData = () => {
-    setTimeout(this.componentDidMount, 500);
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee",
+      data: null,
+    })
+      .then((res) => {
+        ArrayValue = [];
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          ArrayValue.push(contentItem);
+        });
+
+        this.setState({
+          contentItems: ArrayValue,
+        });
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+  LoadData = () => {
+    var { contentItems } = this.state;
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+    
+  };
+  /*------------------------------------- */
   render() {
-    var { contentItems, filter, Name, CMND, BirthDay } = this.state;
+    var { contentItems, contentItemss, filter, Name, CMND, BirthDay, CardNo  } = this.state;
     if (filter) {
       // xét điều kiện để filter
-      if (filter.name) {
+      if (filter.keyword) {
         contentItems = contentItems.filter((contentItems) => {
-          return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
+          return(
+            contentItems.Id.toLowerCase().indexOf(filter.keyword) !== -1 ||
+            contentItems.Name.toLowerCase().indexOf(filter.keyword) !== -1 ||
+            contentItems.gender.toLowerCase().indexOf(filter.keyword) !== -1 ||
+            contentItems.CardNo.toLowerCase().indexOf(filter.keyword) !== -1 ||
+            contentItems.CMND.toLowerCase().indexOf(filter.keyword) !== -1 ||
+            contentItems.BirthDay.toLowerCase().indexOf(filter.keyword) !== -1
+        )
         });
       }
       contentItems = contentItems.filter((contentItems) => {
@@ -299,7 +316,7 @@ class QuanLyCongNhan extends Component {
             </div>
           </form>
           {/*Hiện thông tin table */}
-          <TableContentCongNhan onFilter={this.onFilter}>
+          <TableContentCongNhan  onSearch={this.onSearch} >
             {this.showContentItems(contentItems)}
           </TableContentCongNhan>
 
@@ -356,6 +373,39 @@ class QuanLyCongNhan extends Component {
                         required
                         placeholder="Nhập tên khu vực thay đổi"
                         value={Name}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>Giới tính:</h5>
+                      </label>
+                      <select
+                        className="form-control"
+                        id="Idgender"
+                        name="gender"
+                        required
+                        onChange={this.onChange}
+                      >
+                        <option value="null">---giới tính---</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="khác">Khác</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
+                        <h5>Mã số công nhân:</h5>
+                      </label>
+                      <br />
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="NumCardNo"
+                        name="CardNo"
+                        placeholder="nhập mã số công nhân"
+                        required
+                        value={CardNo}
                         onChange={this.onChange}
                       />
                     </div>

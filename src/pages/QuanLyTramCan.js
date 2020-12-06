@@ -8,6 +8,8 @@ import * as Config from "../untils/Config";
 var arrayValueProcess = [];
 var arrayValueDevice = [];
 var ObjValue;
+var load = [];
+var ArrayValue = [];
 class QuanLyTramCan extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +64,7 @@ class QuanLyTramCan extends Component {
         this.setState({
           contentItems: arrayValueDevice,
         });
-        console.log(this.state.contentItems)
+        console.log(this.state.contentItems);
       })
       .catch((err) => {
         console.log("Lỗi láy thông tin device ( cân)");
@@ -70,62 +72,6 @@ class QuanLyTramCan extends Component {
       });
   };
 
-  //------------- hàm gọi từng thiết bị cân--------------------------------------------
-  loopContentDevices = (contentItems) => {
-    for (var k in contentItems) {
-      var textString = contentItems[k].Status.ProcessId + "";
-
-      var arrayIdProcess = textString.split(","); // tách chuỗi từ Process ID
-      var stringName = "";
-      var arrayName = [];
-      for (var k = 0; k <= arrayIdProcess.length; k++) {
-        axios({
-          method: "GET",
-          url:
-            `${Config.API_URL}` +
-            "/api/data/valuekey?token=" +
-            `${Config.TOKEN}` +
-            "&Classify=Process&key=" +
-            arrayIdProcess[k] +
-            "",
-          data: null,
-        })
-          .then((resProcess) => {
-            ObjValue = JSON.parse(resProcess.data);
-            var nameProcess = ObjValue.Name;
-            stringName += nameProcess + ",";
-            //arrayName.push(nameProcess);
-            console.log(stringName);
-            this.setState((preState) => ({
-              contentItems: {
-                ...preState.contentItems,
-                Status: {
-                  ...preState.contentItems.Status,
-                  ProcessId: stringName,
-                },
-              },
-            }));
-            console.log(this.state.contentItems);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    }
-  };
-
-  abc = () => {
-    var {contentItems}= this.state;
-    console.log(contentItems);
-    <TableContentTramCan>
-      {this.showContentItems(contentItems)}
-    </TableContentTramCan>;
-  };
-  loadTable = () => {
-    setTimeout(this.abc, 500);
-    setTimeout(this.componentDidMount, 500);
-    
-  };
   onGetIdEdit = (IdDevice) => {
     /*-----------------------function get list process to api ---------------------------------- */
     axios({
@@ -243,8 +189,8 @@ class QuanLyTramCan extends Component {
         },
       })
         .then((res) => {
-          this.loadTable();
           alert("Sửa thành công !");
+          this.LoadData();
         })
         .catch((err) => {
           console.log(err);
@@ -252,9 +198,40 @@ class QuanLyTramCan extends Component {
         });
     }
   };
-  reLoadComponent=(item)=>{
-   
-  }
+  // load dữ liệu lại
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` + "/api/iotdevice/all?token=" + `${Config.TOKEN}`,
+      data: null,
+    })
+      .then((res) => {
+        arrayValueDevice = [];
+        var Objvalue = res.data;
+        for (var k in Objvalue) {
+          if (Objvalue[k].Capabilitie == "WeighingStation") {
+            arrayValueDevice.push(Objvalue[k]);
+          }
+        }
+        this.setState({
+          contentItems: arrayValueDevice,
+        });
+        console.log(this.state.contentItems);
+      })
+      .catch((err) => {
+        console.log("Lỗi láy thông tin device ( cân)");
+        console.log(err);
+      });
+  };
+  LoadData = () => {
+    var { contentItems } = this.state;
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+  };
+  /*------------------------------------- */
 
   render() {
     var { contentItems, contentProcess, contentSection } = this.state;
@@ -273,12 +250,12 @@ class QuanLyTramCan extends Component {
         </section>
 
         <section className="content">
-        <form className="filter-section form-inline">
+          <form className="filter-section form-inline">
             <div className="input-group inputSeach">
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={this.reLoadComponent}
+                onClick={this.LoadData}
               >
                 Làm mới dữ liệu
               </button>
@@ -409,7 +386,6 @@ class QuanLyTramCan extends Component {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      onClick={this.reLoadTable}
                     >
                       Lưu thay đổi
                     </button>
@@ -441,7 +417,7 @@ class QuanLyTramCan extends Component {
             contentItem={contentItem}
             index={index}
             onGetIdEdit={this.onGetIdEdit}
-            reLoadComponent ={this.reLoadComponent}
+            reLoadComponent={this.reLoadComponent}
           />
         );
       });

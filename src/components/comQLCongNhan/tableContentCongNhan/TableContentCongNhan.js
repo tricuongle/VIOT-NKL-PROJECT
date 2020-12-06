@@ -16,6 +16,8 @@ class TableContentCongNhan extends Component {
               <th>STT</th>
               <th>ID công nhân</th>
               <th>Họ Tên</th>
+              <th>Giới tính</th>
+              <th>Mã số công nhân</th>
               <th>CMND</th>
               <th>Ngày sinh</th>
               <th>Tình trạng</th>
