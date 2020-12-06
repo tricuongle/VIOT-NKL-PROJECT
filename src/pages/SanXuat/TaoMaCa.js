@@ -40,7 +40,7 @@ class TaoMaCa extends Component {
         // sử dụng thư viện datatable 
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 5,
+            pageLength: 10,
             processing: true,
             responsive: true,
             dom: "Bfrtip",

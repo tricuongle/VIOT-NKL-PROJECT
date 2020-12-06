@@ -22,7 +22,6 @@ class QuanLyThongTinCongNhan extends Component {
       contentEmployee: [],
       keyword: "",
       status: 1,
-
       idNewCard: "",
       nameCard: "",
       contentGetTableEmp: {

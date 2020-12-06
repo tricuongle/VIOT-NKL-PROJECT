@@ -421,3 +421,11 @@ td {
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }
+
+.employeeTable{
+    overflow-y:scroll;
+    overflow-x:scroll;
+}
+th {
+    cursor: pointer;
+  }

@@ -46,11 +46,10 @@ class ThongKe extends Component {
             searching: false,
             ordering: false,
             //dom: "Bfrtip",
-            pageLength: 10,
+            //pageLength: 10,
             fixedHeader: true,
             scrollY: 500,
             scrollX: true,
-            clear: true,
           });
         });
 

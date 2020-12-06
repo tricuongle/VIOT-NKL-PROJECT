@@ -86,9 +86,10 @@ class QuanLyMaCa extends Component {
         });
         $(document).ready(function () {
           $("#tableData").DataTable({
-            pageLength: 5,
+            pageLength: 10,
             processing: true,
             responsive: true,
+            fixedHeader: true,
             dom: "Bfrtip",
           });
         });

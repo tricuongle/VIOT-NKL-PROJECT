@@ -42,14 +42,47 @@ class ActionCreateCongNhan extends Component {
       method: "GET",
       url:
         `${Config.API_URL}` +
-        "/api/data?token=" +
+        "/api/data/Values?token=" +
         `${Config.TOKEN}` +
         "&Classify=Employee",
       data: null,
     })
       .then((res) => {
-        count = res.data.length + 1;
-        var countString = "CN-NKL-0" + count;
+        ArrayValue = [];
+        res.data.map((contentItem) => {
+          contentItem = JSON.parse(contentItem);
+          ArrayValue.push(contentItem);
+        });
+
+        this.setState({
+          contentItems: ArrayValue,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    /*--------------- hàm tạo id công nhân------------ */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee",
+      data: null,
+    })
+      .then((res) => {
+        for (var k in res.data) {
+          count = res.data.length + 1;
+          var countString = "CN-NKL-0" + count;
+          if (countString == JSON.parse(res.data[k]).Id) {
+            count++;
+            countString = "CN-NKL-0" + count;
+          }
+        }
+        console.log(countString);
+
         this.setState((preState) => ({
           valueEmp: {
             ...preState.valueEmp,
@@ -60,31 +93,8 @@ class ActionCreateCongNhan extends Component {
       .catch((err) => {
         console.log(err);
       });
-    /*--------------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/Values?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Employee",
-      data: null,
-    })
-      .then((res) => {
-        ArrayValue = [];
-        res.data.map((contentItem) => {
-          contentItem = JSON.parse(contentItem);
-          ArrayValue.push(contentItem);
-        });
-
-        this.setState({
-          contentItems: ArrayValue,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
+
   /*-----------Hàm tạo mới công nhân --------------- */
   onSave = (event) => {
     event.preventDefault();
@@ -92,75 +102,40 @@ class ActionCreateCongNhan extends Component {
     var isCheck = true;
     valueNew = JSON.stringify(valueEmp);
     console.log(valueNew);
-    for(var k in contentItems){
-      if(valueEmp.CardNo == contentItems[k].CardNo){
-          isCheck= false;
+    for (var k in contentItems) {
+      if (valueEmp.CardNo == contentItems[k].CardNo) {
+        isCheck = false;
       }
     }
     if (isCheck) {
       axios({
-      method: "POST",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/Add?token=" +
-        `${Config.TOKEN}` +
-        "&key=" +
-        valueEmp.Id +
-        "&Value=" +
-        valueNew +
-        "&Description=NKL&classify=Employee",
-      data: null,
-    })
-      .then((res) => {
-        
-        alert("Thêm công nhân " + valueEmp.Name+ " thành công !");
-        this.LoadData();
+        method: "POST",
+        url:
+          `${Config.API_URL}` +
+          "/api/data/Add?token=" +
+          `${Config.TOKEN}` +
+          "&key=" +
+          valueEmp.Id +
+          "&Value=" +
+          valueNew +
+          "&Description=NKL&classify=Employee",
+        data: null,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          alert("Thêm công nhân " + valueEmp.Name + " thành công !");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      alert("Mã số  " +valueEmp.CardNo +" công nhân đã tồn tại!");
+      alert("Mã số  " + valueEmp.CardNo + " công nhân đã tồn tại!");
     }
   };
 
-  // load dữ liệu lại
-  dataTableLoad = () => {
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/Values?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Employee",
-      data: null,
-    })
-      .then((res) => {
-        ArrayValue = [];
-        res.data.map((contentItem) => {
-          contentItem = JSON.parse(contentItem);
-          ArrayValue.push(contentItem);
-        });
-
-        this.setState({
-          contentItems: ArrayValue,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  LoadData = () => {
-    var { contentItems } = this.state;
-    this.setState({
-      contentItems: load,
-    });
-    this.dataTableLoad();
-  };
   /*------------------------------------- */
   /*----------Nội dụng xử lý giao diện-------------- */
   render() {
-    var { Name, CMND, BirthDay, Id, CardNo } = this.state;
+    var { Name, CMND, BirthDay, CardNo } = this.state;
     return (
       <div className="modal fade" id="modal-create">
         <form onSubmit={this.onSave}>
@@ -225,6 +200,7 @@ class ActionCreateCongNhan extends Component {
                     name="CardNo"
                     placeholder="nhập mã số công nhân"
                     required
+                    min="0"
                     value={CardNo}
                     onChange={this.onChange}
                   />
@@ -239,6 +215,7 @@ class ActionCreateCongNhan extends Component {
                     className="form-control"
                     id="NumCMND"
                     name="CMND"
+                    min="0"
                     placeholder="nhập mã số CMND thẻ căn cước"
                     value={CMND}
                     onChange={this.onChange}
@@ -262,11 +239,7 @@ class ActionCreateCongNhan extends Component {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={this.reLoadTable}
-                >
+                <button type="submit" className="btn btn-primary">
                   Tạo mới
                 </button>
                 <button

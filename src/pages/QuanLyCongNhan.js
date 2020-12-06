@@ -17,10 +17,8 @@ class QuanLyCongNhan extends Component {
       contentItems: [],
       contentItemss: [],
       contentGetEmployeeId: "",
-      filter: {
-        keyword: "",
-        status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
-      },
+      keyword: "",
+      status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
       BirthDay: "",
       CMND: "",
       CardNo: "",
@@ -42,26 +40,12 @@ class QuanLyCongNhan extends Component {
     this.setState({
       [name]: value,
     });
-  };/*
+  };
   onSearch = (keyword) => {
-    console.log(keyword);
     this.setState({
-      filter: {
-        keyword: keyword.toLowerCase(),
-      },
-     
+      keyword: keyword.toLowerCase(),
     });
   };
-  // hàm filter nội dung (tất cả, đã nghỉ, đang làm)
-  onFilter = (filterStatus) => {
-    filterStatus = parseInt(filterStatus, 10);
-    this.setState({
-      filter: {
-        status: filterStatus,
-      },
-    });
-  };*/
-  // hàm lấy danh sách công nhân từ api
   componentDidMount = () => {
     axios({
       method: "GET",
@@ -74,21 +58,23 @@ class QuanLyCongNhan extends Component {
     })
       .then((res) => {
         ArrayValue = [];
-        res.data.map((contentItem) => {
-          contentItem = JSON.parse(contentItem);
-          ArrayValue.push(contentItem);
-        });
+        for (var k in res.data) {
+          var temp = JSON.parse(res.data[k]);
+          if (temp.IsLock == true) {
+            ArrayValue.push(temp);
+          }
+        }
 
         this.setState({
           contentItems: ArrayValue,
         });
         // sử dụng thư viện datatable
         $("#tableData").DataTable({
-          "ordering": false,
-          //"searching": false,
+          searching: false,
+          ordering: false,
           dom: "Bfrtip",
           scrollX: true,
-          scrollY: 300,
+          scrollY: 450,
         });
       })
       .catch((err) => {
@@ -230,15 +216,16 @@ class QuanLyCongNhan extends Component {
     })
       .then((res) => {
         ArrayValue = [];
-        res.data.map((contentItem) => {
-          contentItem = JSON.parse(contentItem);
-          ArrayValue.push(contentItem);
-        });
+        for (var k in res.data) {
+          var temp = JSON.parse(res.data[k]);
+          if (temp.IsLock == true) {
+            ArrayValue.push(temp);
+          }
+        }
 
         this.setState({
           contentItems: ArrayValue,
         });
-        
       })
       .catch((err) => {
         console.log(err);
@@ -250,35 +237,35 @@ class QuanLyCongNhan extends Component {
       contentItems: load,
     });
     this.dataTableLoad();
-    
   };
   /*------------------------------------- */
+
+
+  
   render() {
-    var { contentItems, contentItemss, filter, Name, CMND, BirthDay, CardNo  } = this.state;
-    if (filter) {
-      // xét điều kiện để filter
-      if (filter.keyword) {
-        contentItems = contentItems.filter((contentItems) => {
-          return(
-            contentItems.Id.toLowerCase().indexOf(filter.keyword) !== -1 ||
-            contentItems.Name.toLowerCase().indexOf(filter.keyword) !== -1 ||
-            contentItems.gender.toLowerCase().indexOf(filter.keyword) !== -1 ||
-            contentItems.CardNo.toLowerCase().indexOf(filter.keyword) !== -1 ||
-            contentItems.CMND.toLowerCase().indexOf(filter.keyword) !== -1 ||
-            contentItems.BirthDay.toLowerCase().indexOf(filter.keyword) !== -1
-        )
-        });
-      }
+    var {
+      contentItems,
+      keyword,
+      status,
+      Name,
+      CMND,
+      BirthDay,
+      CardNo,
+    } = this.state;
+    if (keyword) {
+      console.log(keyword);
+      // render ra nội dung khi tìm kiếm
       contentItems = contentItems.filter((contentItems) => {
-        if (filter.status === -1) {
-          return contentItems;
-        } else {
-          return contentItems.IsLock === (filter.status === 1 ? true : false);
-        }
+        return (
+          contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.CMND.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.CardNo.toLowerCase().indexOf(keyword) !== -1
+        );
       });
     }
+
     return (
-      // giao diện
       <div className="content-wrapper">
         <section className="content-header">
           <h1>QUẢN LÝ CÔNG NHÂN</h1>
@@ -294,18 +281,7 @@ class QuanLyCongNhan extends Component {
 
         <section className="content">
           <form className="filter-section form-inline">
-            <div className="infoCard ">
-              <button
-                type="button"
-                className="btn btn-primary card card-primary card-outline container-fluid"
-                data-toggle="modal"
-                data-target="#modal-create"
-                id="id123"
-              >
-                Thêm nhân mới
-              </button>
-            </div>
-            <div className="input-group inputSeach">
+          <div className="input-group inputSeach">
               <button
                 type="button"
                 className="btn btn-success"
@@ -313,10 +289,13 @@ class QuanLyCongNhan extends Component {
               >
                 Làm mới dữ liệu
               </button>
+              <p>Làm mới dữ liệu khi tạo công nhân mới.</p>
             </div>
+            
           </form>
+         
           {/*Hiện thông tin table */}
-          <TableContentCongNhan  onSearch={this.onSearch} >
+          <TableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}
           </TableContentCongNhan>
 
@@ -405,6 +384,7 @@ class QuanLyCongNhan extends Component {
                         name="CardNo"
                         placeholder="nhập mã số công nhân"
                         required
+                        min="0"
                         value={CardNo}
                         onChange={this.onChange}
                       />

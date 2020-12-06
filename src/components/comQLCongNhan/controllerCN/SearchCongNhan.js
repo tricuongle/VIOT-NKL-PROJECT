@@ -5,49 +5,29 @@ class SearchCongNhan extends Component {
     super(props);
     this.state = {
       keyword: "",
-      filterStatus: -1,
     };
   }
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
     var value = target.value;
-    this.props.onFilter(
-      name === "filterStatus" ? value : this.state.filterStatus
-    );
     this.setState({
       [name]: value,
     });
   };
   onSearch = () => {
-    console.log(this.state.keyword);
     this.props.onSearch(this.state.keyword); // truyền ra ngoài
   };
   render() {
-    var { keyword, filterStatus } = this.state;
+    var { keyword } = this.state;
     return (
       <form className="filter-section form-inline">
-        
-        {/*<div className="filterStatus">
-          <select
-            name="filterStatus"
-            id="input"
-            className="form-control"
-            value={filterStatus}
-            onChange={this.onChange}
-          >
-            <option value={-1}>Tất cả</option>
-            <option value={0}>nghỉ việc</option>
-            <option value={1}>đang làm</option>
-          </select>
-    </div> */}
-        {/*
         <div className="input-group inputSeach">
           <input
             name="keyword"
             type="text"
             className="form-control"
-            placeholder="tìm kiếm"
+            placeholder="Gõ mọi thông tin để tìm"
             value={keyword}
             onChange={this.onChange}
           />
@@ -60,7 +40,19 @@ class SearchCongNhan extends Component {
               Tìm kiếm
             </button>
           </span>
-        </div>*/}
+        </div>
+        <div className="infoCard ">
+              <button
+                type="button"
+                className="btn btn-primary card card-primary card-outline container-fluid"
+                data-toggle="modal"
+                data-target="#modal-create"
+                id="id123"
+              >
+                Thêm nhân mới
+              </button>
+            </div>
+            
       </form>
     );
   }
