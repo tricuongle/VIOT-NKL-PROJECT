@@ -203,7 +203,7 @@ class QuanLyCongNhan extends Component {
         console.log(err);
       });
   };
-  // load dữ liệu lại
+  // --------------------load dữ liệu lại-------------------------
   dataTableLoad = () => {
     axios({
       method: "GET",
@@ -232,7 +232,6 @@ class QuanLyCongNhan extends Component {
       });
   };
   LoadData = () => {
-    var { contentItems } = this.state;
     this.setState({
       contentItems: load,
     });
@@ -240,8 +239,6 @@ class QuanLyCongNhan extends Component {
   };
   /*------------------------------------- */
 
-
-  
   render() {
     var {
       contentItems,
@@ -281,7 +278,7 @@ class QuanLyCongNhan extends Component {
 
         <section className="content">
           <form className="filter-section form-inline">
-          <div className="input-group inputSeach">
+            <div className="input-group inputSeach">
               <button
                 type="button"
                 className="btn btn-success"
@@ -291,9 +288,8 @@ class QuanLyCongNhan extends Component {
               </button>
               <p>Làm mới dữ liệu khi tạo công nhân mới.</p>
             </div>
-            
           </form>
-         
+
           {/*Hiện thông tin table */}
           <TableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}

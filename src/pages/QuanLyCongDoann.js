@@ -20,12 +20,14 @@ var count;
 var valueNew;
 var Description;
 var IdProcessOld;
+var load = [];
 class QuanLyCongDoann extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contentItems: [],
       contentGetProcessId: "",
+      keyword: "",
       filter: {
         name: "",
         status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
@@ -38,6 +40,11 @@ class QuanLyCongDoann extends Component {
       After: "ProcessID (After)",
     };
   }
+  onSearch = (keyword) => {
+    this.setState({
+      keyword: keyword.toLowerCase(),
+    });
+  };
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -70,13 +77,12 @@ class QuanLyCongDoann extends Component {
         this.setState({
           contentItems: ArrayValue,
         });
-        $(document).ready(function () {
-          $("#tableData").DataTable({
-            pageLength: 5,
-            processing: true,
-            responsive: true,
-            dom: "Bfrtip",
-          });
+        $("#tableData").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 300,
         });
       })
       .catch((err) => {
@@ -84,11 +90,6 @@ class QuanLyCongDoann extends Component {
         console.log("Lỗi");
       });
   };
-  // hàm load lại trang
-  reLoadTable = () => {
-    setTimeout(this.componentDidMount, 500);
-  };
-
   /*-------------- nhận ID từ buton Chỉnh sửa và Xóa------------------------- */
   onUpdate = (Id) => {
     axios({
@@ -154,8 +155,8 @@ class QuanLyCongDoann extends Component {
       data: null,
     })
       .then((res) => {
-        this.reLoadTable();
         alert("Xóa công đoạn " + this.state.Name + " thành công !");
+        this.LoadData();
       })
       .catch((err) => {
         console.log(err);
@@ -190,9 +191,6 @@ class QuanLyCongDoann extends Component {
       '","After":"' +
       After +
       '"}';
-    console.log(idEdit);
-    console.log(valueNew);
-    console.log(Description);
     axios({
       method: "PUT",
       url:
@@ -208,32 +206,70 @@ class QuanLyCongDoann extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res);
-        this.reLoadTable();
         alert("Sửa khu vực " + this.state.Name + " thành công !");
+        this.LoadData();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  // --------------------load dữ liệu lại-------------------------
+  dataTableLoad = () => {
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process",
+      data: null,
+    })
+      .then((res) => {
+        ArrayValue = []; // set mảng về 0 khi load lại
+        for (var i = 0; i < res.data.length; i++) {
+          JsonTime = JSON.parse(res.data[i].Time); // get time
+          JsonDes = res.data[i].Description; // get description
+          JsonValue = JSON.parse(res.data[i].Value); // get value
+          JsonValue["TimeCreate"] = JsonTime; // add on value to array
+          JsonValue["Description"] = JsonDes;
+          ArrayValue.push(JsonValue);
+        }
+        this.setState({
+          contentItems: ArrayValue,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi");
+      });
+  };
+  LoadData = () => {
+    this.setState({
+      contentItems: load,
+    });
+    this.dataTableLoad();
+  };
+  /*------------------------------------- */
   render() {
     var { contentItems } = this.state;
-    var { Name, filter } = this.state;
-    if (filter) {
-      // xét điều kiện để filter
-      if (filter.name) {
-        contentItems = contentItems.filter((contentItems) => {
-          return contentItems.Name.toLowerCase().indexOf(filter.name) !== -1;
-        });
-      }
+    var { Name, filter, keyword } = this.state;
+    // xét điều kiện để filter
+    if (keyword) {
       contentItems = contentItems.filter((contentItems) => {
-        if (filter.status === -1) {
-          return contentItems;
-        } else {
-          return contentItems.status === (filter.status === 1 ? true : false);
-        }
+        return (
+          contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Id.toLowerCase().indexOf(keyword) !== -1
+        );
       });
     }
+
+    contentItems = contentItems.filter((contentItems) => {
+      if (filter.status === -1) {
+        return contentItems;
+      } else {
+        return contentItems.status === (filter.status === 1 ? true : false);
+      }
+    });
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -249,28 +285,18 @@ class QuanLyCongDoann extends Component {
         </section>
         <section className="content">
           <form className="filter-section form-inline">
-            <div className="infoCard ">
-              <button
-                type="button"
-                className="btn btn-primary card card-primary card-outline container-fluid"
-                data-toggle="modal"
-                data-target="#modal-create"
-                id="id123"
-              >
-                Thêm công đoạn mới
-              </button>
-            </div>
             <div className="input-group inputSeach">
               <button
                 type="button"
                 className="btn btn-success"
-                onClick={this.reLoadTable}
+                onClick={this.LoadData}
               >
                 Làm mới dữ liệu
               </button>
+              <p>Làm mới dữ liệu khi tạo công đoạn mới.</p>
             </div>
           </form>
-          <TableContentCongDoann>
+          <TableContentCongDoann onSearch={this.onSearch}>
             {this.showContentItems(contentItems)}
           </TableContentCongDoann>
           {/*------------------ button tạo mới khu vực-------------------------*/}

@@ -18,7 +18,6 @@ class QuanLyTramCan extends Component {
       contentProcess: [],
       contentSection: [],
       contentDevice: "",
-
       // name process convert to ProcessID
       nameProcessConvert: [],
     };
@@ -30,7 +29,6 @@ class QuanLyTramCan extends Component {
     this.setState({
       [name]: value,
     });
-
     /* xử lý mutiple với Type 4 và 5 */
     if (
       document.getElementById("idType4").checked ||
@@ -57,6 +55,7 @@ class QuanLyTramCan extends Component {
         arrayValueDevice = [];
         var Objvalue = res.data;
         for (var k in Objvalue) {
+          // so sánh trùng tên thì lấy cho vào mảng
           if (Objvalue[k].Capabilitie == "WeighingStation") {
             arrayValueDevice.push(Objvalue[k]);
           }
@@ -64,7 +63,13 @@ class QuanLyTramCan extends Component {
         this.setState({
           contentItems: arrayValueDevice,
         });
-        console.log(this.state.contentItems);
+        $("#tableData").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 350,
+        });
       })
       .catch((err) => {
         console.log("Lỗi láy thông tin device ( cân)");
@@ -171,9 +176,6 @@ class QuanLyTramCan extends Component {
     if (Type === "") {
       alert("Vui lòng chọn Type phù hợp!");
     } else {
-      console.log(idSection);
-      console.log(idProcess);
-      console.log(Type);
       axios({
         method: "PUT",
         url:
@@ -189,7 +191,7 @@ class QuanLyTramCan extends Component {
         },
       })
         .then((res) => {
-          alert("Sửa thành công !");
+          alert("Sửa thành thiết bị cân công !");
           this.LoadData();
         })
         .catch((err) => {
@@ -225,7 +227,6 @@ class QuanLyTramCan extends Component {
       });
   };
   LoadData = () => {
-    var { contentItems } = this.state;
     this.setState({
       contentItems: load,
     });
@@ -383,10 +384,7 @@ class QuanLyTramCan extends Component {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                    >
+                    <button type="submit" className="btn btn-primary">
                       Lưu thay đổi
                     </button>
                     <button
