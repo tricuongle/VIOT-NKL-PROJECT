@@ -89,7 +89,7 @@ class QLTTableContentItemCongNhan extends Component {
     if (getValueTypeInModel != "") {
       document.getElementById("idTypeSelect").disabled = false;
     } else {
-      document.getElementById("idTypeSelect").value = "";
+      document.getElementById("idTypeSelect").value = "-";
       document.getElementById("idTypeSelect").disabled = true;
     }
     // truyền 4 giá trị ra ngoài hàm cha để tạo thẻ

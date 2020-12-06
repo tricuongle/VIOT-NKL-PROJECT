@@ -167,7 +167,6 @@ class QuanLyThongTinCongNhan extends Component {
         '","RFID":"' +
         idNewCard +
         '","CurrentRecode":""}';
-      console.log(valueCard);
       //--------------Thêm thẻ mới ---------------------
       axios({
         method: "POST",
@@ -180,7 +179,6 @@ class QuanLyThongTinCongNhan extends Component {
         },
       }).then((res) => {
         alert("Gán thẻ RFID " + nameCard + " vào nhân viên thành công!");
-
         //--------Xóa thẻ RFID ở table newCard -----------
         axios({
           method: "DELETE",
@@ -193,8 +191,8 @@ class QuanLyThongTinCongNhan extends Component {
           data: null,
         })
           .then((res) => {
-            this.reloadTableNewCard();
             console.log("Xóa thẻ RFID ở NewCard thành công!");
+            this.LoadData();
           })
           .catch((err) => {
             console.log(err);
@@ -259,7 +257,7 @@ class QuanLyThongTinCongNhan extends Component {
         data: null,
       })
         .then((res) => {
-          console.log("Xóa thẻ RFID thành công!");
+          console.log("Xóa all thẻ RFID thành công!");
           this.LoadData();
         })
         .catch((err) => {
@@ -296,7 +294,7 @@ class QuanLyThongTinCongNhan extends Component {
   };
   LoadData = () => {
     this.setState({
-      contentItems: load,
+      contentNewCard: load,
     });
     this.dataTableLoad();
   };
@@ -363,8 +361,8 @@ class QuanLyThongTinCongNhan extends Component {
 
           {/*đổ dữ liệu công nhân sau khi tìm kiếm vào talbe */}
           <p>
-            Gợi ý: Gõ họ tên, hoặc số CMND để tìm công nhân,
-            <br /> sau đó chọn thông tin cần thiết.
+            Gợi ý: Gõ họ tên, hoặc số thẻ nhân viên, CMND <br />để tìm công nhân,
+             sau đó chọn thông tin cần thiết.
           </p>
           <QLTTableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItemss)}
