@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import axios from "axios";
-import moment from "moment";
-import { data } from "jquery";
+import moment, { max } from "moment";
+import { data, get } from "jquery";
 import * as Config from "../../../untils/Config";
 
-var count;
+var count = 1;
+var count1 = 0;
+var countString;
 var valueNew;
 var Description;
 class ActionCreateMaCa extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contentProcess :[],
+      contentProcess: [],
       valueMaCa: {
         Id: "",
         Name: "",
@@ -46,30 +48,39 @@ class ActionCreateMaCa extends Component {
       document.getElementById("idClassify").disabled = true;
     }
   };
-  // lấy số lượng của công đoạn và cộng dồn gán ID
+  // lấy số lượng của mã cá và cộng dồn gán ID
   componentDidMount = () => {
     axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
-        "/api/data?token=" +
+        "/api/data/Values?token=" +
         `${Config.TOKEN}` +
         "&Classify=Model",
       data: null,
     })
       .then((res) => {
-        count = res.data.length + 1;
-        var countString = "MC-NKL-0" + count;
+        var arrNum = [];
+        for (var k in res.data) {
+          var getString = JSON.parse(res.data[k]).Id;
+          var getNum = getString.substring(8, res.data.length);
+          arrNum.push(getNum);
+        }
+        var maxInNumbers = Math.max.apply(Math, arrNum);
+        var idNew = maxInNumbers + 1;
+        var countString = "MC-NKL-0" + idNew;
+        var getTimetoDay = Date.now;
         this.setState((preState) => ({
           valueMaCa: {
             ...preState.valueMaCa,
-            Id: countString, // sẵn gán id vào id valueMaCa
+            Id: countString,
+            CreateDate: getTimetoDay, // sẵn gán id vào id valueMaCa
           },
         }));
       })
       .catch((err) => {
         console.log(err);
-        console.log("Không lấy được số lượng công đoạn !");
+        console.log("Không lấy được số lượng mã cá !");
       });
     /*---------- lấy data đổ vào select để  Chọn khu vực----------------- */
     axios({

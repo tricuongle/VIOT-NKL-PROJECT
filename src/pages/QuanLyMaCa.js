@@ -253,25 +253,33 @@ class QuanLyMaCa extends Component {
       },
     })
       .then((resModel) => {
-        alert("Xóa công đoạn " + valueModel.Name + " thành công.");
-        this.LoadData();
+        alert("Xóa mã cá " + valueModel.Name + " thành công!");
+        
         /*Xóa thay đổi status định mức mã cá == sai */
-        /* axios({
+         axios({
           method: "GET",
           url:
             `${Config.API_URL}` +
             "/api/data/Values?token=" +
             `${Config.TOKEN}` +
-            "&Classify=Process",
+            "&Classify=FishCode",
           data: null,
         })
-          .then((resProcess) => {
-            
-           
+          .then((resFishCode) => {
+            for(var k in resFishCode.data){
+              var objectValueModel= JSON.parse(resFishCode.data[k]);
+              if(valueModel.Id == objectValueModel.ModelId)  {
+                  objectValueModel.Status=true;
+                  console.log(objectValueModel);
+              }
+             
+            }
+            this.LoadData();
           })
+          
           .catch((err) => {
             console.log(err);
-          });*/
+          });
       })
       .catch((err) => {
         console.log(err);
