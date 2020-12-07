@@ -34,8 +34,15 @@ class ActionCreateCongDoann extends Component {
       data: null,
     })
       .then((res) => {
-        count = res.data.length + 1;
-        var countString = "CD-NKL-0" + count;
+        var arrNum = [];
+        for (var k in res.data) {
+          var getString = JSON.parse(res.data[k]).Id;
+          var getNum = getString.substring(8, res.data.length);
+          arrNum.push(getNum);
+        }
+        var maxInNumbers = Math.max.apply(Math, arrNum);
+        var idNew = maxInNumbers + 1;
+        var countString = "CD-NKL-0" + idNew;
         this.setState({
           Id: countString,
           Parent: countString

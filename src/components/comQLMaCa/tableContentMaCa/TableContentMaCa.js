@@ -13,6 +13,7 @@ class TableContentMaCa extends Component {
           <tr className="tieude">
             <th>STT</th>
             <th>ID</th>
+            <th>Ngày tạo</th>
             <th>Tên</th>
             <th>KL vào Min</th>
             <th>KL vào Max</th>

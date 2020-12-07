@@ -51,8 +51,8 @@ class TableContentItemMaCa extends Component {
         ObjValue = JSON.parse(resProcess.data);
         textName = ObjValue.Name;
         this.setState({
-            nameProcess: textName
-        })
+          nameProcess: textName,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -64,11 +64,27 @@ class TableContentItemMaCa extends Component {
   };
   render() {
     var { contentItem, index } = this.props;
-    var {nameProcess} = this.state
+    var { nameProcess } = this.state;
+    console.log(contentItem.CreateDate);
+    if (contentItem.CreateDate != "" ) {
+      var time = contentItem.CreateDate + "";
+      var timeEdit = time.substring(0, 10);
+      var timeEditInt = parseInt(timeEdit);
+      console.log(timeEditInt);
+      var dateFormat = require("dateformat");
+      if (timeEditInt != '') {
+        const unixTimeOut = timeEditInt;
+        const dateOut = new Date(unixTimeOut * 1000);
+        var dateNewOut = dateFormat(dateOut, "dd-mm-yyyy");
+        var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
+      }
+    }
+
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
+        <td>{dateNewOut}</td>
         <td>{contentItem.Name}</td>
         <td>{contentItem.WeightInMin}</td>
         <td>{contentItem.WeighInMax}</td>

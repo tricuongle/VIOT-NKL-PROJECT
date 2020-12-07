@@ -69,7 +69,7 @@ class ActionCreateMaCa extends Component {
         var maxInNumbers = Math.max.apply(Math, arrNum);
         var idNew = maxInNumbers + 1;
         var countString = "MC-NKL-0" + idNew;
-        var getTimetoDay = Date.now;
+        var getTimetoDay = new Date().getTime();
         this.setState((preState) => ({
           valueMaCa: {
             ...preState.valueMaCa,

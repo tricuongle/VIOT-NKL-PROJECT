@@ -73,16 +73,15 @@ class ActionCreateCongNhan extends Component {
       data: null,
     })
       .then((res) => {
+        var arrNum = [];
         for (var k in res.data) {
-          count = res.data.length + 1;
-          var countString = "CN-NKL-0" + count;
-          if (countString == JSON.parse(res.data[k]).Id) {
-            count++;
-            countString = "CN-NKL-0" + count;
-          }
+          var getString = JSON.parse(res.data[k]).Id;
+          var getNum = getString.substring(8, res.data.length);
+          arrNum.push(getNum);
         }
-        console.log(countString);
-
+        var maxInNumbers = Math.max.apply(Math, arrNum);
+        var idNew = maxInNumbers + 1;
+        var countString = "CN-NKL-0" + idNew;
         this.setState((preState) => ({
           valueEmp: {
             ...preState.valueEmp,

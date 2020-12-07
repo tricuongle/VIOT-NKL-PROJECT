@@ -62,8 +62,15 @@ class DinhMuc extends Component {
       data: null,
     })
       .then((res) => {
-        var count = res.data.length + 1;
-        var IDcountString = "DG-NKL-0" + count;
+        var arrNum = [];
+        for (var k in res.data) {
+          var getString = JSON.parse(res.data[k]).Id;
+          var getNum = getString.substring(8, res.data.length);
+          arrNum.push(getNum);
+        }
+        var maxInNumbers = Math.max.apply(Math, arrNum);
+        var idNew = maxInNumbers + 1;
+        var countString = "DM-NKL-0" + idNew;
         ArrayValue = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
@@ -76,7 +83,7 @@ class DinhMuc extends Component {
           contentItems: ArrayValue,
           valueDinhMuc: {
             ...preState.valueDinhMuc,
-            ID: IDcountString,
+            ID: countString,
           },
         }));
         console.log(this.state.contentItems);
