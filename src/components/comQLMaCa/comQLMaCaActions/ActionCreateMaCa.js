@@ -63,12 +63,16 @@ class ActionCreateMaCa extends Component {
         var arrNum = [];
         for (var k in res.data) {
           var getString = JSON.parse(res.data[k]).Id;
-          var getNum = getString.substring(8, res.data.length);
+          var getNum = getString.substring(8);
           arrNum.push(getNum);
         }
         var maxInNumbers = Math.max.apply(Math, arrNum);
         var idNew = maxInNumbers + 1;
+        if (idNew < 0) {
+          idNew = 1;
+        }
         var countString = "MC-NKL-0" + idNew;
+        console.log(countString);
         var getTimetoDay = new Date().getTime();
         this.setState((preState) => ({
           valueMaCa: {
@@ -133,6 +137,7 @@ class ActionCreateMaCa extends Component {
       .then((res) => {
         console.log(res);
         alert("Thêm mã cá " + this.state.Name + " thành công !");
+        this.componentDidMount(); // gọi lại hàm để tạo ID công nhân mới
       })
       .catch((err) => {
         console.log(err);

@@ -1,11 +1,12 @@
 :root {
-    --primary: #0097e0;
+    --primary: orange;
     --title: #979797;
+    --background-bar: #FAFBFD; 
     --background: #eeeeee;
 }
 
 .sidebar {
-    background-color: var(--primary);
+    background-color: var(--background-bar);
 }
 
 .skin-black-light .sidebar-menu>li.header {
@@ -14,7 +15,7 @@
 }
 
 .skin-black-light .sidebar-menu>li>a {
-    color: #fff;
+    color: rgb(66, 62, 62);
 }
 
 .skin-black-light .sidebar-menu>li.active>a {
@@ -52,8 +53,8 @@
 
 .filter-section>.filter-input select,
 .filter-section>.filter-input input {
-    background: var(--primary);
-    color: #fff;
+    background: #F6F6F6;
+    color: rgb(37, 35, 32);
 }
 
 .content-wrapper {
@@ -120,7 +121,7 @@ td {
     color:#0471a8;
 }
 .tieude {
-    background-color: #0097e0;
+    background-color: #F6F6F6;
 }
 
 .select-css {

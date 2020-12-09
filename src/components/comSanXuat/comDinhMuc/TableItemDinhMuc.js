@@ -20,7 +20,6 @@ class TableItemDinhMuc extends Component {
   componentDidMount = () => {
     var { contentItem } = this.props;
     var key = contentItem.ModelId;
-    console.log(key);
     axios({
       method: "GET",
       url:

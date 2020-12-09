@@ -78,13 +78,17 @@ class ActionCreateCongNhan extends Component {
         for (var k in res.data) {
           var getString = JSON.parse(res.data[k]).Id;
           // tách chuỗi lấy số trong mã công nhân
-          var getNum = getString.substring(8, res.data.length);
+          var getNum = getString.substring(8);
           arrNum.push(getNum);// thêm số vào mảng
         }
         // tìm số lớn trong mảng
         var maxInNumbers = Math.max.apply(Math, arrNum);
         var idNew = maxInNumbers + 1;
+        if (idNew < 0) {
+          idNew = 1;
+        }
         var countString = "CN-NKL-0" + idNew;
+        console.log(countString);
         this.setState((preState) => ({
           valueEmp: {
             ...preState.valueEmp,

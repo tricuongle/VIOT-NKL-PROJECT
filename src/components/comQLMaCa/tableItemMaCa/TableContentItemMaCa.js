@@ -65,12 +65,10 @@ class TableContentItemMaCa extends Component {
   render() {
     var { contentItem, index } = this.props;
     var { nameProcess } = this.state;
-    console.log(contentItem.CreateDate);
     if (contentItem.CreateDate != "" ) {
       var time = contentItem.CreateDate + "";
       var timeEdit = time.substring(0, 10);
       var timeEditInt = parseInt(timeEdit);
-      console.log(timeEditInt);
       var dateFormat = require("dateformat");
       if (timeEditInt != '') {
         const unixTimeOut = timeEditInt;

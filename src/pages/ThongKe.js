@@ -120,6 +120,13 @@ class ThongKe extends Component {
     });
   };
   /*------------------------------------- */
+
+  checkExcel =()=>{
+    var functionExcel = window.confirm("Bạn muốn xuất file Excel?");
+    if(functionExcel){
+      this.exportTableToExcel();
+    }
+  }
   exportTableToExcel=( )=>{
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
@@ -262,7 +269,7 @@ class ThongKe extends Component {
               <button
                 id="btnLoc"
                 type="button"
-                className="form-control form-group btn btn-primary"
+                className="form-control form-group btn btn-warning"
                 onClick={this.FilterDate}
               >
                 Lọc tìm kiếm
@@ -272,7 +279,7 @@ class ThongKe extends Component {
               <button
                 id="btnLoc"
                 type="button"
-                className="form-control btn-success"
+                className="form-control btn-warning"
                 onClick={this.LoadData}
               >
                 Làm mới dữ liệu
@@ -283,8 +290,8 @@ class ThongKe extends Component {
               <button
                 id="btnLoc"
                 type="button"
-                className="form-control btn-success"
-                onClick={this.exportTableToExcel}
+                className="form-control "
+                onClick={this.checkExcel}
               >
                 Xuất Excel
               </button>

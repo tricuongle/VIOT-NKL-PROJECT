@@ -64,13 +64,18 @@ class DinhMuc extends Component {
       .then((res) => {
         var arrNum = [];
         for (var k in res.data) {
-          var getString = JSON.parse(res.data[k]).Id;
-          var getNum = getString.substring(8, res.data.length);
+          var getString = JSON.parse(res.data[k]).ID;
+          var getNum = getString.substring(8);
           arrNum.push(getNum);
         }
         var maxInNumbers = Math.max.apply(Math, arrNum);
         var idNew = maxInNumbers + 1;
+        if (idNew < 0) {
+          idNew = 1;
+        }
+        console.log(idNew);
         var countString = "DM-NKL-0" + idNew;
+        console.log(countString);
         ArrayValue = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
@@ -86,7 +91,6 @@ class DinhMuc extends Component {
             ID: countString,
           },
         }));
-        console.log(this.state.contentItems);
 
         // sử dụng thư viện datatable
         $(document).ready(function () {

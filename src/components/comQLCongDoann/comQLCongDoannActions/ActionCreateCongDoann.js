@@ -30,19 +30,23 @@ class ActionCreateCongDoann extends Component {
   componentDidMount = () => {
     axios({
       method: "GET",
-      url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}` +"&Classify=Process",
+      url: `${Config.API_URL}` + "/api/data/Values?token=" + `${Config.TOKEN}` +"&Classify=Process",
       data: null,
     })
       .then((res) => {
         var arrNum = [];
         for (var k in res.data) {
           var getString = JSON.parse(res.data[k]).Id;
-          var getNum = getString.substring(8, res.data.length);
+          var getNum = getString.substring(8);
           arrNum.push(getNum);
         }
         var maxInNumbers = Math.max.apply(Math, arrNum);
         var idNew = maxInNumbers + 1;
+        if (idNew < 0) {
+          idNew = 1;
+        }
         var countString = "CD-NKL-0" + idNew;
+        console.log(countString);
         this.setState({
           Id: countString,
           Parent: countString
@@ -81,6 +85,7 @@ class ActionCreateCongDoann extends Component {
         alert("Thêm công đoạn " + this.state.Name + " thành công !");
         document.getElementById('NameCongDoann').value='';
         document.getElementById('info').value='';
+        this.componentDidMount(); // gọi lại hàm để tạo ID công nhân mới
       })
       .catch((err) => {
         console.log(err);
