@@ -6,6 +6,7 @@ class TableContentThongKe extends Component {
       <table id="tableData" className="table table-hover" width="100%">
         <thead>
           <tr className="tieude">
+          <th>STT</th>
             <th>Ngày</th>
             <th>Tên C.nhân</th>
             <th>Số CN</th>

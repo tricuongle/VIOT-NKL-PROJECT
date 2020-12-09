@@ -10,6 +10,10 @@ var arrayValueDevice = [];
 var ObjValue;
 var load = [];
 var ArrayValue = [];
+var arrayPara = [];
+var arrayParaNew = [];
+var arrParaConcar = [];
+var Type = "";
 class QuanLyTramCan extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +33,10 @@ class QuanLyTramCan extends Component {
     this.setState({
       [name]: value,
     });
-    /* xử lý mutiple với Type 4 và 5 */
+    document.getElementById("btnEditDevice").disabled = false;
+    document.getElementById("checkEditDevice").innerHTML =
+      "Cảnh báo: thay đổi quan trong,<br/> có thể lỗi hệ thống nếu chọn sai!";
+    /* xử lý mutiple với Type 4 và 5 
     if (
       document.getElementById("idType4").checked ||
       document.getElementById("idType5").checked
@@ -40,7 +47,7 @@ class QuanLyTramCan extends Component {
       !document.getElementById("idType5").checked
     ) {
       document.getElementById("idProcessList").multiple = "";
-    }
+    }*/
   };
 
   componentDidMount = () => {
@@ -79,6 +86,8 @@ class QuanLyTramCan extends Component {
 
   onGetIdEdit = (IdDevice) => {
     /*-----------------------function get list process to api ---------------------------------- */
+    document.getElementById("btnEditDevice").disabled = false;
+
     axios({
       method: "GET",
       url:
@@ -125,6 +134,7 @@ class QuanLyTramCan extends Component {
         document.getElementById(
           "IdnameDevice"
         ).value = this.state.contentDevice.Name;
+        arrayPara = JSON.parse(this.state.contentDevice.Status.Para); // lấy value para và chuyển Object
       })
       .catch((err) => {
         console.log(err);
@@ -152,19 +162,24 @@ class QuanLyTramCan extends Component {
         console.log("Lỗi lấy thông tin khu vực - sections");
       });
   };
-  /*---------------------Chỉnh sửa thông tin câm ------------------------- */
-  onEditDevice = (event) => {
-    event.preventDefault();
+  /*---------------------Chỉnh sửa thông tin câm - thêm type và process ------------------------- */
+  CheckOK = () => {
+    var checkInfo = window.confirm("Bạn muốn thêm Type và công đoạn mới này?");
+    if (checkInfo) {
+      this.addValuePara();
+    }
+  };
+  // thêm giá trị vào mảng Para
+  addValuePara = () => {
     var { contentDevice } = this.state;
-    var Type = "";
+    var Object = {};
+    Type = "";
+    let idProcess = "";
     var checkbox = document.getElementsByName("Type");
-    var Id = contentDevice.Id;
     var selectProcess = document.getElementById("idProcessList") // thêm công đoạn từ select vào một mảng
       .selectedOptions;
-    let idProcess = "";
-    var idSection = document.getElementById("idSection").value; // lấy id section
     for (let i = 0; i < selectProcess.length; i++) {
-      idProcess += selectProcess[i].value + ",";
+      idProcess += selectProcess[i].value;
     }
     for (var i = 0; i < checkbox.length; i++) {
       // quét vòng for trong nhóm radio.
@@ -172,33 +187,71 @@ class QuanLyTramCan extends Component {
         Type = checkbox[i].value;
       }
     }
-
-    if (Type === "") {
-      alert("Vui lòng chọn Type phù hợp!");
-    } else {
-      axios({
-        method: "PUT",
-        url:
-          `${Config.API_URL}` +
-          "/api/iotdevice/" +
-          Id +
-          "?token=" +
-          `${Config.TOKEN}`,
-        data: {
-          ProcessId: idProcess,
-          Type: Type,
-          //SectionId: idSection
-        },
-      })
-        .then((res) => {
-          alert("Sửa thành thiết bị cân công !");
-          this.LoadData();
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log("Lỗi rồi");
-        });
+    Object = {
+      ProcessId: idProcess,
+      Type: Type,
+      ModelId: "",
+      CurrentGroupModel: "",
+    };
+    arrayParaNew = [];
+    var checkProcess = 1;
+    for (var i = 0; i < arrayPara.length; i++) {
+      if (Object.ProcessId == arrayPara[i].ProcessId) {
+        alert("Lựa chọn đã tồn tại!");
+        checkProcess = 0;
+        break;
+      }
     }
+    if(checkProcess==1){
+      arrayParaNew.push(Object);
+    }
+    arrParaConcar = arrayPara.concat(arrayParaNew); // gợp 2 mảng lại (mảng mới và mảng lấy từ API)
+
+    // hiển thị thông tin ra màng hình
+    var info = "";
+    var valueInfo = "";
+    for (var k = 0; k < arrayParaNew.length; k++) {
+      var e = document.getElementById("idProcessList");
+      var textProcess = e.options[e.selectedIndex].text;
+      info =
+        "●" + "Type: " + arrayParaNew[k].Type + "- Công đoạn: " + textProcess;
+      valueInfo += info;
+    }
+    //document.getElementById("checkEditDevice").innerHTML = valueInfo;
+  };
+
+  // hàm edit thiết bị
+  onEditDevice = (event) => {
+    event.preventDefault();
+    document.getElementById("btnEditDevice").disabled = true;
+
+    var { contentDevice } = this.state;
+    var Id = contentDevice.Id;
+    this.addValuePara();
+    var pareString = JSON.stringify(arrParaConcar); // chuyển về string
+    console.log(pareString);
+    //var idSection = document.getElementById("idSection").value; // lấy id section
+    axios({
+      method: "PUT",
+      url:
+        `${Config.API_URL}` +
+        "/api/iotdevice/" +
+        Id +
+        "?token=" +
+        `${Config.TOKEN}`,
+      data: {
+        Para: pareString,
+      },
+    })
+      .then((res) => {
+        alert("Sửa thành thiết bị cân công !");
+
+        this.LoadData();
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi rồi");
+      });
   };
   // load dữ liệu lại
   dataTableLoad = () => {
@@ -219,7 +272,6 @@ class QuanLyTramCan extends Component {
         this.setState({
           contentItems: arrayValueDevice,
         });
-        console.log(this.state.contentItems);
       })
       .catch((err) => {
         console.log("Lỗi láy thông tin device ( cân)");
@@ -235,7 +287,13 @@ class QuanLyTramCan extends Component {
   /*------------------------------------- */
 
   render() {
-    var { contentItems, contentProcess, contentSection } = this.state;
+    var {
+      contentItems,
+      contentProcess,
+      contentSection,
+      contentDevice,
+    } = this.state;
+
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -312,11 +370,11 @@ class QuanLyTramCan extends Component {
                       <label htmlFor="area">
                         <h5> Type:</h5>
                       </label>
-                      <h6>
-                        {" "}
-                        Trên máy tính nếu chọn Type 4,5 nhấn giữ phím Ctrl để
-                        chọn nhiều công đoạn
-                      </h6>
+
+                      <p id="checkEditDevice">
+                        Cảnh báo: thay đổi quan trong,
+                        <br /> có thể lỗi hệ thống nếu chọn sai!
+                      </p>
                       <br />
                       <label className="radio-inline">
                         <input
@@ -325,6 +383,7 @@ class QuanLyTramCan extends Component {
                           name="Type"
                           id="idType1"
                           value="In"
+                          required
                         />
                         <b>1. Input</b>
                       </label>
@@ -335,6 +394,7 @@ class QuanLyTramCan extends Component {
                           name="Type"
                           id="idType2"
                           value="Out"
+                          required
                         />
                         <b>2. Output</b>
                       </label>
@@ -345,28 +405,9 @@ class QuanLyTramCan extends Component {
                           name="Type"
                           id="idType3"
                           value="In-Out"
+                          required
                         />
                         <b>3. Input-Output</b>
-                      </label>
-                      <label className="radio-inline">
-                        <input
-                          type="radio"
-                          onChange={this.onChange}
-                          name="Type"
-                          id="idType4"
-                          value="Multi-In"
-                        />
-                        <b>4. Multi-Input</b>
-                      </label>
-                      <label className="radio-inline">
-                        <input
-                          type="radio"
-                          onChange={this.onChange}
-                          name="Type"
-                          id="idType5"
-                          value="Multi-out"
-                        />
-                        <b>5.Multi-Output</b>
                       </label>
                     </div>
                     <div className="form-group" onChange={this.onChange}>
@@ -382,9 +423,21 @@ class QuanLyTramCan extends Component {
                         {this.showContentSelect(contentProcess)}
                       </select>
                     </div>
+                    {/*<button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={this.CheckOK}
+                    >
+                      Thêm
+                    </button>*/}
                   </div>
+
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      id="btnEditDevice"
+                    >
                       Lưu thay đổi
                     </button>
                     <button

@@ -336,10 +336,6 @@ td {
     background-color: #0471a8;
 }
 
-.tenMaCa{
-}
-.congDoanMaCa{
-}
 .tenDinhGia{
     float: left;
     margin-left: 10px;
@@ -387,37 +383,37 @@ td {
 * {
     box-sizing: border-box;
   }
-  
+
   .row {
     margin-left:-5px;
     margin-right:-5px;
   }
-    
+
   .column {
     float: left;
     width: 50%;
     padding: 5px;
   }
-  
-  //Clearfix (clear floats) 
+
+  /* Clearfix (clear floats) */
   .row::after {
     content: "";
     clear: both;
     display: table;
   }
-  
+
   table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
     border: 1px solid #ddd;
   }
-  
+
   th, td {
     text-align: left;
     padding: 16px;
   }
-  
+
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }
@@ -428,4 +424,8 @@ td {
 }
 th {
   cursor: pointer;
+}
+#checkEditDevice{
+    float: right;
+
 }

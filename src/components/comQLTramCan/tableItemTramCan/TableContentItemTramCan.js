@@ -11,40 +11,54 @@ class TableContentItemTramCan extends Component {
     this.state = {
       contentItemModelGetId: [],
       nameItemModelGetId: [],
+      nameItemTypeGetId: [],
       nameSection: "",
     };
   }
-  /*----------------------get ID of table Model to call name Model ----------------------------- */
+  /*----------------------get ID of table process to call name process ----------------------------- */
   componentDidMount = () => {
     var { contentItem } = this.props;
-    var textString = contentItem.Status.ProcessId + "";
-    var arrayIdProcess = textString.split(","); // tách chuỗi từ Process ID
-    console.log(arrayIdProcess);
-    var arrayName = [];
-    for (var k = 0; k <= arrayIdProcess.length; k++) {
-      axios({
-        method: "GET",
-        url:
-          `${Config.API_URL}` +
-          "/api/data/valuekey?token=" +
-          `${Config.TOKEN}` +
-          "&Classify=Process&key=" +
-          arrayIdProcess[k] +
-          "",
-        data: null,
-      })
-        .then((resProcess) => {
-          ObjValue = JSON.parse(resProcess.data);
-          var nameProcess = ObjValue.Name;
-          arrayName.push(nameProcess);
-          this.setState({
-            nameItemModelGetId: arrayName,
-          });
-          console.log(this.state.nameItemModelGetId);
+    var stringPara = contentItem.Status.Para;
+    var arrType = [];
+    if (stringPara != "") {
+      var ObjectPara = JSON.parse(stringPara);
+      /*var textString = contentItem.Status.ProcessId + "";
+      var arrayIdProcess = textString.split(","); // tách chuỗi từ Process ID*/
+      var arrayName = [];
+      for (var k = 0; k < ObjectPara.length; k++) {
+        // láy tên process theo id trong Para
+        axios({
+          method: "GET",
+          url:
+            `${Config.API_URL}` +
+            "/api/data/valuekey?token=" +
+            `${Config.TOKEN}` +
+            "&Classify=Process&key=" +
+            ObjectPara[k].ProcessId +
+            "",
+          data: null,
         })
-        .catch((err) => {
-          console.log(err);
+          .then((resProcess) => {
+            ObjValue = JSON.parse(resProcess.data);
+            var nameProcess = ObjValue.Name;
+            arrayName.push(nameProcess);
+
+            var setArray = Array.from(new Set(arrayName)); // gợp các phần tử giống nhau trong arr
+
+            this.setState({
+              nameItemModelGetId: setArray,
+              nameItemTypeGetId: arrType,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        // lấy type
+        arrType.push(ObjectPara[k].Type);
+        this.setState({
+          nameItemTypeGetId: arrType,
         });
+      }
     }
     /*-----------------Lấy thông tin section và đổ vào select----------------------------- */
     axios({
@@ -59,7 +73,6 @@ class TableContentItemTramCan extends Component {
     })
       .then((res) => {
         var ObjvalueSection = res.data;
-        console.log(ObjvalueSection);
         /*this.setState({
           nameSection: ObjvalueSection,
         });*/
@@ -76,14 +89,20 @@ class TableContentItemTramCan extends Component {
 
   render() {
     var { contentItem, index } = this.props;
-    var { contentItemModelGetId, nameItemModelGetId, nameSection } = this.state;
+
+    var {
+      contentItemModelGetId,
+      nameItemModelGetId,
+      nameSection,
+      nameItemTypeGetId,
+    } = this.state;
 
     return (
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
-        <td>{contentItem.Status.Type}</td>
+        <td>{nameItemTypeGetId + " "}</td>
         <td>{nameItemModelGetId + " "}</td>
         <td>{contentItem.SectionId}</td>
         <td>

@@ -169,7 +169,7 @@ class TableItemTongHop extends Component {
       valueDeviceRecordIn,
       valueRecordIn,
     } = this.state;
-    var { contentItem } = this.props;
+    var { contentItem, index } = this.props;
     var dateFormat = require("dateformat");
     if (valueRecordIn.ReadTime != undefined) {
       const unixTimeIn = valueRecordIn.ReadTime;
@@ -198,6 +198,7 @@ class TableItemTongHop extends Component {
     var DinhMuc = parseFloat(WeightIn / WeightOut).toFixed(2);
     return (
       <tr>
+        <td>{index +1}</td>
         <td>{dateNewOut}</td>
         <td>{valueEmployee.Name}</td>
         <td>{valueEmployee.CardNo}</td>

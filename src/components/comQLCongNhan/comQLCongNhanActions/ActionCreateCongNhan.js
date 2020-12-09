@@ -38,6 +38,7 @@ class ActionCreateCongNhan extends Component {
   };
   /*----------lấy số lượng ds công nhân và cộng 1 tạo id công nhân mới------------*/
   componentDidMount = () => {
+    console.log("ok");
     axios({
       method: "GET",
       url:
@@ -76,9 +77,11 @@ class ActionCreateCongNhan extends Component {
         var arrNum = [];
         for (var k in res.data) {
           var getString = JSON.parse(res.data[k]).Id;
+          // tách chuỗi lấy số trong mã công nhân
           var getNum = getString.substring(8, res.data.length);
-          arrNum.push(getNum);
+          arrNum.push(getNum);// thêm số vào mảng
         }
+        // tìm số lớn trong mảng
         var maxInNumbers = Math.max.apply(Math, arrNum);
         var idNew = maxInNumbers + 1;
         var countString = "CN-NKL-0" + idNew;
@@ -122,6 +125,7 @@ class ActionCreateCongNhan extends Component {
       })
         .then((res) => {
           alert("Thêm công nhân " + valueEmp.Name + " thành công !");
+          this.componentDidMount(); // gọi lại hàm để tạo ID công nhân mới
         })
         .catch((err) => {
           console.log(err);

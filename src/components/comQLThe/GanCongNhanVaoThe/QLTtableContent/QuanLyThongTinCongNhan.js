@@ -166,7 +166,7 @@ class QuanLyThongTinCongNhan extends Component {
         contentGetTableEmp.typeModel +
         '","RFID":"' +
         idNewCard +
-        '","CurrentRecode":""}';
+        '","CurrentRecord":""}';
       //--------------Thêm thẻ mới ---------------------
       axios({
         method: "POST",
