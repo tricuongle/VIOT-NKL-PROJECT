@@ -5,6 +5,7 @@ import TableContentTramCan from "../components/comQLTramCan/tableContentTramCan/
 import TableContentItemTramCan from "../components/comQLTramCan/tableItemTramCan/TableContentItemTramCan";
 import $ from "jquery";
 import * as Config from "../untils/Config";
+import { Button } from "bootstrap";
 var arrayValueProcess = [];
 var arrayValueDevice = [];
 var ObjValue;
@@ -12,7 +13,9 @@ var load = [];
 var ArrayValue = [];
 var arrayPara = [];
 var arrayParaNew = [];
+var arrNewTest = [];
 var arrParaConcar = [];
+
 var Type = "";
 class QuanLyTramCan extends Component {
   constructor(props) {
@@ -30,24 +33,92 @@ class QuanLyTramCan extends Component {
     var target = event.target;
     var name = target.name;
     var value = target.value;
-    this.setState({
-      [name]: value,
-    });
-    document.getElementById("btnEditDevice").disabled = false;
-    document.getElementById("checkEditDevice").innerHTML =
-      "Cảnh báo: thay đổi quan trong,<br/> có thể lỗi hệ thống nếu chọn sai!";
-    /* xử lý mutiple với Type 4 và 5 
-    if (
-      document.getElementById("idType4").checked ||
-      document.getElementById("idType5").checked
-    ) {
-      document.getElementById("idProcessList").multiple = "multiple";
-    } else if (
-      !document.getElementById("idType4").checked ||
-      !document.getElementById("idType5").checked
-    ) {
-      document.getElementById("idProcessList").multiple = "";
-    }*/
+    var checkProcess = 1;
+    var tempArrayPara = [];
+    arrNewTest = [];
+    // tạo object rỗng
+    var ObjectValue = {
+      ProcessId: "",
+      Type: "",
+      ModelId: "",
+      CurrentGroupModel: "",
+    };
+    ObjectValue.ProcessId = name.substring(4);
+    ObjectValue.Type = value;
+
+    for (var k in arrayPara) {
+      if (ObjectValue.ProcessId == arrayPara[k].ProcessId) {
+        arrayPara[k].Type = ObjectValue.Type;
+        arrayPara[k].ModelId = ObjectValue.ModelId;
+        arrayPara[k].CurrentGroupModel = ObjectValue.CurrentGroupModel;
+      }
+    }
+
+    // kiểm tra bỏ chọn
+    if (ObjectValue.Type == "0") {
+      for (var k in arrayParaNew) {
+        if (ObjectValue.ProcessId == arrayParaNew[k].ProcessId) {
+          arrayParaNew.splice(k, 1); // xóa phần tử trong mảng
+        }
+      }
+    } else {
+      // xử lý trùng
+      for (var k in arrayParaNew) {
+        if (ObjectValue.ProcessId == arrayParaNew[k].ProcessId) {
+          if (ObjectValue.Type == arrayParaNew[k].Type) {
+            checkProcess = 0;
+            break;
+          } else {
+            arrayParaNew.splice(k, 1);
+          }
+        }
+      }
+      // xử lý nếu không trùng
+      if (checkProcess == 1) {
+        for (var k in arrayPara) {
+          if (ObjectValue.ProcessId == arrayPara[k].ProcessId) {
+            break;
+          } else {
+            arrayParaNew.push(ObjectValue);
+            break;
+          }
+        }
+      }
+    }
+
+    for (var k = 0; k < arrayParaNew.length; k++) {
+      for (var j = 1; j < arrayPara.length; j++) {
+        if (arrayParaNew[k].ProcessId == arrayPara[j].ProcessId) {
+          arrayParaNew.splice(k, 1);
+        }
+      }
+    }
+
+    console.log(arrayParaNew);
+    console.log(arrayPara);
+
+    arrNewTest = arrayParaNew.concat( arrayPara);
+    for (var k in arrNewTest) {
+      if (arrNewTest[k].Type == "0") {
+        arrNewTest.splice(k, 1);
+      }
+    }
+    for (var k in arrNewTest) {
+      if (arrNewTest[k].Type == "0") {
+        arrNewTest.splice(k, 1);
+      }
+    }
+    for (var k in arrNewTest) {
+      if (arrNewTest[k].Type == "0") {
+        arrNewTest.splice(k, 1);
+      }
+    }
+    for (var k in arrNewTest) {
+      if (arrNewTest[k].Type == "0") {
+        arrNewTest.splice(k, 1);
+      }
+    }
+    console.log(arrNewTest);
   };
 
   componentDidMount = () => {
@@ -134,7 +205,10 @@ class QuanLyTramCan extends Component {
         document.getElementById(
           "IdnameDevice"
         ).value = this.state.contentDevice.Name;
-        arrayPara = JSON.parse(this.state.contentDevice.Status.Para); // lấy value para và chuyển Object
+        arrayPara = JSON.parse(this.state.contentDevice.Status.Para);
+        for (var k in arrayPara) {
+          console.log(arrayPara[k].Type);
+        } // lấy value para và chuyển Object
       })
       .catch((err) => {
         console.log(err);
@@ -162,63 +236,6 @@ class QuanLyTramCan extends Component {
         console.log("Lỗi lấy thông tin khu vực - sections");
       });
   };
-  /*---------------------Chỉnh sửa thông tin câm - thêm type và process ------------------------- */
-  CheckOK = () => {
-    var checkInfo = window.confirm("Bạn muốn thêm Type và công đoạn mới này?");
-    if (checkInfo) {
-      this.addValuePara();
-    }
-  };
-  // thêm giá trị vào mảng Para
-  addValuePara = () => {
-    var { contentDevice } = this.state;
-    var Object = {};
-    Type = "";
-    let idProcess = "";
-    var checkbox = document.getElementsByName("Type");
-    var selectProcess = document.getElementById("idProcessList") // thêm công đoạn từ select vào một mảng
-      .selectedOptions;
-    for (let i = 0; i < selectProcess.length; i++) {
-      idProcess += selectProcess[i].value;
-    }
-    for (var i = 0; i < checkbox.length; i++) {
-      // quét vòng for trong nhóm radio.
-      if (checkbox[i].checked === true) {
-        Type = checkbox[i].value;
-      }
-    }
-    Object = {
-      ProcessId: idProcess,
-      Type: Type,
-      ModelId: "",
-      CurrentGroupModel: "",
-    };
-    arrayParaNew = [];
-    var checkProcess = 1;
-    for (var i = 0; i < arrayPara.length; i++) {
-      if (Object.ProcessId == arrayPara[i].ProcessId) {
-        alert("Lựa chọn đã tồn tại!");
-        checkProcess = 0;
-        break;
-      }
-    }
-    if(checkProcess==1){
-      arrayParaNew.push(Object);
-    }
-    arrParaConcar = arrayPara.concat(arrayParaNew); // gợp 2 mảng lại (mảng mới và mảng lấy từ API)
-
-    // hiển thị thông tin ra màng hình
-    var info = "";
-    var valueInfo = "";
-    for (var k = 0; k < arrayParaNew.length; k++) {
-      var e = document.getElementById("idProcessList");
-      var textProcess = e.options[e.selectedIndex].text;
-      info =
-        "●" + "Type: " + arrayParaNew[k].Type + "- Công đoạn: " + textProcess;
-      valueInfo += info;
-    }
-    //document.getElementById("checkEditDevice").innerHTML = valueInfo;
-  };
 
   // hàm edit thiết bị
   onEditDevice = (event) => {
@@ -227,11 +244,11 @@ class QuanLyTramCan extends Component {
 
     var { contentDevice } = this.state;
     var Id = contentDevice.Id;
-    this.addValuePara();
+    //this.addValuePara();
     var pareString = JSON.stringify(arrParaConcar); // chuyển về string
     console.log(pareString);
     //var idSection = document.getElementById("idSection").value; // lấy id section
-    axios({
+    /*axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
@@ -251,7 +268,7 @@ class QuanLyTramCan extends Component {
       .catch((err) => {
         console.log(err);
         console.log("Lỗi rồi");
-      });
+      });*/
   };
   // load dữ liệu lại
   dataTableLoad = () => {
@@ -286,6 +303,97 @@ class QuanLyTramCan extends Component {
   };
   /*------------------------------------- */
 
+  clearRadioGroup = (GroupName) => {
+    var ele = document.getElementsByName(GroupName);
+    for (var i = 0; i < ele.length; i++) ele[i].checked = false;
+  };
+  Clear = () => {
+    var { contentProcess } = this.state;
+    for (var k in contentProcess) {
+      var nameG = "Type" + contentProcess[k].Id;
+      this.clearRadioGroup(nameG);
+    }
+  };
+  addProcess = () => {
+    var { contentProcess } = this.state;
+    var arrayvalue = [];
+    var arrayname = [];
+    let valueHTML;
+    this.Clear();
+    for (var k = 0; k < contentProcess.length; k++) {
+      arrayname.push(contentProcess[k].Id);
+      valueHTML = (
+        <div className="form-group">
+          <br />
+          <label className="radio-inline">
+            <input
+              type="radio"
+              className="buttonType"
+              onChange={this.onChange}
+              name={"Type" + contentProcess[k].Id}
+              id={"idTypeIn" + contentProcess[k].Id}
+              value="In"
+            />
+            <b>1. Input</b>
+          </label>
+          <label className="radio-inline">
+            <input
+              type="radio"
+              className="buttonType"
+              onChange={this.onChange}
+              name={"Type" + contentProcess[k].Id}
+              id={"idTypeOut" + contentProcess[k].Id}
+              value="Out"
+            />
+            <b>2. Output</b>
+          </label>
+          <label className="radio-inline">
+            <input
+              type="radio"
+              className="buttonType"
+              onChange={this.onChange}
+              name={"Type" + contentProcess[k].Id}
+              id={"idTypeInOut" + contentProcess[k].Id}
+              value="In-Out"
+            />
+            <b>3. Input-Output</b>
+          </label>
+          <label className="radio-inline">
+            <input
+              type="radio"
+              className="buttonType"
+              onChange={this.onChange}
+              name={"Type" + contentProcess[k].Id}
+              id={"idTypeUnCheck" + contentProcess[k].Id}
+              value={0}
+            />
+            <b>4. bỏ chọn</b>
+          </label>
+          <h5 className="nameProcess"> {contentProcess[k].Name}</h5>
+        </div>
+      );
+      for (var j = 0; j < arrayPara.length; j++) {
+        if (arrayPara[j].ProcessId == contentProcess[k].Id) {
+          if (arrayPara[j].Type == "In") {
+            document.getElementById(
+              "idTypeIn" + contentProcess[k].Id
+            ).checked = true;
+          } else if (arrayPara[j].Type == "Out") {
+            document.getElementById(
+              "idTypeOut" + contentProcess[k].Id
+            ).checked = true;
+          } else if (arrayPara[j].Type == "In-Out") {
+            document.getElementById(
+              "idTypeInOut" + contentProcess[k].Id
+            ).checked = true;
+          }
+        }
+      }
+      arrayvalue.push(valueHTML);
+    }
+
+    return arrayvalue;
+  };
   render() {
     var {
       contentItems,
@@ -293,7 +401,6 @@ class QuanLyTramCan extends Component {
       contentSection,
       contentDevice,
     } = this.state;
-
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -366,72 +473,8 @@ class QuanLyTramCan extends Component {
                         {this.showContentSelect(contentSection)}
                       </select>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="area">
-                        <h5> Type:</h5>
-                      </label>
-
-                      <p id="checkEditDevice">
-                        Cảnh báo: thay đổi quan trong,
-                        <br /> có thể lỗi hệ thống nếu chọn sai!
-                      </p>
-                      <br />
-                      <label className="radio-inline">
-                        <input
-                          type="radio"
-                          onChange={this.onChange}
-                          name="Type"
-                          id="idType1"
-                          value="In"
-                          required
-                        />
-                        <b>1. Input</b>
-                      </label>
-                      <label className="radio-inline">
-                        <input
-                          type="radio"
-                          onChange={this.onChange}
-                          name="Type"
-                          id="idType2"
-                          value="Out"
-                          required
-                        />
-                        <b>2. Output</b>
-                      </label>
-                      <label className="radio-inline">
-                        <input
-                          type="radio"
-                          onChange={this.onChange}
-                          name="Type"
-                          id="idType3"
-                          value="In-Out"
-                          required
-                        />
-                        <b>3. Input-Output</b>
-                      </label>
-                    </div>
-                    <div className="form-group" onChange={this.onChange}>
-                      <label htmlFor="area" id="areaDevice">
-                        <h5> Công đoạn:</h5>
-                      </label>
-                      <select
-                        className="form-control"
-                        id="idProcessList"
-                        required="required"
-                      >
-                        <option value="">---Chọn công đoạn---</option>
-                        {this.showContentSelect(contentProcess)}
-                      </select>
-                    </div>
-                    {/*<button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={this.CheckOK}
-                    >
-                      Thêm
-                    </button>*/}
+                    {this.addProcess()}
                   </div>
-
                   <div className="modal-footer">
                     <button
                       type="submit"

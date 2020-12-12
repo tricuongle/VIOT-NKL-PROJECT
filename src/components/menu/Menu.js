@@ -224,10 +224,12 @@ class Menu extends Component {
                     <span>Quản lý trạm cân</span>
                   </Link>
                 </li>
+                
+                
                 <li className="">
                   <Link to="/Quan-ly-cong-nhan">
-                    <i className="fa fa-user-circle"></i>
-                    Quản lý công nhân
+                    <i className="fa fa-user-circle"  aria-hidden="true"></i>
+                    <span> Quản lý công nhân </span>
                   </Link>
                 </li>
                 <li className="">

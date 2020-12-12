@@ -8,7 +8,6 @@ class TableContentTramCan extends Component {
             <thead>
               <tr className="tieude">
                 <th>STT</th>
-                <th>ID</th>
                 <th>Tên thiết bị</th>
                 <th>Type</th>
                 <th>Công đoạn</th>

@@ -108,6 +108,7 @@ class ActionCreateCongNhan extends Component {
     var isCheck = true;
     valueNew = JSON.stringify(valueEmp);
     console.log(valueNew);
+    console.log(contentItems);
     for (var k in contentItems) {
       if (valueEmp.CardNo == contentItems[k].CardNo) {
         isCheck = false;

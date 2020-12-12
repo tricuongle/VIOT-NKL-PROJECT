@@ -36,6 +36,7 @@ class ThongKe extends Component {
           contentItem = JSON.parse(contentItem);
           arrayRecode.push(contentItem);
         });
+        arrayRecode.sort().reverse();
         this.setState({
           valueRecode: arrayRecode,
           valuetemp: arrayRecode,
@@ -65,6 +66,25 @@ class ThongKe extends Component {
     });
   };
 
+  // hàm xếp ngày tăng dần
+convertDate=(d)=> {
+    var p = d.split("/");
+    return +(p[2]+p[1]+p[0]);
+  }
+  
+sortByDate=()=> {
+    var tbody = document.querySelector("#tableData tbody");
+    // get trs as array for ease of use
+    var rows = [].slice.call(tbody.querySelectorAll("tr"));
+    
+    rows.sort(function(b,a) {
+      return this.convertDate(b.cells[0].innerHTML) - this.convertDate(a.cells[0].innerHTML);
+    });
+    
+    rows.forEach(function(v) {
+      tbody.appendChild(v); // note that .appendChild() *moves* elements
+    });
+  }
   // --------------------load dữ liệu lại-------------------------
   dataTableLoad = () => {
     axios({
@@ -97,11 +117,11 @@ class ThongKe extends Component {
     });
     this.dataTableLoad();
   };
-  // lọc ngày
+  //-----------------------------------
+  // lọc ngày hàm
   FilterDate = () => {
     var { valueRecode, dateIn, dateOut } = this.state;
     if (valueRecode.length != lengthRE) {
-      console.log("relo");
       this.dataTableLoad();
     }
     var arrayRecodeToDate = [];
@@ -120,13 +140,14 @@ class ThongKe extends Component {
     });
   };
   /*------------------------------------- */
-
+// kiểm tra đồng ý xuất excel
   checkExcel =()=>{
     var functionExcel = window.confirm("Bạn muốn xuất file Excel?");
     if(functionExcel){
       this.exportTableToExcel();
     }
   }
+  // xuất file excel
   exportTableToExcel=( )=>{
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';

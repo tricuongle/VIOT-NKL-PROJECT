@@ -86,7 +86,9 @@ class QuanLyThongTinCongNhan extends Component {
       .then((res) => {
         for (var i = 0; i < res.data.length; i++) {
           JsonValue = JSON.parse(res.data[i]);
-          ArrayValue.push(JsonValue);
+          if (JsonValue.IsLock == true) {
+            ArrayValue.push(JsonValue);
+          }
         }
         this.setState({
           contentItems: ArrayValue,
@@ -314,9 +316,9 @@ class QuanLyThongTinCongNhan extends Component {
       // render ra nội dung khi tìm kiếm
       contentItemss = contentItems.filter((contentItems) => {
         return (
-          contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
+          //contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
-          contentItems.CMND.toLowerCase().indexOf(keyword) !== -1 ||
+          //contentItems.CMND.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.CardNo.toLowerCase().indexOf(keyword) !== -1
         );
       });
@@ -324,7 +326,7 @@ class QuanLyThongTinCongNhan extends Component {
         if (status === -1) {
           return contentItems;
         } else {
-          return contentItems.status === (status === 1 ? true : false);
+          return contentItems.IsLock === (status === 1 ? true : false);
         }
       });
     }
@@ -361,8 +363,7 @@ class QuanLyThongTinCongNhan extends Component {
 
           {/*đổ dữ liệu công nhân sau khi tìm kiếm vào talbe */}
           <p>
-            Gợi ý: Gõ họ tên, hoặc số thẻ nhân viên, CMND <br />để tìm công nhân,
-             sau đó chọn thông tin cần thiết.
+            Gợi ý: Gõ họ tên, hoặc số thẻ nhân viên, sau đó chọn thông tin cần thiết.
           </p>
           <QLTTableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItemss)}

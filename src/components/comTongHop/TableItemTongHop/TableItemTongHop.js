@@ -3,6 +3,7 @@ import * as Config from "../../../untils/Config";
 import $, { event } from "jquery";
 import axios from "axios";
 var arrayRecode = [];
+var check = 0;
 class TableItemTongHop extends Component {
   constructor(props) {
     super(props);
@@ -77,6 +78,11 @@ class TableItemTongHop extends Component {
         console.log(err);
       });
   };
+  //-------------reduce -----------------
+  getReduce = (idProcess) => {
+    
+  };
+
   render() {
     var { contentItem, index } = this.props;
     var { RecodeInKG, idProcess, idModel } = this.state;

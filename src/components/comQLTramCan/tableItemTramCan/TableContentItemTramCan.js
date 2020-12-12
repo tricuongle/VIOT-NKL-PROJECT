@@ -100,7 +100,6 @@ class TableContentItemTramCan extends Component {
     return (
       <tr>
         <td>{index + 1}</td>
-        <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
         <td>{nameItemTypeGetId + " "}</td>
         <td>{nameItemModelGetId + " "}</td>

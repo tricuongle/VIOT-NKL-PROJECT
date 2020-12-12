@@ -31,6 +31,7 @@ class RawData extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           arrayRecode.push(contentItem);
+          arrayRecode.sort().reverse();
           this.setState({
             valueRecodeOut: arrayRecode,
           });
@@ -51,6 +52,7 @@ class RawData extends Component {
                 contentItem = JSON.parse(contentItem);
                 arrayRecode.push(contentItem);
               });
+              arrayRecode.sort().reverse();
               this.setState({
                 valueRecodeIn: arrayRecode,
               });

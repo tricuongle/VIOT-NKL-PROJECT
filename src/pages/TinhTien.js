@@ -6,7 +6,7 @@ class TinhTien extends Component {
       <div className="content-wrapper">
         <div w3-include-html="../_Layout.html"></div>
         <section className="content-header">
-          <h1>TÍNH TIỀN</h1>
+          <h1>TÍNH TIỀN CÔNG NHÂN</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">

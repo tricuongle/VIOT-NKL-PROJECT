@@ -111,6 +111,7 @@ class QLTTableContentItemCongNhan extends Component {
       <tr id="device2" className="edit form-check form-check-inlines">
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
+        <td>{contentItem.CardNo}</td>
         <td>{contentItem.CMND}</td>
         <td>{status}</td>
         <td>

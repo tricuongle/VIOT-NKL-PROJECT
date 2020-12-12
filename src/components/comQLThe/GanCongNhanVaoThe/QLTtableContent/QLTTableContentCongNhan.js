@@ -10,6 +10,7 @@ class QLTTableContentCongNhan extends Component {
             <tr className="tieude">
               <th>ID công nhân</th>
               <th>Tên công nhân</th>
+              <th>Số thẻ</th>
               <th>CMND</th>
               <th>Tình trạng</th>
               <th>Màu thẻ</th>

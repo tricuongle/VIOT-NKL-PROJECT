@@ -174,7 +174,7 @@ class TableItemTongHop extends Component {
     if (valueRecordIn.ReadTime != undefined) {
       const unixTimeIn = valueRecordIn.ReadTime;
       const dateIn = new Date(unixTimeIn * 1000);
-      var dateNewIn = dateFormat(dateIn, "dd-mm-yyyy");
+      var dateNewIn = dateFormat(dateIn, "dd/mm/yyyy");
       var dateNewTimeIn = dateFormat(dateIn, "HH:MM:ss");
     }
     /*----------thời gian record Out ------------------*/
@@ -183,7 +183,7 @@ class TableItemTongHop extends Component {
     /*----------thời gian record Out ------------------*/
     const unixTimeOut = contentItem.ReadTime;
     const dateOut = new Date(unixTimeOut * 1000);
-    var dateNewOut = dateFormat(dateOut, "dd-mm-yyyy");
+    var dateNewOut = dateFormat(dateOut, "dd/mm/yyyy");
     var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
 
     /*hình ảnh */
