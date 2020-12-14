@@ -36,6 +36,8 @@ class QuanLyTramCan extends Component {
     var checkProcess = 1;
     var tempArrayPara = [];
     arrNewTest = [];
+    
+    console.log(arrNewTest);
     // tạo object rỗng
     var ObjectValue = {
       ProcessId: "",
@@ -43,8 +45,10 @@ class QuanLyTramCan extends Component {
       ModelId: "",
       CurrentGroupModel: "",
     };
+    
     ObjectValue.ProcessId = name.substring(4);
     ObjectValue.Type = value;
+    console.log(ObjectValue);
 
     for (var k in arrayPara) {
       if (ObjectValue.ProcessId == arrayPara[k].ProcessId) {
@@ -75,17 +79,21 @@ class QuanLyTramCan extends Component {
       }
       // xử lý nếu không trùng
       if (checkProcess == 1) {
-        for (var k in arrayPara) {
-          if (ObjectValue.ProcessId == arrayPara[k].ProcessId) {
-            break;
-          } else {
-            arrayParaNew.push(ObjectValue);
-            break;
+        if (arrayPara.length == 0) {
+          arrayParaNew.push(ObjectValue);
+        } else {
+          for (var k in arrayPara) {
+            if (ObjectValue.ProcessId == arrayPara[k].ProcessId) {
+              break;
+            } else {
+              arrayParaNew.push(ObjectValue);
+              console.log("OKS");
+              break;
+            }
           }
         }
       }
     }
-
     for (var k = 0; k < arrayParaNew.length; k++) {
       for (var j = 1; j < arrayPara.length; j++) {
         if (arrayParaNew[k].ProcessId == arrayPara[j].ProcessId) {
@@ -94,10 +102,7 @@ class QuanLyTramCan extends Component {
       }
     }
 
-    console.log(arrayParaNew);
-    console.log(arrayPara);
-
-    arrNewTest = arrayParaNew.concat( arrayPara);
+    arrNewTest = arrayParaNew.concat(arrayPara);
     for (var k in arrNewTest) {
       if (arrNewTest[k].Type == "0") {
         arrNewTest.splice(k, 1);
@@ -138,6 +143,7 @@ class QuanLyTramCan extends Component {
             arrayValueDevice.push(Objvalue[k]);
           }
         }
+        arrayValueDevice.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: arrayValueDevice,
         });
@@ -147,6 +153,7 @@ class QuanLyTramCan extends Component {
           dom: "Bfrtip",
           scrollX: true,
           scrollY: 350,
+          paging: false,
         });
       })
       .catch((err) => {
@@ -240,15 +247,22 @@ class QuanLyTramCan extends Component {
   // hàm edit thiết bị
   onEditDevice = (event) => {
     event.preventDefault();
+    this.onChange(event);
+    for (var k in arrNewTest) {
+      if (arrNewTest[k].ProcessId == "") {
+        arrNewTest.splice(k, 1);
+      }
+    }
     document.getElementById("btnEditDevice").disabled = true;
 
     var { contentDevice } = this.state;
     var Id = contentDevice.Id;
     //this.addValuePara();
-    var pareString = JSON.stringify(arrParaConcar); // chuyển về string
+    var pareString = JSON.stringify(arrNewTest); // chuyển về string
+    arrayParaNew = [] // trả mảng về rỗng
     console.log(pareString);
     //var idSection = document.getElementById("idSection").value; // lấy id section
-    /*axios({
+    axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
@@ -262,13 +276,12 @@ class QuanLyTramCan extends Component {
     })
       .then((res) => {
         alert("Sửa thành thiết bị cân công !");
-
         this.LoadData();
       })
       .catch((err) => {
         console.log(err);
         console.log("Lỗi rồi");
-      });*/
+      });
   };
   // load dữ liệu lại
   dataTableLoad = () => {
@@ -286,6 +299,7 @@ class QuanLyTramCan extends Component {
             arrayValueDevice.push(Objvalue[k]);
           }
         }
+        arrayValueDevice.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: arrayValueDevice,
         });

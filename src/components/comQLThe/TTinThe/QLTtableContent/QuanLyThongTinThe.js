@@ -65,6 +65,7 @@ class QuanLyThongTinThe extends Component {
           JsonValue = JSON.parse(res.data[i]);
           ArrayValue.push(JsonValue);
         }
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });
@@ -74,6 +75,7 @@ class QuanLyThongTinThe extends Component {
           dom: "Bfrtip",
           scrollX: true,
           scrollY: 300,
+          paging: false,
         });
       })
       .catch((err) => {
@@ -250,6 +252,7 @@ class QuanLyThongTinThe extends Component {
           JsonValue = JSON.parse(res.data[i]);
           ArrayValue.push(JsonValue);
         }
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });

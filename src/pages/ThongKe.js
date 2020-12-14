@@ -102,6 +102,7 @@ sortByDate=()=> {
           contentItem = JSON.parse(contentItem);
           arrayRecode.push(contentItem);
         });
+        arrayRecode.sort().reverse();
         this.setState({
           valueRecode: arrayRecode,
         });

@@ -64,7 +64,7 @@ class QuanLyCongNhan extends Component {
             ArrayValue.push(temp);
           }
         }
-
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });
@@ -75,6 +75,7 @@ class QuanLyCongNhan extends Component {
           dom: "Bfrtip",
           scrollX: true,
           scrollY: 450,
+          paging: false
         });
       })
       .catch((err) => {
@@ -222,7 +223,7 @@ class QuanLyCongNhan extends Component {
             ArrayValue.push(temp);
           }
         }
-
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });

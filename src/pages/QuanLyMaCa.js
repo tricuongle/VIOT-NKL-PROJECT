@@ -88,6 +88,7 @@ class QuanLyMaCa extends Component {
           ArrayValue.push(JsonValue);
           ArrayNameProcess.push(ArrayValue[i].ProcessId);
         }
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });
@@ -99,6 +100,7 @@ class QuanLyMaCa extends Component {
             dom: "Bfrtip",
             scrollX: true,
             scrollY: 450,
+            paging: false,
           });
         });
       })
@@ -254,9 +256,9 @@ class QuanLyMaCa extends Component {
     })
       .then((resModel) => {
         alert("Xóa mã cá " + valueModel.Name + " thành công!");
-        
+
         /*Xóa thay đổi status định mức mã cá == sai */
-         axios({
+        axios({
           method: "GET",
           url:
             `${Config.API_URL}` +
@@ -266,17 +268,15 @@ class QuanLyMaCa extends Component {
           data: null,
         })
           .then((resFishCode) => {
-            for(var k in resFishCode.data){
-              var objectValueModel= JSON.parse(resFishCode.data[k]);
-              if(valueModel.Id == objectValueModel.ModelId)  {
-                  objectValueModel.Status=true;
-                  console.log(objectValueModel);
+            for (var k in resFishCode.data) {
+              var objectValueModel = JSON.parse(resFishCode.data[k]);
+              if (valueModel.Id == objectValueModel.ModelId) {
+                objectValueModel.Status = true;
               }
-             
             }
             this.LoadData();
           })
-          
+
           .catch((err) => {
             console.log(err);
           });
@@ -305,6 +305,7 @@ class QuanLyMaCa extends Component {
           ArrayValue.push(JsonValue);
           ArrayNameProcess.push(ArrayValue[i].ProcessId);
         }
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });
@@ -472,6 +473,7 @@ class QuanLyMaCa extends Component {
                             name="WeightInMin"
                             required
                             min={0}
+                            step=".01"
                             onChange={this.onChange}
                           />
                         </div>
@@ -489,6 +491,7 @@ class QuanLyMaCa extends Component {
                             required
                             onChange={this.onChange}
                             min={0}
+                            step=".01"
                           />
                         </div>
                         <div className="khoiLuongMaCa">
@@ -504,6 +507,7 @@ class QuanLyMaCa extends Component {
                             name="WeightOutMin"
                             required
                             min={0}
+                            step=".01"
                             onChange={this.onChange}
                           />
                         </div>
@@ -521,6 +525,7 @@ class QuanLyMaCa extends Component {
                             required
                             onChange={this.onChange}
                             min={0}
+                            step=".01"
                           />
                         </div>
                         <div className="groupAndclassify">
@@ -536,7 +541,6 @@ class QuanLyMaCa extends Component {
                             className="form-control"
                             id="idGroupp"
                             name="Group"
-                            min={0}
                             onChange={this.onChange}
                           />
                         </div>

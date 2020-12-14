@@ -74,6 +74,7 @@ class QuanLyCongDoann extends Component {
           JsonValue["Description"] = JsonDes;
           ArrayValue.push(JsonValue);
         }
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });
@@ -83,6 +84,7 @@ class QuanLyCongDoann extends Component {
           dom: "Bfrtip",
           scrollX: true,
           scrollY: 300,
+          paging: false,
         });
       })
       .catch((err) => {
@@ -234,6 +236,7 @@ class QuanLyCongDoann extends Component {
           JsonValue["Description"] = JsonDes;
           ArrayValue.push(JsonValue);
         }
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });
@@ -273,7 +276,7 @@ class QuanLyCongDoann extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>QUẢN LÝ CÔNG ĐOẠN</h1>
+          <h1>QUẢN LÝ CÔNG ĐOẠN TRONG NGÀY</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">

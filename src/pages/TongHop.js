@@ -6,6 +6,7 @@ import linq, { Enumerable } from "linq";
 
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
+import { Alert } from "bootstrap";
 var arrayRecode = [];
 var load = [];
 
@@ -19,6 +20,12 @@ class TongHop extends Component {
       valueRecode: [],
     };
   }
+  convertData = (data) => {
+    const date = new Date(data * 1000);
+    var dateFormat = require("dateformat");
+    var dateNew = dateFormat(date, "dd/mm/yyyy");
+    return dateNew;
+  };
   componentDidMount = () => {
     axios({
       method: "GET",
@@ -33,12 +40,26 @@ class TongHop extends Component {
         arrayRecode = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
-          arrayRecode.push(contentItem);
+          // lấy ngày hiện tại hôm nay
+          var dataToday = new Date().getTime();
+          var dataTodayString = dataToday + ""; // chuyển string
+          var dataTodayStringSub = dataTodayString.substring(0, 10); // tách chuỗi
+          var dayToday = this.convertData(dataTodayStringSub); // gán giá trị trong hàm == daytoday
+
+          var dayRawData = this.convertData(contentItem.ReadTime);
+
+          if (dayRawData == dayToday) {
+            arrayRecode.push(contentItem);
+          }
+          //arrayRecode.push(contentItem);
         });
-        arrayRecode.sort().reverse();
+        arrayRecode.sort().reverse(); // sort đảo mảng
         this.setState({
           valueRecode: arrayRecode,
         });
+        if (this.state.valueRecode == '') {
+          alert("Thông báo, chưa có dữ liệu mới trong ngày...");
+        }
         $("#tableData").DataTable({
           searching: false,
           ordering: false,
@@ -49,7 +70,7 @@ class TongHop extends Component {
         });
 
         //----------------
-        var linq = Enumerable.From(this.state.valueRecode);
+        /*var linq = Enumerable.From(this.state.valueRecode);
         var result = linq
           .GroupBy(function (x) {
             return x.ProcessId;
@@ -67,21 +88,11 @@ class TongHop extends Component {
               }),
             };
           })
-          .ToArray();
-        console.table(result);
+          .ToArray();*/
+        // console.table(result);
         //alert(JSON.stringify(result));
 
-        /*let women = this.state.valueRecode.filter((person) => person.Model === 'MC-NKL-010');
-        console.table(women);*/
-        //console.table(this.state.valueRecode);
-
-        /* jinqJs().from(this.state.valueRecode).groupBy('ProcessId').sum('Weight').select();
-        var ageLess20 = this.state.valueRecode.filter(function (valueRecode) {
-          return (valueRecode.Classify= "LON") ;
-        });
-        console.log(ageLess20);*/
-
-        /*var obj = this.state.valueRecode.reduce((acc, cur) => {
+        var obj = this.state.valueRecode.reduce((acc, cur) => {
           acc[cur.Model] = parseFloat(cur.Weight || 0);
           return acc;
         }, {});
@@ -89,7 +100,7 @@ class TongHop extends Component {
         var array = Object.entries(obj).map((entry) => {
           return { Model: entry[0], Weight: entry[1] };
         });
-        console.log(array);*/
+        console.log(array);
         //jinqJs().from(this.state.valueRecode).groupBy('date').sum('impressions').select();
       })
       .catch((err) => {
@@ -185,6 +196,7 @@ class TongHop extends Component {
               </button>
             </div>
           </form>
+
           <TableContentTongHop>
             {this.showContentItems(valueRecode)}
           </TableContentTongHop>

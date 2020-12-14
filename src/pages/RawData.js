@@ -16,6 +16,13 @@ class RawData extends Component {
       valueRecodeOut: [],
     };
   }
+
+  convertData = (data) => {
+    const date = new Date(data * 1000);
+    var dateFormat = require("dateformat");
+    var dateNew = dateFormat(date, "dd/mm/yyyy");
+    return dateNew;
+  };
   componentDidMount = () => {
     axios({
       method: "GET",
@@ -30,12 +37,23 @@ class RawData extends Component {
         arrayRecode = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
-          arrayRecode.push(contentItem);
+          // lấy ngày hiện tại hôm nay
+          var dataToday = new Date().getTime();
+          var dataTodayString = dataToday + ""; // chuyển string
+          var dataTodayStringSub = dataTodayString.substring(0, 10); // tách chuỗi
+          var dayToday = this.convertData(dataTodayStringSub); // gán giá trị trong hàm == daytoday
+
+          var dayRawData = this.convertData(contentItem.ReadTime);
+
+          if (dayRawData == dayToday) {
+            arrayRecode.push(contentItem);
+          }
+
           arrayRecode.sort().reverse();
           this.setState({
             valueRecodeOut: arrayRecode,
           });
-           
+
           /*-------- */
           axios({
             method: "GET",
@@ -50,8 +68,18 @@ class RawData extends Component {
               arrayRecode = [];
               res.data.map((contentItem) => {
                 contentItem = JSON.parse(contentItem);
-                arrayRecode.push(contentItem);
+                // lấy ngày hiện tại hôm nay
+                var dataToday = new Date().getTime();
+                var dataTodayString = dataToday + ""; // chuyển string
+                var dataTodayStringSub = dataTodayString.substring(0, 10); // tách chuỗi
+                var dayToday = this.convertData(dataTodayStringSub); // gán giá trị trong hàm == daytoday
+
+                var dayRawData = this.convertData(contentItem.ReadTime);
+                if (dayRawData == dayToday) {
+                  arrayRecode.push(contentItem);
+                }
               });
+
               arrayRecode.sort().reverse();
               this.setState({
                 valueRecodeIn: arrayRecode,
@@ -65,8 +93,6 @@ class RawData extends Component {
       .catch((err) => {
         console.log(err);
       });
-    //setTimeout(this.componentDidMount, 2000);
-    //console.log("<-- số lần quét Raw data (2s/lần)");
   };
 
   render() {
@@ -86,6 +112,7 @@ class RawData extends Component {
         </section>
 
         <section className="content">
+           
           <div className="row">
             <TableContentRawDataIn>
               {this.showContentItemsOut(valueRecodeIn)}

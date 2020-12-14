@@ -213,6 +213,7 @@ class ActionCreateMaCa extends Component {
                         name="WeightInMin"
                         required
                         min={0}
+                        step=".01"
                         onChange={this.onChange}
                       />
                     </div>
@@ -230,6 +231,7 @@ class ActionCreateMaCa extends Component {
                         required
                         onChange={this.onChange}
                         min={0}
+                        step=".01"
                       />
                     </div>
                     <div className="khoiLuongMaCa">
@@ -245,6 +247,7 @@ class ActionCreateMaCa extends Component {
                         name="WeightOutMin"
                         required
                         min={0}
+                        step=".01"
                         onChange={this.onChange}
                       />
                     </div>
@@ -262,6 +265,7 @@ class ActionCreateMaCa extends Component {
                         required
                         onChange={this.onChange}
                         min={0}
+                        step=".01"
                       />
                     </div>
                     <div className="groupAndclassify">
@@ -278,6 +282,7 @@ class ActionCreateMaCa extends Component {
                         id="idGroup"
                         name="Group"
                         min={0}
+                        step=".01"
                         onChange={this.onChange}
                       />
                     </div>
@@ -294,7 +299,6 @@ class ActionCreateMaCa extends Component {
                         placeholder="Nhập loại"
                         disabled
                         onChange={this.onChange}
-                        min={0}
                       />
                     </div>
                   </div>

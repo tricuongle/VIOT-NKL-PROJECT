@@ -84,6 +84,7 @@ class DinhMuc extends Component {
             ArrayValue.push(contentItem);
           }
         });
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState((preState) => ({
           contentItems: ArrayValue,
           valueDinhMuc: {
@@ -100,6 +101,7 @@ class DinhMuc extends Component {
             dom: "Bfrtip",
             scrollX: true,
             scrollY: 450,
+            paging: false,
           });
         });
       })
@@ -299,6 +301,7 @@ class DinhMuc extends Component {
             ArrayValue.push(contentItem);
           }
         });
+        ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
         });

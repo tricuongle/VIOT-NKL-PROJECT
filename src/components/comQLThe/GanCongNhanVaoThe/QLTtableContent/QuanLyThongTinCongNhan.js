@@ -59,6 +59,7 @@ class QuanLyThongTinCongNhan extends Component {
           var ObjValueNewCard = JSON.parse(valueNewCard[k]);
           arrayNewCard.push(ObjValueNewCard);
         }
+        arrayNewCard.sort().reverse(); // sort đảo mảng
         this.setState({
           contentNewCard: arrayNewCard,
         });
@@ -98,12 +99,8 @@ class QuanLyThongTinCongNhan extends Component {
         console.log(err);
       });
   };
-  reloadTableNewCard = () => {
-    setTimeout(this.componentDidMount, 500);
-  };
   /*-----------hàm nhận value newCard từ table newCard và lưu vào state----------------- */
   OnGetValueColorProcessType = (idNameEmp, status, color, idProcess, Type) => {
-    console.log(status);
     this.createNameCard();
     this.setState((preState) => ({
       contentGetTableEmp: {
@@ -285,6 +282,7 @@ class QuanLyThongTinCongNhan extends Component {
           var ObjValueNewCard = JSON.parse(valueNewCard[k]);
           arrayNewCard.push(ObjValueNewCard);
         }
+        arrayNewCard.sort().reverse(); // sort đảo mảng
         this.setState({
           contentNewCard: arrayNewCard,
         });
