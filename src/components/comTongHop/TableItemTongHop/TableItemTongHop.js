@@ -75,7 +75,7 @@ class TableItemTongHop extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   };
   //-------------reduce -----------------
@@ -85,24 +85,24 @@ class TableItemTongHop extends Component {
 
   render() {
     var { contentItem, index } = this.props;
-    var { RecodeInKG, idProcess, idModel } = this.state;
-    var dateFormat = require("dateformat");
+    //var { RecodeInKG, idProcess, idModel } = this.state;
+   /* var dateFormat = require("dateformat");
     if (contentItem.ReadTime != undefined) {
       const unixTimeOut = contentItem.ReadTime;
       const dateOut = new Date(unixTimeOut * 1000);
       var dateNewOut = dateFormat(dateOut, "dd-mm-yyyy");
       var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
-    }
+    }*/
+    console.log(contentItem.Weight);
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
-        <td>{dateNewOut}</td>
-        <td>{idProcess.Name}</td>
-        <td>{idModel.Name}</td>
-        <td>{RecodeInKG} </td>
-        <td>{contentItem.Weight} </td>
+        <td>{contentItem.ModelName}</td>
+        <td>{contentItem.ProcessName}</td>
+        <td>--- </td>
+        <td>{contentItem.Weight.toFixed(2)} </td>
       </tr>
     );
   }
-}
+} 
 export default TableItemTongHop;

@@ -1,64 +1,68 @@
 import React, { Component } from "react";
 import axios from "axios";
 import * as Config from "../../../untils/Config";
-var ObjectRecordIn = {};
 class TableItemTongHop extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      valueEmployee: "",
+      valueEmployee: "", 
       valueProcess: "",
       valueDevice: "",
       valueCard: "",
       valueModel: "",
-      valueRecordIn: {},
+      valueRecordIn: [],
       valueDeviceRecordIn: "",
     };
   }
   componentDidMount = () => {
     var { contentItem } = this.props;
-    /*---------------lấy thông tin record-In theo ID-------------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Record-In&key=" +
-        contentItem.RecordIn,
-      data: null,
-    })
-      .then((res) => {
-        var ObjValue = JSON.parse(res.data);
-        this.setState({
-          valueRecordIn: ObjValue,
-        });
-        /*Lấy thông tin thiết bị cân theo id cân trong record out. */
-        axios({
-          method: "GET",
-          url:
-            `${Config.API_URL}` +
-            "/api/iotdevice/all?token=" +
-            `${Config.TOKEN}`,
-          data: null,
-        })
-          .then((res) => {
-            var ObjValue = res.data;
-            for (var k in ObjValue) {
-              if (this.state.valueRecordIn.DeviceId == ObjValue[k].Id)
-                this.setState({
-                  valueDeviceRecordIn: ObjValue[k],
-                });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        //-------------------------
+    if (contentItem.RecordIn != "") {
+      /*---------------lấy thông tin record-In theo ID-------------------- */
+      axios({
+        method: "GET",
+        url:
+          `${Config.API_URL}` +
+          "/api/data/valuekey?token=" +
+          `${Config.TOKEN}` +
+          "&Classify=Record-In&key=" +
+          contentItem.RecordIn,
+        data: null,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          var ObjValue = JSON.parse(res.data);
+          this.setState({
+            valueRecordIn: ObjValue,
+          });
+          /*Lấy thông tin thiết bị cân theo id cân trong record out. */
+          axios({
+            method: "GET",
+            url:
+              `${Config.API_URL}` +
+              "/api/iotdevice/all?token=" +
+              `${Config.TOKEN}`,
+            data: null,
+          })
+            .then((res) => {
+              var ObjValue = res.data;
+              for (var k in ObjValue) {
+                if (this.state.valueRecordIn.DeviceId == ObjValue[k].Id)
+                  this.setState({
+                    valueDeviceRecordIn: ObjValue[k],
+                  });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          //-------------------------
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("Không tồn tại Record In !!!");
+    }
+
     /*---------------lấy thông tin nhân viên theo ID-------------------- */
     axios({
       method: "GET",
@@ -196,25 +200,34 @@ class TableItemTongHop extends Component {
     var WeightIn = parseFloat(valueRecordIn.Weight);
     var WeightOut = parseFloat(contentItem.Weight);
     var DinhMuc = parseFloat(WeightIn / WeightOut).toFixed(2);
+    if(DinhMuc == 'NaN'){
+      DinhMuc= "---";
+    }
+    /*--------- */
+    /*if (contentItem.RecordIn != "") {
+      valueDeviceRecordIn.Name = null;
+      valueRecordIn.Weight = null;
+      dateNewTimeIn = null;
+    }*/
     return (
       <tr>
-        <td>{index +1}</td>
+        <td>{index + 1}</td>
         <td>{dateNewOut}</td>
-        <td>{valueEmployee.Name}</td>
+        <td>{contentItem.EmployeeName}</td>
         <td>{valueEmployee.CardNo}</td>
-        <td>{valueCard.RFID}</td>
+        <td>{contentItem.CardId}</td>
         <td>{valueCard.Color}</td>
-        <td>{valueModel.Name}</td>
-        <td>{valueCard.Classify}</td>
-        <td>{valueProcess.Name}</td>
+        <td>{contentItem.ModelName}</td>
+        <td>{contentItem.Classify}</td>
+        <td>{contentItem.ProcessName}</td>
         <td>{valueDeviceRecordIn.Name}</td>
-        <td>{valueDevice.Name}</td>
+        <td>{contentItem.DeviceName}</td>
         <td>{valueRecordIn.Weight}</td>
         <td>{contentItem.Weight}</td>
         <td>{dateNewTimeIn}</td>
         <td>{dateNewTimeOut}</td>
         <td>{DinhMuc} </td>
-        <td>{valueDevice.SectionId}</td>
+        <td>---</td>  {/*valueDevice.SectionId*/}
 
         <td>
           <a href={imgIn} target="_blank">

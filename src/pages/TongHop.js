@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import TableContentTongHop from "../components/comTongHop/tableContentTongHop/TableContentTongHop";
 import TableItemTongHop from "../components/comTongHop/TableItemTongHop/TableItemTongHop";
 import axios from "axios";
-import linq, { Enumerable } from "linq";
+import * as Enumerable from "linq";
 
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
-import { Alert } from "bootstrap";
 var arrayRecode = [];
 var load = [];
+var RecordGroup = [];
+var valueReWeight = [];
 
+var dayToDay2 ='---';
 var countScan = 0;
 let scanDataTable;
 let scanDataTableOff = 0;
@@ -18,6 +20,7 @@ class TongHop extends Component {
     super(props);
     this.state = {
       valueRecode: [],
+      valueRecordGroup: [],
     };
   }
   convertData = (data) => {
@@ -38,17 +41,19 @@ class TongHop extends Component {
     })
       .then((res) => {
         arrayRecode = [];
+        var date = new Date();
+        dayToDay2 =
+          date.getDate() +
+          "/" +
+          (date.getMonth() + 1) +
+          "/" +
+          date.getFullYear();
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
-          // lấy ngày hiện tại hôm nay
-          var dataToday = new Date().getTime();
-          var dataTodayString = dataToday + ""; // chuyển string
-          var dataTodayStringSub = dataTodayString.substring(0, 10); // tách chuỗi
-          var dayToday = this.convertData(dataTodayStringSub); // gán giá trị trong hàm == daytoday
 
-          var dayRawData = this.convertData(contentItem.ReadTime);
+          var dayRawData = this.convertData(contentItem.ReadTime); // lấy thời gian trong record
 
-          if (dayRawData == dayToday) {
+          if (dayRawData == dayToDay2) {
             arrayRecode.push(contentItem);
           }
           //arrayRecode.push(contentItem);
@@ -57,51 +62,35 @@ class TongHop extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        if (this.state.valueRecode == '') {
+        if (this.state.valueRecode == "") {
           alert("Thông báo, chưa có dữ liệu mới trong ngày...");
         }
+
+        //----------------
+        valueReWeight = this.state.valueRecode;
+        for (var k in valueReWeight) {
+          valueReWeight[k].Weight = parseFloat(valueReWeight[k].Weight);
+        }
+        RecordGroup = Enumerable.from(valueReWeight)
+          .groupBy(
+            "{ PL1: $.ProcessName , PL2: $.ModelName }",
+            "$.Weight || 0",
+            "{ ProcessName: $.PL1,ModelName: $.PL2, Weight : $$.sum()}",
+            "'' + $.PL1 + ' ' + $.PL2"
+          )
+          .toArray();
+        this.setState({
+          valueRecordGroup: RecordGroup,
+        });
         $("#tableData").DataTable({
           searching: false,
           ordering: false,
           dom: "Bfrtip",
           scrollX: false,
-          scrollY: 450,
+          scrollY: 350,
           paging: false,
         });
-
-        //----------------
-        /*var linq = Enumerable.From(this.state.valueRecode);
-        var result = linq
-          .GroupBy(function (x) {
-            return x.ProcessId;
-          })
-          .Select(function (x) {
-            return {
-              ProcessId: x.Key(),
-              DeviceId: x.Key(),
-              CardId: x.Key(),
-              Model: x.Key(),
-              Classify: x.Key(),
-              EmployeeId: x.Key(),
-              Weight: x.Sum(function (y) {
-                return y.Value | 0;
-              }),
-            };
-          })
-          .ToArray();*/
-        // console.table(result);
-        //alert(JSON.stringify(result));
-
-        var obj = this.state.valueRecode.reduce((acc, cur) => {
-          acc[cur.Model] = parseFloat(cur.Weight || 0);
-          return acc;
-        }, {});
-        console.log(obj);
-        var array = Object.entries(obj).map((entry) => {
-          return { Model: entry[0], Weight: entry[1] };
-        });
-        console.log(array);
-        //jinqJs().from(this.state.valueRecode).groupBy('date').sum('impressions').select();
+        console.log(this.state.valueRecordGroup);
       })
       .catch((err) => {
         console.log(err);
@@ -159,11 +148,11 @@ class TongHop extends Component {
   };
   /*------------------------------------- */
   render() {
-    var { valueRecode } = this.state;
+    var { valueRecordGroup } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>TỔNG HỢP CÔNG ĐOẠN</h1>
+          <h1>TỔNG HỢP CÔNG ĐOẠN TRONG NGÀY {dayToDay2}</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
@@ -175,7 +164,7 @@ class TongHop extends Component {
         </section>
         <section className="content">
           <form className="filter-section form-inline">
-            <div className="input-group inputSeach">
+            {/* <div className="input-group inputSeach">
               <button
                 type="button"
                 id="btnScan"
@@ -194,11 +183,11 @@ class TongHop extends Component {
               >
                 Tắt quét dữ liệu
               </button>
-            </div>
+    </div>*/}
           </form>
 
           <TableContentTongHop>
-            {this.showContentItems(valueRecode)}
+            {this.showContentItems(valueRecordGroup)}
           </TableContentTongHop>
         </section>
       </div>

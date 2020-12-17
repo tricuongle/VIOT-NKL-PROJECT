@@ -35,21 +35,23 @@ class RawData extends Component {
     })
       .then((res) => {
         arrayRecode = [];
+        var date = new Date();
+        var dayToDay2 =
+          date.getDate() +
+          "/" +
+          (date.getMonth() + 1) +
+          "/" +
+          date.getFullYear();
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
-          // lấy ngày hiện tại hôm nay
-          var dataToday = new Date().getTime();
-          var dataTodayString = dataToday + ""; // chuyển string
-          var dataTodayStringSub = dataTodayString.substring(0, 10); // tách chuỗi
-          var dayToday = this.convertData(dataTodayStringSub); // gán giá trị trong hàm == daytoday
 
-          var dayRawData = this.convertData(contentItem.ReadTime);
+          var dayRawData = this.convertData(contentItem.ReadTime); // thời gian record
 
-          if (dayRawData == dayToday) {
+          if (dayRawData == dayToDay2) {
             arrayRecode.push(contentItem);
           }
 
-          arrayRecode.sort().reverse();
+          // arrayRecode.sort().reverse();
           this.setState({
             valueRecodeOut: arrayRecode,
           });
@@ -68,19 +70,13 @@ class RawData extends Component {
               arrayRecode = [];
               res.data.map((contentItem) => {
                 contentItem = JSON.parse(contentItem);
-                // lấy ngày hiện tại hôm nay
-                var dataToday = new Date().getTime();
-                var dataTodayString = dataToday + ""; // chuyển string
-                var dataTodayStringSub = dataTodayString.substring(0, 10); // tách chuỗi
-                var dayToday = this.convertData(dataTodayStringSub); // gán giá trị trong hàm == daytoday
-
-                var dayRawData = this.convertData(contentItem.ReadTime);
-                if (dayRawData == dayToday) {
+                var dayRawData = this.convertData(contentItem.ReadTime); // thời gian record
+                if (dayRawData == dayToDay2) {
                   arrayRecode.push(contentItem);
                 }
               });
 
-              arrayRecode.sort().reverse();
+              //arrayRecode.sort().reverse();
               this.setState({
                 valueRecodeIn: arrayRecode,
               });
@@ -88,6 +84,25 @@ class RawData extends Component {
             .catch((err) => {
               console.log(err);
             });
+        });
+        this.state.valueRecodeOut.sort().reverse(); // đảo mảng record Out
+        this.state.valueRecodeIn.sort().reverse(); // đảo mảng record In
+        
+        $("#tableDataOut").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 350,
+          paging: false,
+        });
+        $("#tableDataIn").DataTable({
+          searching: false,
+          ordering: false,
+          dom: "Bfrtip",
+          scrollX: true,
+          scrollY: 350,
+          paging: false,
         });
       })
       .catch((err) => {
@@ -112,7 +127,6 @@ class RawData extends Component {
         </section>
 
         <section className="content">
-           
           <div className="row">
             <TableContentRawDataIn>
               {this.showContentItemsOut(valueRecodeIn)}

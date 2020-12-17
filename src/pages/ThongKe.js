@@ -5,17 +5,16 @@ import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableItemThongKe";
 var arrayRecode = [];
-var checkTable = 0;
 var load = [];
+var table;
 var lengthRE = null;
 class ThongKe extends Component {
   constructor(props) {
     super(props);
     this.state = {
       valueRecode: [],
-      valueRecode1: [],
-      valueRecodeDate: [],
-      valuetemp: [],
+      valueRecodeGetDay: [],
+
       dateIn: "",
       dateOut: "",
     };
@@ -39,10 +38,8 @@ class ThongKe extends Component {
         arrayRecode.sort().reverse();
         this.setState({
           valueRecode: arrayRecode,
-          valuetemp: arrayRecode,
         });
-        lengthRE = this.state.valueRecode.length;
-        $("#tableData").DataTable({
+        table = $("#tableData").DataTable({
           searching: false,
           ordering: false,
           dom: "Bfrtip",
@@ -66,25 +63,6 @@ class ThongKe extends Component {
     });
   };
 
-  // hàm xếp ngày tăng dần
-convertDate=(d)=> {
-    var p = d.split("/");
-    return +(p[2]+p[1]+p[0]);
-  }
-  
-sortByDate=()=> {
-    var tbody = document.querySelector("#tableData tbody");
-    // get trs as array for ease of use
-    var rows = [].slice.call(tbody.querySelectorAll("tr"));
-    
-    rows.sort(function(b,a) {
-      return this.convertDate(b.cells[0].innerHTML) - this.convertDate(a.cells[0].innerHTML);
-    });
-    
-    rows.forEach(function(v) {
-      tbody.appendChild(v); // note that .appendChild() *moves* elements
-    });
-  }
   // --------------------load dữ liệu lại-------------------------
   dataTableLoad = () => {
     axios({
@@ -122,65 +100,71 @@ sortByDate=()=> {
   // lọc ngày hàm
   FilterDate = () => {
     var { valueRecode, dateIn, dateOut } = this.state;
-    if (valueRecode.length != lengthRE) {
-      this.dataTableLoad();
-    }
+    var dateFormat = require("dateformat");
+     var dateToday = new Date(); // lấy thời gian hiện tại
+     var dateBefore =  new Date(dateFormat(dateIn, "yyyy,mm,dd"));
+     var dateAfter =  new Date(dateFormat(dateOut, "yyyy,mm,dd"));
+     console.log(dateToday);
+    console.log(dateBefore);
+    console.log(dateAfter);
+
     var arrayRecodeToDate = [];
     var dateFormat = require("dateformat");
     for (var k in valueRecode) {
       const unixTime = valueRecode[k].ReadTime;
-      const date = new Date(unixTime * 1000);
-      var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
-      if (date >= new Date(dateIn) && date <= new Date(dateOut)) {
+      const date = new Date(unixTime * 1000); // ngày trong record
+      //console.log(date);
+       //var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
+      if (date >= dateBefore && date <= dateAfter) {
         arrayRecodeToDate.push(valueRecode[k]);
       }
     }
-
     this.setState({
-      valueRecode: arrayRecodeToDate,
+      valueRecodeGetDay: arrayRecodeToDate,
     });
+    this.LoadData();
   };
   /*------------------------------------- */
-// kiểm tra đồng ý xuất excel
-  checkExcel =()=>{
+  // kiểm tra đồng ý xuất excel
+  checkExcel = () => {
     var functionExcel = window.confirm("Bạn muốn xuất file Excel?");
-    if(functionExcel){
+    if (functionExcel) {
       this.exportTableToExcel();
     }
-  }
+  };
   // xuất file excel
-  exportTableToExcel=( )=>{
+  exportTableToExcel = () => {
     var downloadLink;
-    var dataType = 'application/vnd.ms-excel';
-    var tableSelect = document.getElementById('tableData');
-    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-    var filename = 'nkl'
+    var dataType = "application/vnd.ms-excel";
+    var tableSelect = document.getElementById("tableData");
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, "%20");
+    var filename = "nkl";
     // Specify file name
-    filename = filename?filename+'.xls':'excel_data.xls';
-    
+    filename = filename ? filename + ".xls" : "excel_data.xls";
+
     // Create download link element
     downloadLink = document.createElement("a");
-    
+
     document.body.appendChild(downloadLink);
-    
-    if(navigator.msSaveOrOpenBlob){
-        var blob = new Blob(['\ufeff', tableHTML], {
-            type: dataType
-        });
-        navigator.msSaveOrOpenBlob( blob, filename);
-    }else{
-        // Create a link to the file
-        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-    
-        // Setting the file name
-        downloadLink.download = filename;
-        
-        //triggering the function
-        downloadLink.click();
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(["\ufeff", tableHTML], {
+        type: dataType,
+      });
+      navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+      // Create a link to the file
+      downloadLink.href = "data:" + dataType + ", " + tableHTML;
+
+      // Setting the file name
+      downloadLink.download = filename;
+
+      //triggering the function
+      downloadLink.click();
     }
-}
+  };
   render() {
-    var { valueRecode, dateIn, dateOut, valueRecode1 } = this.state;
+    var { valueRecode, valueRecodeGetDay, dateIn, dateOut } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -306,7 +290,6 @@ sortByDate=()=> {
               >
                 Làm mới dữ liệu
               </button>
-              
             </div>
             <div>
               <button
@@ -317,11 +300,10 @@ sortByDate=()=> {
               >
                 Xuất Excel
               </button>
-              
             </div>
           </form>
           <TableContentThongKe>
-            {this.showContentItems(valueRecode)}
+            {this.showContentItems(valueRecodeGetDay)}
           </TableContentThongKe>
         </section>
       </div>

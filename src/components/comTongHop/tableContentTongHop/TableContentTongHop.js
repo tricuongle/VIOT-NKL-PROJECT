@@ -7,9 +7,8 @@ class TableContentTongHop extends Component {
           <thead>
             <tr className="tieude">
               <th>STT</th>
-              <th>Ngày</th>
+              <th> Mã cá</th>
               <th>Công đoạn</th>
-              <th>Mã cá</th>
               <th>Khối lượng đầu vào (KG)</th>
               <th>Khối lượng đầu ra (KG)</th>
             </tr>
