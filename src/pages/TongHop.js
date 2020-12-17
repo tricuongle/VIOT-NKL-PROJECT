@@ -7,27 +7,84 @@ import * as Enumerable from "linq";
 import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 var arrayRecode = [];
+var arrayRecodeIn = [];
+var arrayIdRecodeIn = [];
 var load = [];
 var RecordGroup = [];
-var valueReWeight = [];
 
-var dayToDay2 ='---';
+var sumOut = 0;
+var temp;
+var dayToDay2 = "---";
 var countScan = 0;
-let scanDataTable;
 let scanDataTableOff = 0;
 class TongHop extends Component {
   constructor(props) {
     super(props);
     this.state = {
       valueRecode: [],
+      valueRecodeIn: [],
       valueRecordGroup: [],
+      valueRecordInGroup: [],
+      sumWeightOut: "0.00", // tổng weight Out
+      sumWeightIn: "0.00", // tổng weight Out
     };
   }
+  // --- hàm lấy ngày /tháng /năm
   convertData = (data) => {
     const date = new Date(data * 1000);
     var dateFormat = require("dateformat");
     var dateNew = dateFormat(date, "dd/mm/yyyy");
     return dateNew;
+  };
+  //-------- hàm group by record In-----------------
+  groupByRecordIn = (valueReWeight) => {
+    for (var k in valueReWeight) {
+      valueReWeight[k].Weight = parseFloat(valueReWeight[k].Weight); // convert khối lượng sang float
+    }
+    // linq
+    RecordGroup = Enumerable.from(valueReWeight) // tính tổng đầu vào theo mã cá group by
+      .groupBy(
+        "{ PL1: $.ProcessName , PL2: $.ModelName }",
+        "$.Weight || 0",
+        "{ ProcessName: $.PL1,ModelName: $.PL2, WeightIn : $$.sum()}",
+        "'' + $.PL1 + ' ' + $.PL2"
+      )
+      .toArray();
+
+    return RecordGroup;
+  };
+  //-------- hàm group by record Out-----------------
+  groupByRecordOut = (valueReWeight) => {
+    for (var k in valueReWeight) {
+      valueReWeight[k].Weight = parseFloat(valueReWeight[k].Weight); // convert khối lượng sang float
+    }
+    // linq
+    RecordGroup = Enumerable.from(valueReWeight) // tính tổng đầu vào theo mã cá group by
+      .groupBy(
+        "{ PL1: $.ProcessName , PL2: $.ModelName }",
+        "$.Weight || 0",
+        "{ ProcessName: $.PL1,ModelName: $.PL2,WeightIn :0, WeightOut : $$.sum()}",
+        "'' + $.PL1 + ' ' + $.PL2"
+      )
+      .toArray();
+
+    return RecordGroup;
+  };
+  //--- tính tổng khối lượng record Out
+  sumWeightRecordGroupOut = (valueRecordGroup) => {
+    sumOut = 0;
+    for (var w in valueRecordGroup) {
+      sumOut += valueRecordGroup[w].WeightOut;
+    }
+    return sumOut;
+  };
+  //--- tính tổng khối lượng record Out
+  sumWeightRecordGroupIn = (valueRecordGroup) => {
+    sumOut = 0;
+    for (var w in valueRecordGroup) {
+      sumOut += valueRecordGroup[w].WeightIn;
+    }
+    return sumOut;
   };
   componentDidMount = () => {
     axios({
@@ -50,37 +107,90 @@ class TongHop extends Component {
           date.getFullYear();
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
-
           var dayRawData = this.convertData(contentItem.ReadTime); // lấy thời gian trong record
-
+          // so sánh ngày ==
           if (dayRawData == dayToDay2) {
+            // '12/12/2020' dayToDay2
             arrayRecode.push(contentItem);
           }
-          //arrayRecode.push(contentItem);
         });
         arrayRecode.sort().reverse(); // sort đảo mảng
+        //--- lấy record In bỏ vào mảng
+        for (var i in arrayRecode) {
+          if (
+            arrayRecode[i].RecordIn != "" &&
+            arrayRecode[i].RecordIn != undefined
+          ) {
+            axios({
+              method: "GET",
+              url:
+                `${Config.API_URL}` +
+                "/api/data/valuekey?token=" +
+                `${Config.TOKEN}` +
+                "&Classify=Record-In&key=" +
+                arrayRecode[i].RecordIn,
+              data: null,
+            }).then((res) => {
+              temp = JSON.parse(res.data);
+              arrayRecodeIn.push(temp);
+              this.setState({
+                valueRecodeIn: arrayRecodeIn,
+              });
+              // gọi hàm group by Record và đưa giá trị record out vào
+              var RecordInGroup = this.groupByRecordIn(
+                this.state.valueRecodeIn
+              );
+              this.setState({
+                valueRecordInGroup: RecordInGroup,
+              });
+              var { valueRecordInGroup, valueRecordGroup } = this.state;
+              // tính tổng khối lượng
+              var sumInWeight = this.sumWeightRecordGroupIn(valueRecordInGroup);
+              this.setState({
+                sumWeightIn: sumInWeight.toFixed(2),
+              });
+              // --- loop tìm mã cá tương ứng với record In và Out
+              var ObjectGroupRecord;
+              for (var k in valueRecordGroup) {
+                for (var j in valueRecordInGroup) {
+                  if (
+                    valueRecordGroup[k].ModelName ==
+                      valueRecordInGroup[j].ModelName &&
+                    valueRecordGroup[k].ProcessName ==
+                      valueRecordInGroup[j].ProcessName
+                  ) {
+                    // gộp Object với nhau
+                    ObjectGroupRecord = Object.assign(
+                      {},
+                      valueRecordGroup[k],
+                      valueRecordInGroup[j]
+                    );
+                    valueRecordGroup[k] = ObjectGroupRecord;
+                  }
+                }
+              }
+              // thay đổi lại giá trị valueRecordGroup trong state
+              this.setState({valueRecordGroup: valueRecordGroup})
+            });
+          }
+        }
         this.setState({
           valueRecode: arrayRecode,
         });
         if (this.state.valueRecode == "") {
-          alert("Thông báo, chưa có dữ liệu mới trong ngày...");
+          alert("Thông báo, chưa có dữ liệu mới trong ngày "+ dayToDay2 );
         }
+        // gọi hàm group by Record và đưa giá trị record out vào
+        var RecordOutGroup = this.groupByRecordOut(this.state.valueRecode);
 
-        //----------------
-        valueReWeight = this.state.valueRecode;
-        for (var k in valueReWeight) {
-          valueReWeight[k].Weight = parseFloat(valueReWeight[k].Weight);
-        }
-        RecordGroup = Enumerable.from(valueReWeight)
-          .groupBy(
-            "{ PL1: $.ProcessName , PL2: $.ModelName }",
-            "$.Weight || 0",
-            "{ ProcessName: $.PL1,ModelName: $.PL2, Weight : $$.sum()}",
-            "'' + $.PL1 + ' ' + $.PL2"
-          )
-          .toArray();
         this.setState({
-          valueRecordGroup: RecordGroup,
+          valueRecordGroup: RecordOutGroup,
+        });
+        var { valueRecordGroup } = this.state;
+        // tính tổng khối lượng
+        var sumOutWeight = this.sumWeightRecordGroupOut(valueRecordGroup);
+        this.setState({
+          sumWeightOut: sumOutWeight.toFixed(2),
         });
         $("#tableData").DataTable({
           searching: false,
@@ -90,7 +200,6 @@ class TongHop extends Component {
           scrollY: 350,
           paging: false,
         });
-        console.log(this.state.valueRecordGroup);
       })
       .catch((err) => {
         console.log(err);
@@ -148,11 +257,11 @@ class TongHop extends Component {
   };
   /*------------------------------------- */
   render() {
-    var { valueRecordGroup } = this.state;
+    var { valueRecordGroup, sumWeightOut, sumWeightIn } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>TỔNG HỢP CÔNG ĐOẠN TRONG NGÀY {dayToDay2}</h1>
+          <h1>TỔNG HỢP CÔNG ĐOẠN TRONG NGÀY <b>{dayToDay2}</b></h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
@@ -164,6 +273,12 @@ class TongHop extends Component {
         </section>
         <section className="content">
           <form className="filter-section form-inline">
+            <h4 id="idWeight">
+              Tổng khối lượng  Vào: <b>{sumWeightIn}</b> Kg
+              <br />
+              Tổng khối lượng  Ra: <b>{sumWeightOut}</b> Kg
+            </h4>
+            <h4></h4>
             {/* <div className="input-group inputSeach">
               <button
                 type="button"
@@ -183,9 +298,8 @@ class TongHop extends Component {
               >
                 Tắt quét dữ liệu
               </button>
-    </div>*/}
+             </div>*/}
           </form>
-
           <TableContentTongHop>
             {this.showContentItems(valueRecordGroup)}
           </TableContentTongHop>
