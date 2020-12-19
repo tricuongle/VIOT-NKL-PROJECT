@@ -170,7 +170,7 @@ class TongHop extends Component {
                 }
               }
               // thay đổi lại giá trị valueRecordGroup trong state
-              this.setState({valueRecordGroup: valueRecordGroup})
+              this.setState({ valueRecordGroup: valueRecordGroup });
             });
           }
         }
@@ -178,7 +178,7 @@ class TongHop extends Component {
           valueRecode: arrayRecode,
         });
         if (this.state.valueRecode == "") {
-          alert("Thông báo, chưa có dữ liệu mới trong ngày "+ dayToDay2 );
+          alert("Thông báo, chưa có dữ liệu mới trong ngày " + dayToDay2);
         }
         // gọi hàm group by Record và đưa giá trị record out vào
         var RecordOutGroup = this.groupByRecordOut(this.state.valueRecode);
@@ -256,12 +256,20 @@ class TongHop extends Component {
     scanDataTableOff = 1;
   };
   /*------------------------------------- */
+  showPage = () => {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("myDiv").style.display = "block";
+  };
   render() {
     var { valueRecordGroup, sumWeightOut, sumWeightIn } = this.state;
+   // var rowCount = $("#tableData tr").length;
+
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>TỔNG HỢP CÔNG ĐOẠN TRONG NGÀY <b>{dayToDay2}</b></h1>
+          <h1 >
+            TỔNG HỢP CÔNG ĐOẠN TRONG NGÀY <b>{dayToDay2}</b>
+          </h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
@@ -272,11 +280,12 @@ class TongHop extends Component {
           </ol>
         </section>
         <section className="content">
+         
           <form className="filter-section form-inline">
             <h4 id="idWeight">
-              Tổng khối lượng  Vào: <b>{sumWeightIn}</b> Kg
+              Tổng khối lượng Vào: <b>{sumWeightIn}</b> Kg
               <br />
-              Tổng khối lượng  Ra: <b>{sumWeightOut}</b> Kg
+              Tổng khối lượng Ra: <b>{sumWeightOut}</b> Kg
             </h4>
             <h4></h4>
             {/* <div className="input-group inputSeach">

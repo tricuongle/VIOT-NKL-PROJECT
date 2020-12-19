@@ -25,7 +25,7 @@ class TableItemRawDataOut extends Component {
         <td>{contentItem.Classify}</td>
         <td>{contentItem.Weight}</td>
         <td>{contentItem.ProcessName}</td>
-        <td>{contentItem.DeviceId}</td>
+        <td>{contentItem.DeviceName}</td>
         <td>
           <a href={img} target="_blank">
             Xem ảnh

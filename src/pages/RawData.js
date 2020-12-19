@@ -87,7 +87,7 @@ class RawData extends Component {
         });
         this.state.valueRecodeOut.sort().reverse(); // đảo mảng record Out
         this.state.valueRecodeIn.sort().reverse(); // đảo mảng record In
-        
+
         $("#tableDataOut").DataTable({
           searching: false,
           ordering: false,

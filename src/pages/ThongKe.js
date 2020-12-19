@@ -14,11 +14,17 @@ class ThongKe extends Component {
     this.state = {
       valueRecode: [],
       valueRecodeGetDay: [],
-
+      keyword: "",
       dateIn: "",
       dateOut: "",
     };
   }
+  onSearch = (keyword) => {
+    console.log(keyword);
+    this.setState({
+      keyword: keyword.toLowerCase(),
+    });
+  };
   componentDidMount = () => {
     axios({
       method: "GET",
@@ -39,6 +45,7 @@ class ThongKe extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
+        lengthRE = this.state.valueRecode.length;
         table = $("#tableData").DataTable({
           searching: false,
           ordering: false,
@@ -61,6 +68,7 @@ class ThongKe extends Component {
     this.setState({
       [name]: value,
     });
+    this.LoadData();
   };
 
   // --------------------load dữ liệu lại-------------------------
@@ -101,12 +109,9 @@ class ThongKe extends Component {
   FilterDate = () => {
     var { valueRecode, dateIn, dateOut } = this.state;
     var dateFormat = require("dateformat");
-     var dateToday = new Date(); // lấy thời gian hiện tại
-     var dateBefore =  new Date(dateFormat(dateIn, "yyyy,mm,dd"));
-     var dateAfter =  new Date(dateFormat(dateOut, "yyyy,mm,dd"));
-     console.log(dateToday);
-    console.log(dateBefore);
-    console.log(dateAfter);
+    var dateToday = new Date(); // lấy thời gian hiện tại
+    var dateBefore = new Date(dateFormat(dateIn, "yyyy,mm,dd"));
+    var dateAfter = new Date(dateFormat(dateOut, "yyyy,mm,dd"));
 
     var arrayRecodeToDate = [];
     var dateFormat = require("dateformat");
@@ -114,7 +119,7 @@ class ThongKe extends Component {
       const unixTime = valueRecode[k].ReadTime;
       const date = new Date(unixTime * 1000); // ngày trong record
       //console.log(date);
-       //var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
+      //var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
       if (date >= dateBefore && date <= dateAfter) {
         arrayRecodeToDate.push(valueRecode[k]);
       }
@@ -122,7 +127,7 @@ class ThongKe extends Component {
     this.setState({
       valueRecodeGetDay: arrayRecodeToDate,
     });
-    this.LoadData();
+    this.LoadData()
   };
   /*------------------------------------- */
   // kiểm tra đồng ý xuất excel
@@ -163,8 +168,32 @@ class ThongKe extends Component {
       downloadLink.click();
     }
   };
+  loadPage =()=>{
+    window.location.reload();
+  }
   render() {
-    var { valueRecode, valueRecodeGetDay, dateIn, dateOut } = this.state;
+    var {
+      valueRecode,
+      valueRecodeGetDay,
+      dateIn,
+      dateOut,
+      keyword,
+    } = this.state;
+    if (keyword) {
+      // render ra nội dung khi tìm kiếm
+      valueRecodeGetDay = valueRecodeGetDay.filter((valueRecodeGetDay) => {
+        return (
+          valueRecodeGetDay.ProcessId.toLowerCase().indexOf(keyword) !== -1 ||
+          valueRecodeGetDay.ProcessName.toLowerCase().indexOf(keyword) !== -1 ||
+          valueRecodeGetDay.DeviceName.toLowerCase().indexOf(keyword) !== -1 ||
+          valueRecodeGetDay.ModelName.toLowerCase().indexOf(keyword) !== -1 ||
+          valueRecodeGetDay.Classify.toLowerCase().indexOf(keyword) !== -1 ||
+          valueRecodeGetDay.Weight.toLowerCase().indexOf(keyword) !== -1 ||
+          valueRecodeGetDay.EmployeeName.toLowerCase().indexOf(keyword) !==-1 ||
+          valueRecodeGetDay.CardId.toLowerCase().indexOf(keyword) !== -1
+        );
+      });
+    }
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -285,8 +314,8 @@ class ThongKe extends Component {
               <button
                 id="btnLoc"
                 type="button"
-                className="form-control btn-warning"
-                onClick={this.LoadData}
+                className="form-control btn-success"
+                onClick={this.loadPage}
               >
                 Làm mới dữ liệu
               </button>
@@ -302,7 +331,7 @@ class ThongKe extends Component {
               </button>
             </div>
           </form>
-          <TableContentThongKe>
+          <TableContentThongKe  onSearch={this.onSearch}>
             {this.showContentItems(valueRecodeGetDay)}
           </TableContentThongKe>
         </section>

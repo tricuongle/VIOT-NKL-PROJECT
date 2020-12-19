@@ -5,18 +5,16 @@ class TableItemTongHop extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      valueEmployee: "", 
-      valueProcess: "",
-      valueDevice: "",
-      valueCard: "",
-      valueModel: "",
+      valueEmployee: [],
+      valueDevice: [],
+      valueCard: [],
+      valueDeviceRecordIn: [],
       valueRecordIn: [],
-      valueDeviceRecordIn: "",
     };
   }
   componentDidMount = () => {
     var { contentItem } = this.props;
-    if (contentItem.RecordIn != "") {
+    if (contentItem.RecordIn != "" && contentItem.RecordIn != undefined) {
       /*---------------lấy thông tin record-In theo ID-------------------- */
       axios({
         method: "GET",
@@ -83,47 +81,8 @@ class TableItemTongHop extends Component {
       .catch((err) => {
         console.log(err);
       });
-    /*---------------lấy thông tin công đoạn theo Id--------------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Process&key=" +
-        contentItem.ProcessId,
-      data: null,
-    })
-      .then((res) => {
-        var ObjValue = JSON.parse(res.data);
-        this.setState({
-          valueProcess: ObjValue,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    /*---------------lấy thông tin mã cá theo Id--------------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Model&key=" +
-        contentItem.Model,
-      data: null,
-    })
-      .then((res) => {
-        var ObjValue = JSON.parse(res.data);
-        this.setState({
-          valueModel: ObjValue,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    /*---------------lấy thông tin công nhân theo Id--------------------- */
+
+    /*---------------lấy thông tin thẻ RFID theo Id--------------------- */
     axios({
       method: "GET",
       url:
@@ -166,49 +125,40 @@ class TableItemTongHop extends Component {
   render() {
     var {
       valueEmployee,
-      valueProcess,
-      valueModel,
       valueCard,
-      valueDevice,
       valueDeviceRecordIn,
       valueRecordIn,
     } = this.state;
     var { contentItem, index } = this.props;
     var dateFormat = require("dateformat");
-    if (valueRecordIn.ReadTime != undefined) {
+    if (valueRecordIn.ReadTime != undefined && valueRecordIn.ReadTime != "") {
       const unixTimeIn = valueRecordIn.ReadTime;
       const dateIn = new Date(unixTimeIn * 1000);
       var dateNewIn = dateFormat(dateIn, "dd/mm/yyyy");
       var dateNewTimeIn = dateFormat(dateIn, "HH:MM:ss");
+
+      // ảnh Record In
+      var imgIn =
+        `${Config.API_URL}` + "/api/images/" + valueRecordIn.Image + ".jpg";
+
+      /*Tính định mức */
+      var WeightIn = parseFloat(valueRecordIn.Weight);
+      var WeightOut = parseFloat(contentItem.Weight);
+      var DinhMuc = parseFloat(WeightIn / WeightOut).toFixed(2);
+    } else {
+      valueDeviceRecordIn.Name = "-";
+      valueRecordIn.Weight = "-";
+      dateNewTimeIn = "-";
     }
-    /*----------thời gian record Out ------------------*/
-    /**/
 
     /*----------thời gian record Out ------------------*/
     const unixTimeOut = contentItem.ReadTime;
     const dateOut = new Date(unixTimeOut * 1000);
     var dateNewOut = dateFormat(dateOut, "dd/mm/yyyy");
     var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
-
     /*hình ảnh */
-    var imgIn =
-      `${Config.API_URL}` + "/api/images/" + valueRecordIn.Image + ".jpg";
     var imgOut =
       `${Config.API_URL}` + "/api/images/" + contentItem.Image + ".jpg";
-
-    /*Tính định mức */
-    var WeightIn = parseFloat(valueRecordIn.Weight);
-    var WeightOut = parseFloat(contentItem.Weight);
-    var DinhMuc = parseFloat(WeightIn / WeightOut).toFixed(2);
-    if(DinhMuc == 'NaN'){
-      DinhMuc= "---";
-    }
-    /*--------- */
-    /*if (contentItem.RecordIn != "") {
-      valueDeviceRecordIn.Name = null;
-      valueRecordIn.Weight = null;
-      dateNewTimeIn = null;
-    }*/
     return (
       <tr>
         <td>{index + 1}</td>
@@ -227,8 +177,7 @@ class TableItemTongHop extends Component {
         <td>{dateNewTimeIn}</td>
         <td>{dateNewTimeOut}</td>
         <td>{DinhMuc} </td>
-        <td>---</td>  {/*valueDevice.SectionId*/}
-
+        <td>---</td> {/*valueDevice.SectionId*/}
         <td>
           <a href={imgIn} target="_blank">
             vào-

@@ -251,7 +251,6 @@ class QuanLyCongNhan extends Component {
       CardNo,
     } = this.state;
     if (keyword) {
-      console.log(keyword);
       // render ra nội dung khi tìm kiếm
       contentItems = contentItems.filter((contentItems) => {
         return (
