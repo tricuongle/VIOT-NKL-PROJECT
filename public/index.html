@@ -10,13 +10,14 @@
       content="Web site created using create-react-app"
     />
 
-
     <!--Gọi các thư viện file hỗ trợ giao diện-->
     <!-- Tell the browser to be responsive to screen width -->
     <meta
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
       name="viewport"
     />
+     <!-- export excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
 
     <!-- DataTables 
     <link
@@ -49,7 +50,10 @@
     />
 
     <!-- Theme style -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.15/css/AdminLTE.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.15/css/AdminLTE.min.css"
+    />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
     <link
@@ -88,8 +92,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"
     />
-
-
+    
     <!-- jQuery 3 -->
     <script src="%PUBLIC_URL%/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -108,7 +111,7 @@
     <script src="%PUBLIC_URL%/dist/js/buttons.print.min.js"></script>
     <script src="%PUBLIC_URL%/dist/js/buttons.html5.min.js"></script>
     <script src="%PUBLIC_URL%/dist/js/dataTables.responsive.min.js"></script>
-    
+
     <!--<script src="https://unpkg.com/linq@3.2.0/linq.js"></script> -->
     <script src="http://neue.cc/linq.min.js"></script>
 
@@ -142,7 +145,10 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <!-- Bootstrap -->
     <link href="%PUBLIC_URL%/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css" rel="stylesheet" />
+    <link
+      href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       type="text/css"
@@ -154,13 +160,11 @@
       href="//code.jquery.com/jquery-3.5.1.js"
     />
     <title>VIOT</title>
+   
   </head>
   <body class="hold-transition skin-black-light sidebar-mini fixed">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="content" class="wrapper">
-    
-    
-    </div>
+    <div id="content" class="wrapper"></div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="%PUBLIC_URL%/js/jquery-3.5.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

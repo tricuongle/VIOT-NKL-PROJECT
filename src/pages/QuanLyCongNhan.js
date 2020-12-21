@@ -1,24 +1,33 @@
 import React, { Component } from "react";
 import axios from "axios";
-import $, { data } from "jquery";
+import $, { data, event } from "jquery";
 import TableContentItemCongNhan from "../components/comQLCongNhan/tableItemCongNhan/TableContentItemCongNhan";
 import TableContentCongNhan from "../components/comQLCongNhan/tableContentCongNhan/TableContentCongNhan";
 import ActionCreateCongNhan from "../components/comQLCongNhan/comQLCongNhanActions/ActionCreateCongNhan";
+import XLSX from "xlsx";
 
 import * as Config from "../untils/Config";
 var ArrayValue = [];
-var valueNew;
 var load = [];
+
+var arrayEmployeeExcel = [];
+var valueNew;
 var count = 0;
+let selectFileExcel;
+
 class QuanLyCongNhan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contentItems: [],
       contentItemss: [],
+      arrayEmployeeExcel: [],
       contentGetEmployeeId: "",
       keyword: "",
       status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
+
+      countStringIDEmployee: "",
+
       BirthDay: "",
       CMND: "",
       CardNo: "",
@@ -75,7 +84,7 @@ class QuanLyCongNhan extends Component {
           dom: "Bfrtip",
           scrollX: true,
           scrollY: 450,
-          paging: false
+          paging: false,
         });
       })
       .catch((err) => {
@@ -239,7 +248,132 @@ class QuanLyCongNhan extends Component {
     this.dataTableLoad();
   };
   /*------------------------------------- */
+  createIDEmployee = () => {
+    /*--------------- hàm tạo id công nhân------------ */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee",
+      data: null,
+    })
+      .then((res) => {
+        var arrNum = [];
+        for (var k in res.data) {
+          var getString = JSON.parse(res.data[k]).Id;
+          // tách chuỗi lấy số trong mã công nhân
+          var getNum = getString.substring(8);
+          arrNum.push(getNum); // thêm số vào mảng
+        }
+        // tìm số lớn trong mảng
+        var maxInNumbers = Math.max.apply(Math, arrNum);
+        var idNew = maxInNumbers + 1;
+        if (idNew < 0) {
+          idNew = 1;
+        }
+        var countString = "CN-NKL-0" + idNew;
+        this.setState({
+          countStringIDEmployee: countString,
+        });
+        console.log(this.state.countStringIDEmployee);
+        /* this.setState((preState) => ({
+          valueEmp: {
+            ...preState.valueEmp,
+            Id: countString,
+          },
+        }));*/
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  exportExcel = () => {
+    let rowObject;
+    var exExcel = window.confirm(
+      "Bạn muốn nhập thông tin công nhân từ file excel? Vui lòng chọn file excel từ thiết bị!"
+    );
+    if (exExcel) {
+     
+      if (selectFileExcel) {
+        var arrObjEmExcel = [];
+        var tempObject;
+        let fileReader = new FileReader();
+        fileReader.readAsBinaryString(selectFileExcel);
+        fileReader.onload = (event) => {
+          let data = event.target.result;
+          let workbook = XLSX.read(data, { type: "binary" });
+          workbook.SheetNames.forEach((sheet) => {
+            rowObject = XLSX.utils.sheet_to_row_object_array(
+              workbook.Sheets[sheet]
+             
+            );
+            console.log(rowObject);
+          alert("Chức năng đang cập nhập!, tìm thấy trong danh sách có 0"+rowObject.length+" dòng trong file excel");
+          });
+          
+          /*axios({
+            method: "GET",
+            url:
+              `${Config.API_URL}` +
+              "/api/data/Values?token=" +
+              `${Config.TOKEN}` +
+              "&Classify=Employee",
+            data: null,
+          })
+            .then((res) => {
+              var arrNum = [];
+              for (var k in res.data) {
+                var getString = JSON.parse(res.data[k]).Id;
+                // tách chuỗi lấy số trong mã công nhân
+                var getNum = getString.substring(8);
+                arrNum.push(getNum); // thêm số vào mảng
+              }
+              // tìm số lớn trong mảng
+              var maxInNumbers = Math.max.apply(Math, arrNum);
+              var idNew = maxInNumbers + 1;
+              if (idNew < 0) {
+                idNew = 1;
+              }
+              var countString = "CN-NKL-0" + idNew;
+              console.log(arrObjEmExcel);
+              for (var k in rowObject) {
+              }
+              /* this.setState((preState) => ({
+                valueEmp: {
+                  ...preState.valueEmp,
+                  Id: countString,
+                },
+              }));
+            })
+            .catch((err) => {
+              console.log(err);
+            });*/
+        };
 
+        /*axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: idNewCard,
+            Classify: "Employee",
+            Value: valueCard,
+            Description: "Card Ngọc Kim Loan",
+          },
+        }).then((res) => {
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log("Lỗi");
+          });*/
+      }
+    }
+  };
+  onChangeInput = (event) => {
+    console.log(event.target.files);
+    selectFileExcel = event.target.files[0];
+  };
   render() {
     var {
       contentItems,
@@ -286,8 +420,24 @@ class QuanLyCongNhan extends Component {
               >
                 Làm mới dữ liệu
               </button>
+              <button
+                type="button"
+                className="btn btn-default inputExcel"
+                id="button"
+                onClick={this.exportExcel}
+              >
+                Export công nhân Excel
+              </button>
+
               <p>Làm mới dữ liệu khi tạo công nhân mới.</p>
             </div>
+            <input
+              className="form-control"
+              type="file"
+              id="input"
+              accept=".xls,.xlsx"
+              onChange={this.onChangeInput}
+            />
           </form>
 
           {/*Hiện thông tin table */}

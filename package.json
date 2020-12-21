@@ -31,7 +31,8 @@
     "redux": "^4.0.5",
     "use-double-click": "^1.0.5",
     "vs-react-datatable": "^1.0.0",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "xlsx": "^0.16.9"
   },
   "proxy": "http://171.232.86.160:5001/api/data?token=ca8a745971a27185fda435692a1e66df835e7cd21261cebbc0c5be88b2250db4d2094547265b6cfc8d7d112d4c411c34&Classify=Process",
   "scripts": {

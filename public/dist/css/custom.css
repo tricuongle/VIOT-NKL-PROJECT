@@ -366,9 +366,7 @@ td {
     margin-left: 10px;
 }
 
-.inputSeach{
-   margin-left: 10px;
-}
+
 .filterStatus{
     margin-left: 10px;
 }
@@ -445,3 +443,12 @@ th {
     margin-left: 30px;
     color: #0471a8;
 }*/
+.inputExcel{
+    margin-left: 10px;
+}
+.inputSeach{
+    margin-right: 15px;
+}
+.getFile{
+margin-left: 50px;
+}

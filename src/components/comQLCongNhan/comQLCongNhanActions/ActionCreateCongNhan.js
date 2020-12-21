@@ -38,7 +38,6 @@ class ActionCreateCongNhan extends Component {
   };
   /*----------lấy số lượng ds công nhân và cộng 1 tạo id công nhân mới------------*/
   componentDidMount = () => {
-    console.log("ok");
     axios({
       method: "GET",
       url:
@@ -88,7 +87,6 @@ class ActionCreateCongNhan extends Component {
           idNew = 1;
         }
         var countString = "CN-NKL-0" + idNew;
-        console.log(countString);
         this.setState((preState) => ({
           valueEmp: {
             ...preState.valueEmp,
