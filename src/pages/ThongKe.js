@@ -127,7 +127,8 @@ class ThongKe extends Component {
     this.setState({
       valueRecodeGetDay: arrayRecodeToDate,
     });
-    this.LoadData()
+
+    this.LoadData();
   };
   /*------------------------------------- */
   // kiểm tra đồng ý xuất excel
@@ -168,9 +169,9 @@ class ThongKe extends Component {
       downloadLink.click();
     }
   };
-  loadPage =()=>{
+  loadPage = () => {
     window.location.reload();
-  }
+  };
   render() {
     var {
       valueRecode,
@@ -189,7 +190,8 @@ class ThongKe extends Component {
           valueRecodeGetDay.ModelName.toLowerCase().indexOf(keyword) !== -1 ||
           valueRecodeGetDay.Classify.toLowerCase().indexOf(keyword) !== -1 ||
           valueRecodeGetDay.Weight.toLowerCase().indexOf(keyword) !== -1 ||
-          valueRecodeGetDay.EmployeeName.toLowerCase().indexOf(keyword) !==-1 ||
+          valueRecodeGetDay.EmployeeName.toLowerCase().indexOf(keyword) !==
+            -1 ||
           valueRecodeGetDay.CardId.toLowerCase().indexOf(keyword) !== -1
         );
       });
@@ -236,75 +238,12 @@ class ThongKe extends Component {
                 onChange={this.onChange}
               />
             </div>
-            {/*<div className=" filter-input">
-              <select
-                name=""
-                id="input"
-                className="form-control"
-                required="required"
-              >
-                <option value="0">Mã cá</option>
-                <option value="1">EX1</option>
-                <option value="2">EX2</option>
-                <option value="3">EX3</option>
-                <option value="4">EX4</option>
-                <option value="5">EX5</option>
-                <option value="6">EX6</option>
-              </select>
-            </div>
-            <div className=" filter-input">
-              <select
-                name=""
-                id="input"
-                className="form-control"
-                required="required"
-              >
-                <option value="0">khu vực</option>
-                <option value="1">EX1</option>
-                <option value="2">EX2</option>
-                <option value="3">EX3</option>
-                <option value="4">EX4</option>
-                <option value="5">EX5</option>
-                <option value="6">EX6</option>
-              </select>
-            </div>
-            <div className=" filter-input">
-              <select
-                name=""
-                id="input"
-                className="form-control"
-                required="required"
-              >
-                <option value="0">C.đoạn</option>
-                <option value="1">EX1</option>
-                <option value="2">EX2</option>
-                <option value="3">EX3</option>
-                <option value="4">EX4</option>
-                <option value="5">EX5</option>
-                <option value="6">EX6</option>
-              </select>
-            </div>
-            <div className=" filter-input">
-              <select
-                name=""
-                id="input"
-                className="form-control"
-                required="required"
-              >
-                <option value="0">Cân</option>
-                <option value="1">EX1</option>
-                <option value="2">EX2</option>
-                <option value="3">EX3</option>
-                <option value="4">EX4</option>
-                <option value="5">EX5</option>
-                <option value="6">EX6</option>
-              </select>
-            </div>*/}
             <div>
               <button
                 id="btnLoc"
                 type="button"
-                className="form-control form-group btn btn-warning"
+                className=" form-control form-group btn btn-warning  btn-ladda"
+                data-style="expand-left"
                 onClick={this.FilterDate}
               >
                 Lọc tìm kiếm
@@ -331,7 +270,7 @@ class ThongKe extends Component {
               </button>
             </div>
           </form>
-          <TableContentThongKe  onSearch={this.onSearch}>
+          <TableContentThongKe onSearch={this.onSearch}>
             {this.showContentItems(valueRecodeGetDay)}
           </TableContentThongKe>
         </section>

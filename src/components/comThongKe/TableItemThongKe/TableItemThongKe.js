@@ -122,6 +122,7 @@ class TableItemTongHop extends Component {
         console.log(err);
       });
   };
+  
   render() {
     var {
       valueEmployee,

@@ -8,7 +8,6 @@ import * as Config from "../untils/Config";
 import $, { event } from "jquery";
 var arrayRecode = [];
 var arrayRecodeIn = [];
-var arrayIdRecodeIn = [];
 var load = [];
 var RecordGroup = [];
 
@@ -108,9 +107,8 @@ class TongHop extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           var dayRawData = this.convertData(contentItem.ReadTime); // lấy thời gian trong record
-          // so sánh ngày ==
+          // so sánh ngày
           if (dayRawData == dayToDay2) {
-            // '12/12/2020' dayToDay2
             arrayRecode.push(contentItem);
           }
         });
@@ -262,8 +260,6 @@ class TongHop extends Component {
   };
   render() {
     var { valueRecordGroup, sumWeightOut, sumWeightIn } = this.state;
-   // var rowCount = $("#tableData tr").length;
-
     return (
       <div className="content-wrapper">
         <section className="content-header">

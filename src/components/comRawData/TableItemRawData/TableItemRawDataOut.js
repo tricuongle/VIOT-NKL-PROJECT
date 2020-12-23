@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import axios from "axios";
 import * as Config from "../../../untils/Config";
-import $, { event } from "jquery";
 class TableItemRawDataOut extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
     var { contentItem } = this.props;
     const unixTime = contentItem.ReadTime;

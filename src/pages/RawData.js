@@ -8,6 +8,7 @@ import TableItemRawDataOut from "../components/comRawData/TableItemRawData/Table
 import TableItemRawDataIn from "../components/comRawData/TableItemRawData/TableItemRawDataIn";
 
 var arrayRecode = [];
+var dayToDay2='---';
 class RawData extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +17,7 @@ class RawData extends Component {
       valueRecodeOut: [],
     };
   }
-
+  // hàm convert ngày
   convertData = (data) => {
     const date = new Date(data * 1000);
     var dateFormat = require("dateformat");
@@ -36,7 +37,7 @@ class RawData extends Component {
       .then((res) => {
         arrayRecode = [];
         var date = new Date();
-        var dayToDay2 =
+        dayToDay2 =
           date.getDate() +
           "/" +
           (date.getMonth() + 1) +
@@ -45,18 +46,14 @@ class RawData extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
 
-          var dayRawData = this.convertData(contentItem.ReadTime); // thời gian record
+          var dayRawData = this.convertData(contentItem.ReadTime); // Lấy thời gian record
 
-          if (dayRawData == dayToDay2) {
+          if (dayRawData == dayToDay2) { // So sách ngày
             arrayRecode.push(contentItem);
           }
-
-          // arrayRecode.sort().reverse();
           this.setState({
             valueRecodeOut: arrayRecode,
           });
-
-          /*-------- */
           axios({
             method: "GET",
             url:
@@ -76,7 +73,6 @@ class RawData extends Component {
                 }
               });
 
-              //arrayRecode.sort().reverse();
               this.setState({
                 valueRecodeIn: arrayRecode,
               });
@@ -87,13 +83,16 @@ class RawData extends Component {
         });
         this.state.valueRecodeOut.sort().reverse(); // đảo mảng record Out
         this.state.valueRecodeIn.sort().reverse(); // đảo mảng record In
+        if(this.state.valueRecodeIn.length == 0 && this.state.valueRecodeOut ==0 ){
+          alert("Thông báo, chưa có dữ liệu mới trong ngày " + dayToDay2);
+        }
 
         $("#tableDataOut").DataTable({
           searching: false,
           ordering: false,
           dom: "Bfrtip",
           scrollX: true,
-          scrollY: 350,
+          scrollY: 300,
           paging: false,
         });
         $("#tableDataIn").DataTable({
@@ -101,7 +100,7 @@ class RawData extends Component {
           ordering: false,
           dom: "Bfrtip",
           scrollX: true,
-          scrollY: 350,
+          scrollY: 300,
           paging: false,
         });
       })
@@ -115,7 +114,7 @@ class RawData extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1> RAW DATA - DỮ LIỆU QUÉT THIẾT BỊ CÂN</h1>
+          <h1>DỮ LIỆU QUÉT THIẾT BỊ CÂN TRONG NGÀY <b>{dayToDay2}</b></h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
