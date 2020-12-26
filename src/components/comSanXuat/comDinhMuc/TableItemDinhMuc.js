@@ -43,9 +43,10 @@ class TableItemDinhMuc extends Component {
 
   render() {
     var { NameModel } = this.state;
-    var { contentItem, priceTag } = this.props;
+    var { contentItem, priceTag, index } = this.props;
     return (
       <tr id="device2" className="edit">
+        <td>{index+1}</td>
         <td>{contentItem.ID}</td>
         <td>{NameModel}</td>
         <td>{contentItem.Name}</td>

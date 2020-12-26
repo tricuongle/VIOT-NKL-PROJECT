@@ -9,6 +9,7 @@ class TableContentDinhMuc extends Component {
         <table id="tableData" className="table table-hover" width="100%">
           <thead>
             <tr className="tieude">
+            <th>STT</th>
               <th>ID định mức giá</th>
               <th >Tên mã cá</th>
               <th >Tên định mức</th>
