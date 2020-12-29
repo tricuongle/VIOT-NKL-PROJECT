@@ -22,8 +22,21 @@ class TinhTien extends Component {
       valueRecodeGroupBy: [],
       valueRecodeModelGroupBy: [],
       valueGroupModelToCell: [],
+     
     };
   }
+
+  onChange = (event) => {
+    var target = event.target;
+    var name = target.name;
+    var value = target.value;
+
+    /*this.setState({
+      [name]: value,
+    });*/
+    //this.LoadData();
+  };
+
   componentDidMount = () => {
     // lấy giá trị Record Out
     axios({
@@ -45,15 +58,7 @@ class TinhTien extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        var { valueRecode } = this.state;
-        var groupByRecord = this.groupByRecordOut(valueRecode); //
-        var groupByModelRecord = this.groupByModelRecordOut(groupByRecord); //
-        var groupModelToCell = this.groupByModelInObj(groupByRecord);
-        this.setState({
-          valueRecodeGroupBy: groupByRecord,
-          valueRecodeModelGroupBy: groupByModelRecord,
-          valueGroupModelToCell: groupModelToCell,
-        });
+        this.getValueRecordHasGroup(this.state.valueRecode);
         $("#tableData").DataTable({
           searching: false,
           ordering: false,
@@ -80,7 +85,10 @@ class TinhTien extends Component {
         arrayFishCode = [];
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
-          arrayFishCode.push(contentItem);
+          // kiểm tra giá trị status == true
+          if (contentItem.Status == true) {
+            arrayFishCode.push(contentItem);
+          }
         });
         this.setState({
           valueFishCode: arrayFishCode,
@@ -90,6 +98,22 @@ class TinhTien extends Component {
         console.log(err);
       });
   };
+
+  getValueRecordHasGroup =(valueRecode)=>{
+    //var { valueRecode } = this.state;
+    //console.log(valueRecode);
+        var groupByRecord = this.groupByRecordOut(valueRecode); //
+        var groupByModelRecord = this.groupByModelRecordOut(groupByRecord); //
+        var groupModelToCell = this.groupByModelInObj(groupByRecord);
+        this.setState({
+          valueRecodeGroupBy: groupByRecord,
+          valueRecodeModelGroupBy: groupByModelRecord,
+          valueGroupModelToCell: groupModelToCell,
+        });
+        console.log(this.state.valueRecodeModelGroupBy); 
+        console.log(this.state.valueGroupModelToCell);
+        
+  }
   //-------- hàm group by record Out-----------------
   groupByRecordOut = (valueRecord) => {
     var { valueFishCode } = this.state;
@@ -113,12 +137,12 @@ class TinhTien extends Component {
           weightRound == valueFishCode[k].Weight
         ) {
           arrDisableUn[j].Weight *= valueFishCode[k].Price;
-          arrValueRecordNew.push(arrDisableUn[j]); // đợi
+          arrValueRecordNew.push(arrDisableUn[j]); // đợi thay thế
         }
       }
     }
     // linq
-    valueRecordGroup = Enumerable.from(arrDisableUn)
+    valueRecordGroup = Enumerable.from(arrDisableUn) //<----
       .groupBy(
         "{ PL1: $.EmployeeName , PL3: $.ModelName }",
         "$.Weight || 0",
@@ -158,9 +182,8 @@ class TinhTien extends Component {
             sumMoney += valueRecord[j].Money;
 
             var ObjectM = {
-                ModelName: valueRecord[j].ModelName,
-                Money: valueRecord[j].Money,
-                
+              ModelName: valueRecord[j].ModelName,
+              Money: valueRecord[j].Money,
             };
             arr123.push(ObjectM);
           }
@@ -169,14 +192,64 @@ class TinhTien extends Component {
           nameEmp: valueRecord[k].EmployeeName,
           listModel: arr123,
           sumMoney: sumMoney,
-          arrAllModel: valueRecordGroupModel
+          arrAllModel: valueRecordGroupModel,
         };
         arr.push(ObjectModelNhom);
         arrNameEmp.push(valueRecord[k].EmployeeName);
       }
     }
-    console.log(arr);
     return arr;
+  };
+
+  // lọc ngày hàm
+  FilterDate = () => {
+    var dateIn = document.getElementById("filter-dateIn").value ;
+    var dateOut = document.getElementById("filter-dateOut").value ;
+    var { valueRecode } = this.state;
+    var dateFormat = require("dateformat");
+    var dateBefore = new Date(dateFormat(dateIn, "yyyy,mm,dd"));
+    var dateAfter = new Date(dateFormat(dateOut, "yyyy,mm,dd"));
+    dateAfter.setDate((dateAfter.getDate()+1));
+    var arrDateFillter = [];
+    var sum  = 0;
+    // kiểm tra đầu vào và đầu ra đúng không
+    if (dateBefore.getTime() < dateAfter.getTime()) {
+      for (var k in valueRecode) {
+        var dateInValueRecord = new Date(valueRecode[k].ReadTime * 1000); // ngày trong record
+        if (
+          dateInValueRecord.getTime() >= dateBefore.getTime() &&
+          dateInValueRecord.getTime() <= dateAfter.getTime()
+        ) {
+          arrDateFillter.push(valueRecode[k]);
+          sum++
+        }
+      }
+    } else {
+      alert("Chọn ngày không hợp lệ! Ngày bắt đầu phải nhỏ hơn ngày kế thúc.");
+    }
+    this.getValueRecordHasGroup(arrDateFillter);
+    /*console.log(arrDateFillter);
+    console.log(sum);*/
+
+
+    //console.log(dateBefore);
+    //console.log(dateAfter);
+    /*var arrayRecodeToDate = [];
+    var dateFormat = require("dateformat");
+    for (var k in valueGroupModelToCell) {
+      const unixTime = valueGroupModelToCell[k].ReadTime;
+      const date = new Date(unixTime * 1000); // ngày trong record
+      //console.log(date);
+      //var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
+      if (date >= dateBefore && date <= dateAfter) {
+        arrayRecodeToDate.push(valueGroupModelToCell[k]);
+      }
+    }
+    this.setState({
+      valueRecodeGetDay: arrayRecodeToDate,
+    });
+
+    this.LoadData();*/
   };
   render() {
     var {
@@ -185,6 +258,8 @@ class TinhTien extends Component {
       valueRecodeGroupBy,
       valueRecodeModelGroupBy,
       valueGroupModelToCell,
+      dateIn,
+      dateOut,
     } = this.state;
     return (
       <div className="content-wrapper">
@@ -208,8 +283,10 @@ class TinhTien extends Component {
               <input
                 type="date"
                 className="form-control form-group"
-                name="filter-date"
-                id="filter-date"
+                name="dateIn"
+                id="filter-dateIn"
+                //value={dateIn}
+                //onChange={this.onChange}
               />
             </div>
             <div className="filter-input">
@@ -219,8 +296,10 @@ class TinhTien extends Component {
               <input
                 type="date"
                 className="form-control form-group"
-                name="filter-date"
-                id="filter-date1"
+                name="dateOut"
+                id="filter-dateOut"
+                //value={dateOut}
+                //onChange={this.onChange}
               />
             </div>
             <div className=" filter-input">
@@ -244,6 +323,7 @@ class TinhTien extends Component {
                 id="btnLoc"
                 type="button"
                 className="form-control form-group btn btn-primary"
+                onClick={this.FilterDate}
               >
                 Lọc tìm kiếm
               </button>

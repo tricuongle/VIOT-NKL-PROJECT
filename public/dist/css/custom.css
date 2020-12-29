@@ -1,7 +1,7 @@
 :root {
     --primary: orange;
     --title: #979797;
-    --background-bar: #FAFBFD; 
+    --background-bar: #FAFBFD;
     --background: #eeeeee;
 }
 
@@ -72,7 +72,8 @@
     height: 40px;
     margin-left: 20px;
 }
-#btnNhapdongia{
+
+#btnNhapdongia {
     margin-top: 12px;
     font-size: 15px;
     max-width: 150px;
@@ -80,25 +81,34 @@
     margin-left: 10px;
 }
 
-
 table,
 th,
 td {
     border: 2px solid GhostWhite;
     text-align: center;
+    font-size: 12px;
+}
+
+#sumMoney {
+    color: #0471a8;
+    font-weight: bold;
 }
 
 
 /*MANG HINH HIEN THI*/
+
 #tableManghinhHT {
- background-color: white;
- font-size: 25px;
- border-collapse: collapse;
+    background-color: white;
+    font-size: 25px;
+    border-collapse: collapse;
 }
-#tableManghinhHT th, #tableManghinhHT td {
+
+#tableManghinhHT th,
+#tableManghinhHT td {
     border: 1px solid orange;
 }
-#tableManghinhHT{
+
+#tableManghinhHT {
     border: 1px solid orange;
 }
 
@@ -108,18 +118,22 @@ td {
     text-transform: uppercase;
     height: 100px;
 }
+
 #titleMaca {
     text-align: center;
     color: #0471a8;
 }
+
 #titleDauvao {
     text-align: center;
-    color:#0471a8;
+    color: #0471a8;
 }
+
 #titleDaura {
     text-align: center;
-    color:#0471a8;
+    color: #0471a8;
 }
+
 .tieude {
     background-color: #F6F6F6;
 }
@@ -286,36 +300,45 @@ td {
         transform: rotate(360deg);
     }
 }
-.linkTo{
+
+.linkTo {
     text-decoration: none;
 }
+
 .modal-container {
     position: relative;
-  }
-  .modal-container .modal, .modal-container .modal-backdrop {
+}
+
+.modal-container .modal,
+.modal-container .modal-backdrop {
     position: absolute;
-  }
-  .modal {
+}
+
+.modal {
     font-size: 12px;
-  }
-  .modal > .header {
+}
+
+.modal>.header {
     width: 100%;
     border-bottom: 1px solid gray;
     font-size: 18px;
     text-align: center;
     padding: 5px;
-  }
-  .modal > .content {
+}
+
+.modal>.content {
     width: 100%;
     padding: 10px 5px;
-  }
-  .modal > .actions {
+}
+
+.modal>.actions {
     width: 100%;
     padding: 10px 5px;
     margin: auto;
     text-align: center;
-  }
-  .modal > .close {
+}
+
+.modal>.close {
     cursor: pointer;
     position: absolute;
     display: block;
@@ -327,128 +350,150 @@ td {
     background: #ffffff;
     border-radius: 18px;
     border: 1px solid #cfcece;
-  }
+}
+
+
 /*biểu tượng loading button tim kiếm*/
 
-.infoCard{
+.infoCard {
     padding-left: 10px;
 }
-.editDinhGia{
+
+.editDinhGia {
     background-color: #0471a8;
 }
 
-.tenDinhGia{
+.tenDinhGia {
     float: left;
     margin-left: 10px;
     width: 130px;
 }
-.khoiLuongMaCa{
+
+.khoiLuongMaCa {
     margin-left: 10px;
     float: left;
     width: 130px;
 }
-.dinhGiaMaCa{
+
+.dinhGiaMaCa {
     margin-left: 10px;
     float: left;
 }
 
-.btnThemDonGia{
+.btnThemDonGia {
     margin-top: 22px;
     margin-left: 10px;
 }
-.themDinhGia-group{
+
+.themDinhGia-group {
     margin-bottom: 20px;
 }
+
+
 /*QUAN LY TRAM CAN*/
 
-.typeInput{
+.typeInput {
     float: left;
     margin-left: 10px;
 }
 
+.filterStatus {
+    margin-left: 10px;
+}
 
-.filterStatus{
+.btnXoaDinhMuc {
     margin-left: 10px;
 }
-.btnXoaDinhMuc{
-    margin-left: 10px;
-}
-.groupAndclassify{
+
+.groupAndclassify {
     margin-left: 20px;
     float: left;
     width: 250px;
 }
+
+
 /*-------table Raw data------*/
 
 * {
     box-sizing: border-box;
-  }
+}
 
-  .row {
-    margin-left:-5px;
-    margin-right:-5px;
-  }
+.row {
+    margin-left: -5px;
+    margin-right: -5px;
+}
 
-  .column {
+.column {
     float: left;
     width: 50%;
     padding: 5px;
-  }
+}
 
-  /* Clearfix (clear floats) */
-  .row::after {
+
+/* Clearfix (clear floats) */
+
+.row::after {
     content: "";
     clear: both;
     display: table;
-  }
+}
 
-  table {
+table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
     border: 1px solid #ddd;
-  }
+}
 
-  th, td {
+th,
+td {
     text-align: left;
     padding: 16px;
-  }
+}
 
-  tr:nth-child(even) {
+tr:nth-child(even) {
     background-color: #f2f2f2;
-  }
+}
 
 .employeeTable {
     height: 300px;
-    overflow-y:scroll;
-    overflow-x:scroll;
+    overflow-y: scroll;
+    overflow-x: scroll;
 }
-.employeeTable th{
+
+.employeeTable th {
     position: sticky;
     top: 0;
     background-color: #f6f6f6;
 }
-th {
-  cursor: pointer;
-}
-#checkEditDevice{
-    float: right;
 
+th {
+    cursor: pointer;
 }
-.nameProcess{
+
+#checkEditDevice {
+    float: right;
+}
+
+.nameProcess {
     float: right;
     margin-right: 50px;
 }
+
+
 /*#idWeight{
     margin-left: 30px;
     color: #0471a8;
 }*/
-.inputExcel{
+
+.inputExcel {
     margin-left: 10px;
 }
-.inputSeach{
+
+.inputSeach {
     margin-right: 15px;
 }
-.getFile{
-margin-left: 50px;
+
+.getFile {
+    margin-left: 50px;
 }

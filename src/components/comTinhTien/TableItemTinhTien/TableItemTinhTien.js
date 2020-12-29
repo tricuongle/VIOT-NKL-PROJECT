@@ -35,8 +35,8 @@ class TableItemTinhTien extends Component {
         if (contentItem.listModel[k].ModelName == arrayTempp[j].ModelName) {
           temps = (
             <td>
-              {contentItem.listModel[k].ModelName}-
-              {contentItem.listModel[k].Money}
+              {contentItem.listModel[k].ModelName}
+              {contentItem.listModel[k].Money.toFixed(2)} 
             </td>
           );
           arrayTemp[j] = temps;
@@ -50,7 +50,7 @@ class TableItemTinhTien extends Component {
         <td> {index + 1} </td>
         <td> {contentItem.nameEmp} </td>
         {arrayTemp}
-        <td> {contentItem.sumMoney} </td>
+        <td id = 'sumMoney'> {contentItem.sumMoney.toFixed(2)} </td>
       </tr>
     );
   }

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import TableItemTinhTien from "../TableItemTinhTien/TableItemTinhTien";
+import $, { event } from "jquery";
 
 class TableContentTinhTien extends Component {
   render() {
+
     var { data } = this.props;
-    if (data != 0) {
+    if (data != 0) {                          
  
       for (var k in data) {
         var row = document.getElementById("idRow");
