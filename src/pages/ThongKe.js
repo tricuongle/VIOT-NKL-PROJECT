@@ -6,8 +6,6 @@ import $, { event } from "jquery";
 import TableItemThongKe from "../components/comThongKe/TableItemThongKe/TableItemThongKe";
 var arrayRecode = [];
 var load = [];
-var table;
-var lengthRE = null;
 class ThongKe extends Component {
   constructor(props) {
     super(props);
@@ -45,8 +43,7 @@ class ThongKe extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        lengthRE = this.state.valueRecode.length;
-        table = $("#tableData").DataTable({
+        $("#tableData").DataTable({
           searching: false,
           ordering: false,
           dom: "Bfrtip",
@@ -67,6 +64,8 @@ class ThongKe extends Component {
     var value = target.value;
     this.setState({
       [name]: value,
+      valueRecodeGetDay: [],
+      keyword: "",
     });
     this.LoadData();
   };
@@ -109,25 +108,28 @@ class ThongKe extends Component {
   FilterDate = () => {
     var { valueRecode, dateIn, dateOut } = this.state;
     var dateFormat = require("dateformat");
-    var dateToday = new Date(); // lấy thời gian hiện tại
     var dateBefore = new Date(dateFormat(dateIn, "yyyy,mm,dd"));
     var dateAfter = new Date(dateFormat(dateOut, "yyyy,mm,dd"));
-
     var arrayRecodeToDate = [];
-    var dateFormat = require("dateformat");
-    for (var k in valueRecode) {
-      const unixTime = valueRecode[k].ReadTime;
-      const date = new Date(unixTime * 1000); // ngày trong record
-      //console.log(date);
-      //var getTimeRecord = dateFormat(date, "yyyy-mm-dd");
-      if (date >= dateBefore && date <= dateAfter) {
-        arrayRecodeToDate.push(valueRecode[k]);
+    dateAfter.setDate(dateAfter.getDate() + 1);
+
+    if (dateBefore.getTime() < dateAfter.getTime()) {
+      for (var k in valueRecode) {
+        const dateRecord = new Date(valueRecode[k].ReadTime * 1000); // ngày trong record
+        if (
+          dateRecord.getTime() >= dateBefore.getTime() &&
+          dateRecord.getTime() <= dateAfter.getTime()
+        ) {
+          arrayRecodeToDate.push(valueRecode[k]);
+        }
       }
+    } else {
+      alert("Lỗi! Khoản thời gian không hợp lệ.");
     }
     this.setState({
       valueRecodeGetDay: arrayRecodeToDate,
+      keyword: "",
     });
-
     this.LoadData();
   };
   /*------------------------------------- */
@@ -142,7 +144,7 @@ class ThongKe extends Component {
   exportTableToExcel = () => {
     var downloadLink;
     var dataType = "application/vnd.ms-excel";
-    var tableSelect = document.getElementById("tableData");
+    var tableSelect = document.getElementById("ttableData");
     var tableHTML = tableSelect.outerHTML.replace(/ /g, "%20");
     var filename = "nkl";
     // Specify file name
