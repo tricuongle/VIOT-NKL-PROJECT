@@ -249,6 +249,7 @@ class QuanLyCongDoann extends Component {
   LoadData = () => {
     this.setState({
       contentItems: load,
+      keyword: "",
     });
     this.dataTableLoad();
   };
@@ -276,7 +277,7 @@ class QuanLyCongDoann extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>QUẢN LÝ CÔNG ĐOẠN TRONG NGÀY</h1>
+          <h1>QUẢN LÝ CÔNG ĐOẠN</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">

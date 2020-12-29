@@ -318,6 +318,7 @@ class QuanLyMaCa extends Component {
   LoadData = () => {
     this.setState({
       contentItems: load,
+      keyword: "",
     });
     this.dataTableLoad();
   };

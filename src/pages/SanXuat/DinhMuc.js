@@ -313,6 +313,7 @@ class DinhMuc extends Component {
   LoadData = () => {
     this.setState({
       contentItems: load,
+      keyword: "",
     });
     this.dataTableLoad();
   };
