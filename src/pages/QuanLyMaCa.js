@@ -16,6 +16,7 @@ var JsonName;
 var ArrayValue = [];
 var ArrayNameProcess = [];
 var load = [];
+ var nameProcess ='';
 // khi gọi về chỉ hiển thị id của khu vực, dùng id lấy tên
 var i;
 class QuanLyMaCa extends Component {
@@ -62,6 +63,14 @@ class QuanLyMaCa extends Component {
         [name]: value,
       },
     }));
+    if( name == "ProcessId"){
+      var valueProcess = this.state.contentProcess;
+      for(var k in valueProcess){
+        if( valueProcess[k].Id == value){
+          nameProcess = valueProcess[k].Name;
+        }
+      }
+    }
     var valueGroup = document.getElementById("idGroupp").value;
     if (valueGroup != "") {
       document.getElementById("idClassifyy").disabled = false;
@@ -136,16 +145,15 @@ class QuanLyMaCa extends Component {
       });
   };
   /*--------------hàm truyền dữ liệu từ một hàng trong table---------------- */
-  onUpdate = (content) => {
-    var date = new Date();
-    var dayCreate = date.valueOf();
+  onUpdate = (content, namePro) => {
+
     this.setState((preState) => ({
       valueModel: {
         ...preState.valueModel,
         Id: content.Id,
         Name: content.Name,
-        ProcessId: content.Name,
-        CreateDate: dayCreate,
+        ProcessId: content.ProcessId,
+        CreateDate: content.CreateDate,
         WeighInMax: content.WeighInMax,
         WeightInMin: content.WeightInMin,
         WeightOutMin: content.WeightOutMin,
@@ -154,16 +162,18 @@ class QuanLyMaCa extends Component {
         Group: content.Group,
       },
     }));
+    nameProcess= namePro; // gán tên với tên lấy được
     document.getElementById("idNameModel").value = content.Name;
     document.getElementById("idModel").value = content.Id;
+
+
     document.getElementById("idGroupp").value = content.Group;
     document.getElementById("idClassifyy").value = content.Classify;
   };
-  /*-----------------Edit Công đoạn ------------------*/
+  /*-----------------hàm Edit Mã cá ------------------*/
   onEditMaCa = (event) => {
     event.preventDefault();
     var { valueModel } = this.state;
-    //delete ValueModel.contentItems;
     var valueModelString = JSON.stringify(valueModel);
     console.log(valueModelString);
     axios({
@@ -179,7 +189,7 @@ class QuanLyMaCa extends Component {
       },
     })
       .then((resModel) => {
-        alert("Sửa công đoạn " + valueModel.Name + " thành công.");
+        alert("Sửa công đoạn " + valueModel.Name + " thành công!");
         this.LoadData();
       })
       .catch((err) => {
@@ -442,7 +452,7 @@ class QuanLyMaCa extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Chọn công đoạn:</h5>
+                        <h5>Công đoạn: <span className="infoModel" id= "idModelName">{nameProcess}</span></h5>
                       </label>
                       <br />
                       <select
@@ -470,11 +480,12 @@ class QuanLyMaCa extends Component {
                             type="number"
                             placeholder="khối lượng Kg"
                             className="form-control"
-                            id="idWeightInMin"
+                            id="idWeightInMin"    
                             name="WeightInMin"
                             required
                             min={0}
                             step=".01"
+                            value={valueModel.WeightInMin}
                             onChange={this.onChange}
                           />
                         </div>
@@ -490,6 +501,7 @@ class QuanLyMaCa extends Component {
                             name="WeighInMax"
                             placeholder="khối lượng Kg"
                             required
+                            value={valueModel.WeighInMax}
                             onChange={this.onChange}
                             min={0}
                             step=".01"
@@ -509,6 +521,7 @@ class QuanLyMaCa extends Component {
                             required
                             min={0}
                             step=".01"
+                            value={valueModel.WeightOutMin}
                             onChange={this.onChange}
                           />
                         </div>
@@ -524,6 +537,7 @@ class QuanLyMaCa extends Component {
                             name="WeighOutMax"
                             placeholder="khối lượng Kg"
                             required
+                            value={valueModel.WeighOutMax}
                             onChange={this.onChange}
                             min={0}
                             step=".01"
@@ -581,7 +595,7 @@ class QuanLyMaCa extends Component {
               </div>
             </form>
           </div>
-          {/*-------------Xóa công đoạn---------------------- */}
+          {/*-------------Xóa Model---------------------- */}
           <div className="modal fade" id="modal-Delete">
             <form onSubmit={this.onDeleteMaCa}>
               <div className="modal-dialog">

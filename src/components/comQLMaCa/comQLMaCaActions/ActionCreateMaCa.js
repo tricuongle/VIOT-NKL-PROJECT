@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import moment, { max } from "moment";
-import { data, get } from "jquery";
 import * as Config from "../../../untils/Config";
 
-var count = 1;
-var count1 = 0;
-var countString;
 var valueNew;
 var Description;
 class ActionCreateMaCa extends Component {
@@ -29,6 +24,7 @@ class ActionCreateMaCa extends Component {
       },
     };
   }
+  // hàm thay đổi giá trị state khi gõ vào popop 
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -112,7 +108,7 @@ class ActionCreateMaCa extends Component {
         console.log(err);
       });
   };
-  /*-----------------------hàm thêm mã cá và gán vào công đoạn ------------------------- */
+  /*-----------------------hàm thêm mã cá vào server ------------------------- */
   onSave = (event) => {
     event.preventDefault();
     var { Id } = this.state.valueMaCa;
@@ -145,6 +141,7 @@ class ActionCreateMaCa extends Component {
 
   render() {
     var { Name, contentProcess } = this.state;
+    // nội dung html tạo mã cá mới (model)
     return (
       <div className="modal fade" id="modal-create">
         <form onSubmit={this.onSave}>

@@ -60,7 +60,7 @@ class TableContentItemMaCa extends Component {
       });
   }
   onUpdate = () => {
-    this.props.onUpdate(this.props.contentItem);
+    this.props.onUpdate(this.props.contentItem, this.state.nameProcess);
   };
   render() {
     var { contentItem, index } = this.props;

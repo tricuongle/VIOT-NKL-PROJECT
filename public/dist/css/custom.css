@@ -498,6 +498,7 @@ th {
     margin-left: 50px;
 }
 
-.infoCard {
+.infoCard,
+.infoModel {
     color: #0471a8;
 }
