@@ -78,7 +78,7 @@ class ActionCreateCongNhan extends Component {
           var getString = JSON.parse(res.data[k]).Id;
           // tách chuỗi lấy số trong mã công nhân
           var getNum = getString.substring(8);
-          arrNum.push(getNum);// thêm số vào mảng
+          arrNum.push(getNum); // thêm số vào mảng
         }
         // tìm số lớn trong mảng
         var maxInNumbers = Math.max.apply(Math, arrNum);
@@ -105,8 +105,6 @@ class ActionCreateCongNhan extends Component {
     var { valueEmp, contentItems } = this.state;
     var isCheck = true;
     valueNew = JSON.stringify(valueEmp);
-    console.log(valueNew);
-    console.log(contentItems);
     for (var k in contentItems) {
       if (valueEmp.CardNo == contentItems[k].CardNo) {
         isCheck = false;
@@ -137,8 +135,6 @@ class ActionCreateCongNhan extends Component {
       alert("Mã số  " + valueEmp.CardNo + " công nhân đã tồn tại!");
     }
   };
-
-  /*------------------------------------- */
   /*----------Nội dụng xử lý giao diện-------------- */
   render() {
     var { Name, CMND, BirthDay, CardNo } = this.state;

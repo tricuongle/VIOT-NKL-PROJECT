@@ -8,6 +8,7 @@ import XLSX from "xlsx";
 
 import * as Config from "../untils/Config";
 var ArrayValue = [];
+var ArrayValueNoCheckStatus = [];
 var load = [];
 
 var arrayEmployeeExcel = [];
@@ -20,36 +21,44 @@ class QuanLyCongNhan extends Component {
     super(props);
     this.state = {
       contentItems: [],
+      contentItemsNoCheckStatus: [],
       contentItemss: [],
       arrayEmployeeExcel: [],
       contentGetEmployeeId: "",
       keyword: "",
       status: 1, // filter (-1 tất cả, 1 đang làm, 0 đã nghỉ)
-
       countStringIDEmployee: "",
-
-      BirthDay: "",
-      CMND: "",
-      CardNo: "",
-      Department: "",
-      Description: "This Item For User Master Data",
-      Id: "",
-      IsLock: true,
-      JobLevel: 3,
-      Name: "",
-      gender: "",
-      PassWord: "",
-      User: "",
+      // nội dung thông tin Employee
+      valueEmployee: {
+        Id: "",
+        Name: "",
+        CMND: "",
+        CardNo: "",
+        BirthDay: "",
+        User: "",
+        PassWord: "",
+        IsLock: true,
+        JobLevel: 3,
+        Department: "",
+        Description: "This Item For User Master Data",
+        gender: "",
+      },
     };
   }
+  // hàm thay đổi giá trị employee khi điền vào popop
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
     var value = target.value;
-    this.setState({
-      [name]: value,
-    });
+
+    this.setState((preState) => ({
+      valueEmployee: {
+        ...preState.valueEmployee,
+        [name]: value,
+      },
+    }));
   };
+  // hàm gán từ khóa tìm kiếm
   onSearch = (keyword) => {
     this.setState({
       keyword: keyword.toLowerCase(),
@@ -67,8 +76,10 @@ class QuanLyCongNhan extends Component {
     })
       .then((res) => {
         ArrayValue = [];
+        ArrayValueNoCheckStatus = [];
         for (var k in res.data) {
           var temp = JSON.parse(res.data[k]);
+          ArrayValueNoCheckStatus.push(temp);
           if (temp.IsLock == true) {
             ArrayValue.push(temp);
           }
@@ -76,6 +87,7 @@ class QuanLyCongNhan extends Component {
         ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
+          contentItemsNoCheckStatus: ArrayValueNoCheckStatus,
         });
         // sử dụng thư viện datatable
         $("#tableData").DataTable({
@@ -91,126 +103,105 @@ class QuanLyCongNhan extends Component {
         console.log(err);
       });
   };
+  // hàm lấy nội dung khi nhấn vào một hàng trong bảng công nhân
   onGetId = (content) => {
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Employee&key=" +
-        content.Id,
-      data: null,
-    })
-      .then((res) => {
-        var ObjValue = JSON.parse(res.data);
-        this.setState({
-          contentGetEmployeeId: ObjValue,
-        });
 
-        /*-----------điền thông tin khi sửa */
-        document.getElementById("NameEmp").value = content.Name;
-        document.getElementById("CNNDEmp").value = content.CMND;
-        document.getElementById("DateEmp").value = content.BirthDay;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.setState((preState) => ({
+      valueEmployee: {
+        ...preState.valueEmployee,
+
+        Id: content.Id,
+        Name: content.Name,
+        CMND: content.CMND,
+        CardNo: content.CardNo,
+        BirthDay: content.BirthDay,
+        User: content.User,
+        PassWord: content.PassWord,
+        IsLock: content.IsLock,
+        JobLevel: content.JobLevel,
+        Department: content.Department,
+        Description: content.Description,
+        gender: content.gender,
+      },
+    }));
+
+    document.getElementById("IDEmployee").value = content.Id;
+    document.getElementById("NameEmp").value = content.Name;
+
+    document.getElementById("CNNDEmp").value = content.CMND;
+    document.getElementById("DateEmp").value = content.BirthDay;
   };
   /*---------------sửa thông tin công nhân--------------- */
   onUpdateSave = (event) => {
     event.preventDefault();
-    var {
-      contentGetEmployeeId,
-      Name,
-      CMND,
-      CardNo,
-      BirthDay,
-      gender,
-      User,
-      PassWord,
-      IsLock,
-      JobLevel,
-      Department,
-      Description,
-    } = this.state;
-    var idEdit = contentGetEmployeeId.Id;
-    valueNew =
-      '{"Id":"' +
-      idEdit +
-      '","Name":"' +
-      Name +
-      '","gender":"' +
-      gender +
-      '","CMND":"' +
-      CMND +
-      '","CardNo":"' +
-      CardNo +
-      '","BirthDay":"' +
-      BirthDay +
-      '","User":"","PassWord":"","IsLock":true,"JobLevel":3,"Department":"","Description":"This Item For User Master Data"}';
-    axios({
-      method: "PUT",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/putkey?token=" +
-        `${Config.TOKEN}` +
-        "&classify=Employee&key=" +
-        idEdit +
-        "&value=" +
-        valueNew +
-        "&Description=nkl",
-      data: null,
-    })
-      .then((res) => {
-        alert("Sửa thông tin công nhân " + this.state.Name + " thành công !");
-        this.LoadData();
+
+    var { valueEmployee, contentItemsNoCheckStatus } = this.state;
+    var valueEmployeeString = JSON.stringify(valueEmployee);
+    var checkCardNo = true;
+    // kiểm tra trùng mã số công nhân 
+    for (var k in contentItemsNoCheckStatus) {
+      if (
+        contentItemsNoCheckStatus[k].CardNo == valueEmployee.CardNo &&
+        contentItemsNoCheckStatus[k].Id != valueEmployee.Id
+      ) {
+        checkCardNo = false;
+      }
+    }
+    if (checkCardNo) {
+      axios({
+        method: "PUT",
+        url:
+          `${Config.API_URL}` +
+          "/api/data/key?token=" +
+          `${Config.TOKEN}` +
+          "&classify=Employee&key=" +
+          valueEmployee.Id,
+        data: {
+          Value: valueEmployeeString,
+        },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((resEmp) => {
+          alert(
+            "Sửa thông tin công nhân " + valueEmployee.Name + " thành công!"
+          );
+          this.LoadData();
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log("Lỗi");
+        });
+    } else {
+      alert(
+        "Lỗi! Mã số công nhân này đã tồn tại, hoặc đã được sở hữu bởi công nhân đã nghĩ."
+      );
+    }
   };
   /*------------Xóa công nhân -------------------- */
   onDeleteSave = (event) => {
     event.preventDefault();
-    var { contentGetEmployeeId } = this.state;
-    var idEdit = contentGetEmployeeId.Id;
-    var Name = contentGetEmployeeId.Name;
-    var CMND = contentGetEmployeeId.CMND;
-    var BirthDay = contentGetEmployeeId.BirthDay;
-    var status = false;
-    valueNew =
-      '{"Id":"' +
-      idEdit +
-      '","Name":"' +
-      Name +
-      '","CMND":"' +
-      CMND +
-      '","CardNo":"","BirthDay":"' +
-      BirthDay +
-      '","User":"","PassWord":"","IsLock":' +
-      status +
-      ',"JobLevel":3,"Department":"","Description":"This Item For User Master Data"}';
-
+    var { valueEmployee } = this.state;
+    var valueEmpDelete = valueEmployee;
+    valueEmpDelete.IsLock = false;
+    var valueEmployeeString = JSON.stringify(valueEmpDelete);
     axios({
       method: "PUT",
       url:
         `${Config.API_URL}` +
-        "/api/data/putkey?token=" +
+        "/api/data/key?token=" +
         `${Config.TOKEN}` +
         "&classify=Employee&key=" +
-        idEdit +
-        "&value=" +
-        valueNew +
-        "&Description=nkl",
-      data: null,
+        valueEmployee.Id,
+      data: {
+        Value: valueEmployeeString,
+      },
     })
-      .then((res) => {
+      .then((resEmp) => {
+        alert("Xóa thông tin công nhân " + valueEmployee.Name + " thành công!");
         this.LoadData();
-        alert("Xóa thông tin công nhân " + this.state.Name + " thành công !");
       })
       .catch((err) => {
         console.log(err);
+        console.log("Lỗi");
       });
   };
   // --------------------load dữ liệu lại-------------------------
@@ -278,7 +269,6 @@ class QuanLyCongNhan extends Component {
         this.setState({
           countStringIDEmployee: countString,
         });
-        console.log(this.state.countStringIDEmployee);
         /* this.setState((preState) => ({
           valueEmp: {
             ...preState.valueEmp,
@@ -290,13 +280,13 @@ class QuanLyCongNhan extends Component {
         console.log(err);
       });
   };
+  // hàm nhập file excel từ máy tính
   exportExcel = () => {
     let rowObject;
     var exExcel = window.confirm(
       "Bạn muốn nhập thông tin công nhân từ file excel? Vui lòng chọn file excel từ thiết bị!"
     );
     if (exExcel) {
-     
       if (selectFileExcel) {
         var arrObjEmExcel = [];
         var tempObject;
@@ -308,12 +298,15 @@ class QuanLyCongNhan extends Component {
           workbook.SheetNames.forEach((sheet) => {
             rowObject = XLSX.utils.sheet_to_row_object_array(
               workbook.Sheets[sheet]
-             
             );
             console.log(rowObject);
-          alert("Chức năng đang cập nhập!, tìm thấy trong danh sách có 0"+rowObject.length+" dòng trong file excel");
+            alert(
+              "Chức năng đang cập nhập!, tìm thấy trong danh sách có 0" +
+                rowObject.length +
+                " dòng trong file excel"
+            );
           });
-          
+
           /*axios({
             method: "GET",
             url:
@@ -372,18 +365,13 @@ class QuanLyCongNhan extends Component {
     }
   };
   onChangeInput = (event) => {
-    console.log(event.target.files);
     selectFileExcel = event.target.files[0];
   };
   render() {
     var {
+      valueEmployee,
       contentItems,
       keyword,
-      status,
-      Name,
-      CMND,
-      BirthDay,
-      CardNo,
     } = this.state;
     if (keyword) {
       // render ra nội dung khi tìm kiếm
@@ -449,7 +437,7 @@ class QuanLyCongNhan extends Component {
           {/*buton create Employee*/}
           <ActionCreateCongNhan></ActionCreateCongNhan>
 
-          {/*buton Edit Employee*/}
+          {/* text html buton Edit Employee*/}
           <div className="modal fade" id="modal-edit">
             <form onSubmit={this.onUpdateSave}>
               <div className="modal-dialog">
@@ -480,7 +468,6 @@ class QuanLyCongNhan extends Component {
                         className="form-control"
                         id="IDEmployee"
                         name="Id"
-                        value={this.state.contentGetEmployeeId.Id}
                         disabled
                       />
                     </div>
@@ -498,7 +485,6 @@ class QuanLyCongNhan extends Component {
                         name="Name"
                         required
                         placeholder="Nhập tên khu vực thay đổi"
-                        value={Name}
                         onChange={this.onChange}
                       />
                     </div>
@@ -531,8 +517,8 @@ class QuanLyCongNhan extends Component {
                         name="CardNo"
                         placeholder="nhập mã số công nhân"
                         required
-                        min="0"
-                        value={CardNo}
+                        min={0}
+                        value={valueEmployee.CardNo}
                         onChange={this.onChange}
                       />
                     </div>
@@ -548,9 +534,7 @@ class QuanLyCongNhan extends Component {
                         className="form-control"
                         id="CNNDEmp"
                         name="CMND"
-                        required
                         placeholder="Nhập số CNMD/Căn cướt công nhân thay đổi"
-                        value={CMND}
                         onChange={this.onChange}
                       />
                     </div>
@@ -566,8 +550,6 @@ class QuanLyCongNhan extends Component {
                         name="filter-date"
                         id="DateEmp"
                         name="BirthDay"
-                        required
-                        value={BirthDay}
                         onChange={this.onChange}
                       />
                     </div>
