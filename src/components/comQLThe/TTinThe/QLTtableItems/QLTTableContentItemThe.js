@@ -79,8 +79,7 @@ class QLTTableContentItemThe extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
-        console.log("lỗi lấy tên công đoạn(mã cá) !");
+        console.log("lỗi lấy tên mã cá!");
       });
   };
   // truyền dữ liệu ra ngoài

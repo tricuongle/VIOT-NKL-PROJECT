@@ -11,6 +11,7 @@ import { Alert } from "bootstrap";
 var JsonValue;
 var ArrayValue = [];
 var arrayValueModel = [];
+var arrayValueEmp = [];
 var arrayValueProcess = [];
 var load = [];
 class QuanLyThongTinThe extends Component {
@@ -21,8 +22,9 @@ class QuanLyThongTinThe extends Component {
       contentGetCardId: [],
       contentModel: [],
       contentProcess: [],
+      contentEmployee: [],
       contentTypeSelect: [],
-      keyword: '',
+      keyword: "",
       filter: {
         name: "",
         status: -1,
@@ -59,7 +61,6 @@ class QuanLyThongTinThe extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res.data);
         ArrayValue = []; // load lại data
         for (var i = 0; i < res.data.length; i++) {
           JsonValue = JSON.parse(res.data[i]);
@@ -79,7 +80,7 @@ class QuanLyThongTinThe extends Component {
         });
       })
       .catch((err) => {
-        console.log("lỗi lấy thông tin thẻ");
+        console.log("lỗi lấy thông tin thẻ!");
         console.log(err);
       });
   };
@@ -127,10 +128,14 @@ class QuanLyThongTinThe extends Component {
     }));
 
     /*-------------gán giá trị cho pop edit---------------- */
-    document.getElementById("idCard").value = contentItem.RFID;
     console.log(nameEmp);
-    document.getElementById("idNameEml").value = nameEmp;
+    document.getElementById("idCard").value = contentItem.RFID;
+    //document.getElementById("idSelectEmployee").innerHTML = nameEmp;
     document.getElementById("idNameCard").value = contentItem.Id;
+    document.getElementById("nameEmp").innerHTML = nameEmp;
+    document.getElementById("nameProcess").innerHTML = nameProcess;
+    document.getElementById("nameClassify").innerHTML = contentItem.Classify;
+    document.getElementById("nameColor").innerHTML = contentItem.Color;
 
     /*--------Lấy danh sách select process ------------------*/
     axios({
@@ -153,11 +158,40 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentProcess: arrayValueProcess,
         });
+        console.log(arrayValueProcess);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    /*--------Lấy danh sách select công nhân ------------------*/
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/Values?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee",
+      data: null,
+    })
+      .then((resEmp) => {
+        arrayValueEmp = [];
+        for (var k in resEmp.data) {
+          var ObjectEmp = JSON.parse(resEmp.data[k]);
+          if (ObjectEmp.IsLock == true) {
+            arrayValueEmp.push(ObjectEmp);
+          }
+        }
+        this.setState({
+          contentEmployee: arrayValueEmp,
+        });
+        console.log(arrayValueEmp);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  // hàm xóa thẻ
   getIDDeleteChange = (idRFID) => {
     var notionDelete = window.confirm("Bạn có đồng ý xóa thẻ nào không?");
     if (notionDelete) {
@@ -207,13 +241,13 @@ class QuanLyThongTinThe extends Component {
       });
   };
 
-  /*-------------Hàm thêm thẻ vào công nhân------------- */
+  /*-------------Hàm sửa thẻ vào công nhân------------- */
   createNewCard = (event) => {
     event.preventDefault();
     var { valueCard } = this.state;
     var stringValueCard = JSON.stringify(valueCard);
-    console.log(valueCard);
-    //--------------Thêm thẻ mới ---------------------
+    console.log(stringValueCard);
+    //--------------sửa thẻ mới ---------------------
     axios({
       method: "PUT",
       url:
@@ -271,7 +305,13 @@ class QuanLyThongTinThe extends Component {
   };
   /*------------------------------------- */
   render() {
-    var { contentItems, contentProcess, contentTypeSelect, keyword } = this.state;
+    var {
+      contentItems,
+      contentProcess,
+      contentEmployee,
+      contentTypeSelect,
+      keyword,
+    } = this.state;
     if (keyword) {
       // render ra nội dung khi tìm kiếm
       contentItems = contentItems.filter((contentItems) => {
@@ -279,23 +319,23 @@ class QuanLyThongTinThe extends Component {
           contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Color.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.ProcessId.toLowerCase().indexOf(keyword) !== -1 ||
-          contentItems.Classify.toLowerCase().indexOf(keyword) !== -1 
+          contentItems.Classify.toLowerCase().indexOf(keyword) !== -1
         );
-      }); 
+      });
     }
     return (
       <div>
         <section className="content">
-        <form className="filter-section form-inline">
-          <div className="input-group inputSeach">
-            <button
-              type="button"
-              className="btn btn-success"
-              onClick={this.LoadData}
-            >
-              Làm mới dữ liệu
-            </button>
-          </div>
+          <form className="filter-section form-inline">
+            <div className="input-group inputSeach">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.LoadData}
+              >
+                Làm mới dữ liệu
+              </button>
+            </div>
           </form>
           {/*-----------------Giao diện table-------------------------------- */}
           <QLTTableContentThe onSearch={this.onSearch}>
@@ -320,7 +360,9 @@ class QuanLyThongTinThe extends Component {
                   </div>
                   <div className="modal-body">
                     <div className="form-group">
-                      <label htmlFor="usr">ID thẻ (chỉ xem)</label>
+                      <label htmlFor="usr">
+                        <h5>ID thẻ (chỉ xem)</h5>
+                      </label>
                       <input
                         type="text"
                         className="form-control"
@@ -330,17 +372,25 @@ class QuanLyThongTinThe extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Tên công nhân: (chỉ xem)</h5>
+                        <h5>
+                          Tên công nhân: <span className="infoCard" id="nameEmp"></span>
+                        </h5>
                       </label>
-                      <input
-                        type="text"
+                      <select
                         className="form-control"
-                        id="idNameEml"
-                        disabled
-                      />
+                        id="idSelectEmployee"
+                        required
+                        name="Employee"
+                        onChange={this.onChange}
+                      >
+                        <option value="">---Thay đổi công nhân---</option>
+                        {this.showContentSelectEmployee(contentEmployee)}
+                      </select>
                     </div>
                     <div className="form-group">
-                      <label htmlFor="usr">Tên thẻ</label>
+                      <label htmlFor="usr">
+                        <h5>Tên thẻ</h5>
+                      </label>
                       <input
                         type="text"
                         className="form-control"
@@ -352,7 +402,10 @@ class QuanLyThongTinThe extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="area" id="areaDevice">
-                        <h5> Công đoạn:</h5>
+                        <h5>
+                          {" "}
+                          Công đoạn: <span className="infoCard" id="nameProcess"></span>
+                        </h5>
                       </label>
                       <select
                         className="form-control"
@@ -367,7 +420,10 @@ class QuanLyThongTinThe extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="area" id="areaDevice">
-                        <h5> Classify (Loại):</h5>
+                        <h5>
+                          {" "}
+                          Classify (Loại): <span className="infoCard" id="nameClassify"></span>
+                        </h5>
                       </label>
                       <select
                         className="form-control"
@@ -377,13 +433,16 @@ class QuanLyThongTinThe extends Component {
                         onChange={this.onChange}
                         disabled
                       >
-                        <option value="null">---Chọn loại---</option>
+                        <option value="-">---Chọn loại---</option>
                         {this.showContentSelect(contentTypeSelect)}
                       </select>
                     </div>
                     <div className="form-group">
                       <label htmlFor="area" id="areaDevice">
-                        <h5> Màu thẻ:</h5>
+                        <h5>
+                          {" "}
+                          Màu thẻ: <span className="infoCard" id="nameColor"></span>
+                        </h5>
                       </label>
                       <select
                         className="form-control"
@@ -391,7 +450,7 @@ class QuanLyThongTinThe extends Component {
                         name="Color"
                         onChange={this.onChange}
                       >
-                        <option value="null">---Chọn màu---</option>
+                        <option value="-">---Chọn màu---</option>
                         <option value="Xanh">Xanh</option>
                         <option value="Đỏ">Đỏ</option>
                         <option value="Vàng">Vàng</option>
@@ -460,6 +519,20 @@ class QuanLyThongTinThe extends Component {
         return (
           <option key={index} value={contentItem.Id}>
             {contentItem.Name}
+          </option>
+        );
+      });
+    }
+    return result;
+  }
+  /*đổ dữ liệu công nhân vào select */
+  showContentSelectEmployee(contentEmp) {
+    var result = null;
+    if (contentEmp.length >= 0) {
+      result = contentEmp.map((contentItem, index) => {
+        return (
+          <option key={index} value={contentItem.Id}>
+           Tên: {contentItem.Name} - Mã số: {contentItem.CardNo}
           </option>
         );
       });
