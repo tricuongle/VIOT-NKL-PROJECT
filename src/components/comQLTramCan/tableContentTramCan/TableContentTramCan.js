@@ -8,8 +8,8 @@ class TableContentTramCan extends Component {
             <thead>
               <tr className="tieude">
                 <th>STT</th>
-                <th>Tên thiết bị</th>
-                <th>Type</th>
+                <th>Tên thiết bị cân</th>
+                <th>Type (Loại cân)</th>
                 <th>Công đoạn</th>
                 <th>Khu vực</th>
                 <th>Chỉnh sửa trạm cân</th> 

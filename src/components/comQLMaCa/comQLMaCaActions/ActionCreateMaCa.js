@@ -72,7 +72,6 @@ class ActionCreateMaCa extends Component {
           idNew = 1;
         }
         var countString = "MC-NKL-0" + idNew;
-        console.log(countString);
         var getTimetoDay = new Date().getTime();
         this.setState((preState) => ({
           valueMaCa: {

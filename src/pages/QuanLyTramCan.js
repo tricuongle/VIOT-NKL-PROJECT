@@ -5,7 +5,7 @@ import TableContentTramCan from "../components/comQLTramCan/tableContentTramCan/
 import TableContentItemTramCan from "../components/comQLTramCan/tableItemTramCan/TableContentItemTramCan";
 import $ from "jquery";
 import * as Config from "../untils/Config";
-import { Button } from "bootstrap";
+
 var arrayValueProcess = [];
 var arrayValueDevice = [];
 var ObjValue;
@@ -15,8 +15,8 @@ var arrayPara = [];
 var arrayParaNew = [];
 var arrNewTest = [];
 var arrParaConcar = [];
-
 var Type = "";
+
 class QuanLyTramCan extends Component {
   constructor(props) {
     super(props);
@@ -24,9 +24,11 @@ class QuanLyTramCan extends Component {
       contentItems: [],
       contentProcess: [],
       contentSection: [],
-      contentDevice: "",
+      contentDevice: [],
       // name process convert to ProcessID
       nameProcessConvert: [],
+
+      temp: null,
     };
   }
   onChange = (event) => {
@@ -36,8 +38,7 @@ class QuanLyTramCan extends Component {
     var checkProcess = 1;
     var tempArrayPara = [];
     arrNewTest = [];
-    
-    console.log(arrNewTest);
+
     // tạo object rỗng
     var ObjectValue = {
       ProcessId: "",
@@ -45,10 +46,9 @@ class QuanLyTramCan extends Component {
       ModelId: "",
       CurrentGroupModel: "",
     };
-    
+
     ObjectValue.ProcessId = name.substring(4);
     ObjectValue.Type = value;
-    console.log(ObjectValue);
 
     for (var k in arrayPara) {
       if (ObjectValue.ProcessId == arrayPara[k].ProcessId) {
@@ -87,7 +87,6 @@ class QuanLyTramCan extends Component {
               break;
             } else {
               arrayParaNew.push(ObjectValue);
-              console.log("OKS");
               break;
             }
           }
@@ -123,7 +122,6 @@ class QuanLyTramCan extends Component {
         arrNewTest.splice(k, 1);
       }
     }
-    console.log(arrNewTest);
   };
 
   componentDidMount = () => {
@@ -209,9 +207,12 @@ class QuanLyTramCan extends Component {
         this.setState({
           contentDevice: ObjectValueId,
         });
+        // truyền giá trị vào popop chỉnh sửa
+        document.getElementById("IdDevice").value = this.state.contentDevice.Id;
         document.getElementById(
           "IdnameDevice"
         ).value = this.state.contentDevice.Name;
+
         arrayPara = JSON.parse(this.state.contentDevice.Status.Para);
         for (var k in arrayPara) {
           console.log(arrayPara[k].Type);
@@ -244,45 +245,6 @@ class QuanLyTramCan extends Component {
       });
   };
 
-  // hàm edit thiết bị
-  onEditDevice = (event) => {
-    event.preventDefault();
-    this.onChange(event);
-    for (var k in arrNewTest) {
-      if (arrNewTest[k].ProcessId == "") {
-        arrNewTest.splice(k, 1);
-      }
-    }
-    document.getElementById("btnEditDevice").disabled = true;
-
-    var { contentDevice } = this.state;
-    var Id = contentDevice.Id;
-    //this.addValuePara();
-    var pareString = JSON.stringify(arrNewTest); // chuyển về string
-    arrayParaNew = [] // trả mảng về rỗng
-    console.log(pareString);
-    //var idSection = document.getElementById("idSection").value; // lấy id section
-    axios({
-      method: "PUT",
-      url:
-        `${Config.API_URL}` +
-        "/api/iotdevice/" +
-        Id +
-        "?token=" +
-        `${Config.TOKEN}`,
-      data: {
-        Para: pareString,
-      },
-    })
-      .then((res) => {
-        alert("Sửa thành thiết bị cân công !");
-        this.LoadData();
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log("Lỗi rồi");
-      });
-  };
   // load dữ liệu lại
   dataTableLoad = () => {
     axios({
@@ -328,6 +290,7 @@ class QuanLyTramCan extends Component {
       this.clearRadioGroup(nameG);
     }
   };
+  // hàm tạo type thiết bị
   addProcess = () => {
     var { contentProcess } = this.state;
     var arrayvalue = [];
@@ -408,6 +371,67 @@ class QuanLyTramCan extends Component {
 
     return arrayvalue;
   };
+
+  // hàm edit thiết bị
+  onEditDevice = (event) => {
+    event.preventDefault();
+    this.onChange(event);
+    for (var k in arrNewTest) {
+      if (arrNewTest[k].ProcessId == "") {
+        arrNewTest.splice(k, 1);
+      }
+    }
+    document.getElementById("btnEditDevice").disabled = true;
+
+    var { contentDevice } = this.state;
+    var Id = contentDevice.Id;
+    var tempContentDevice = contentDevice;
+    var pareString = JSON.stringify(arrNewTest); // chuyển về string
+    arrayParaNew = []; // trả mảng về rỗng
+    var nameEditDevice = document.getElementById("IdnameDevice").value;
+    var idSection = document.getElementById("idSection").value;
+
+    tempContentDevice.Name = nameEditDevice;
+    tempContentDevice.SectionId = idSection;
+    tempContentDevice.Status.Para = pareString;
+    console.log(tempContentDevice);
+
+    /*axios({
+      method: "PUT",
+      url:
+        `${Config.API_URL}` +
+        "/api/iotdevice/" +
+        Id +
+        "?token=" +
+        `${Config.TOKEN}`,
+      data: {
+        Para: pareString,
+      },
+    })
+      .then((res) => {
+        alert("Sửa thành thiết bị cân công !");
+        this.LoadData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });*/
+
+    axios({
+      method: "POST",
+      url:
+        `${Config.API_URL}` +
+        "/api/iotdevice/UpdateAll?token=" +
+        `${Config.TOKEN}`,
+      data: tempContentDevice,
+    })
+      .then((res) => {
+        alert("Sửa thiết bị cân thành công !");
+        this.LoadData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   render() {
     var {
       contentItems,
@@ -463,13 +487,23 @@ class QuanLyTramCan extends Component {
                   <div className="modal-body">
                     <div className="form-group">
                       <label htmlFor="devices">
+                        <h5>ID thiết bị (chỉ xem):</h5>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="IdDevice"
+                        disabled
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="devices">
                         <h5>Tên thiết bị:</h5>
                       </label>
                       <input
                         type="text"
                         className="form-control"
                         id="IdnameDevice"
-                        disabled
                       />
                     </div>
                     <div className="form-group">

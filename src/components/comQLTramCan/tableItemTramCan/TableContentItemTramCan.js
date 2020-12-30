@@ -12,7 +12,7 @@ class TableContentItemTramCan extends Component {
       contentItemModelGetId: [],
       nameItemModelGetId: [],
       nameItemTypeGetId: [],
-      nameSection: "",
+      valueSection: [],
     };
   }
   /*----------------------get ID of table process to call name process ----------------------------- */
@@ -73,9 +73,9 @@ class TableContentItemTramCan extends Component {
     })
       .then((res) => {
         var ObjvalueSection = res.data;
-        /*this.setState({
-          nameSection: ObjvalueSection,
-        });*/
+        this.setState({
+          valueSection: ObjvalueSection,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -93,17 +93,23 @@ class TableContentItemTramCan extends Component {
     var {
       contentItemModelGetId,
       nameItemModelGetId,
-      nameSection,
+      valueSection,
       nameItemTypeGetId,
     } = this.state;
-
+    var nameSection;
+    if( valueSection == null){
+      nameSection = '__'
+    }else{
+      nameSection = valueSection.Name;
+    }
+   
     return (
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Name}</td>
         <td>{nameItemTypeGetId + " "}</td>
         <td>{nameItemModelGetId + " "}</td>
-        <td>{contentItem.SectionId}</td>
+        <td>{nameSection}</td>
         <td>
           <button
             type="button"

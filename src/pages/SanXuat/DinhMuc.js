@@ -263,7 +263,7 @@ class DinhMuc extends Component {
       },
     })
       .then((resFishCode) => {
-        alert("Sửa đinh giá " + valueDinhMuc.Name + "thành công !");
+        alert("Xóa đinh giá " + valueDinhMuc.Name + "thành công !");
         this.LoadData();
       })
       .catch((err) => {
