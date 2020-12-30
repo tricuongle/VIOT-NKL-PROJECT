@@ -10,15 +10,37 @@ class TableContentItemCongNhan extends Component {
       this.props.onEdit(contentItem.Id); // truyền dữ liệu ra ngoài cha
     };
     var statusEmployee = contentItem.IsLock ? "đang làm việc" : "Đã nghỉ";
+    var gender, CMND, BirthDay;
+    if (
+      contentItem.gender == "null" ||
+      contentItem.gender == "__" ||
+      contentItem.gender == ""
+    ) {
+      gender = "__";
+    }else {gender=contentItem.gender}
+    if (
+      contentItem.CMND == "null" ||
+      contentItem.CMND == "__" ||
+      contentItem.CMND == ""
+    ) {
+      CMND = "__";
+    }else {CMND=contentItem.CMND}
+    if (
+      contentItem.BirthDay == "null" ||
+      contentItem.BirthDay == "__" ||
+      contentItem.BirthDay == ""
+    ) {
+      BirthDay = "__";
+    }else {BirthDay=contentItem.BirthDay}
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
         <td>{contentItem.Id}</td>
         <td>{contentItem.Name}</td>
-        <td>{contentItem.gender}</td>
+        <td>{gender}</td>
         <td>{contentItem.CardNo}</td>
-        <td>{contentItem.CMND}</td>
-        <td>{contentItem.BirthDay}</td>
+        <td>{CMND}</td>
+        <td>{BirthDay}</td>
         <td>
           <button
             type="button"

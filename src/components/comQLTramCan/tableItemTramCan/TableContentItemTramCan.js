@@ -97,18 +97,30 @@ class TableContentItemTramCan extends Component {
       nameItemTypeGetId,
     } = this.state;
     var nameSection;
-    if( valueSection == null){
-      nameSection = '__'
-    }else{
+    if (valueSection == null) {
+      nameSection = "__";
+    } else {
       nameSection = valueSection.Name;
     }
-   
+
+    var nameTypeDevice, nameModelDevice;
+    if (nameItemTypeGetId == "") {
+      nameTypeDevice = "__";
+    } else {
+      nameTypeDevice = nameItemTypeGetId;
+    }
+    if (nameItemModelGetId == "") {
+      nameModelDevice = "__";
+    } else {
+      nameModelDevice = nameItemModelGetId;
+    }
+
     return (
       <tr>
         <td>{index + 1}</td>
         <td>{contentItem.Name}</td>
-        <td>{nameItemTypeGetId + " "}</td>
-        <td>{nameItemModelGetId + " "}</td>
+        <td>{nameTypeDevice + " "}</td>
+        <td>{nameModelDevice + " "}</td>
         <td>{nameSection}</td>
         <td>
           <button

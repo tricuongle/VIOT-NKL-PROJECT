@@ -25,7 +25,7 @@ class TableContentThongKe extends Component {
                 <th>Giờ vào</th>
                 <th>Giờ ra</th>
                 <th>Định mức</th>
-                <th>Khu vực</th>
+                {/* <th>Khu vực</th> */}
                 <th>Ảnh Vào/Ra</th>
               </tr>
             </thead>

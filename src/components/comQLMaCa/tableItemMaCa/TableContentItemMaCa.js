@@ -77,6 +77,13 @@ class TableContentItemMaCa extends Component {
         var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
       }
     }
+    var Group, Classify;
+    if(contentItem.Group == ''){
+      Group ="__";
+    }else{Group=contentItem.Group}
+    if(contentItem.Classify == ''){
+      Classify ="__";
+    }else{Classify=contentItem.Classify}
 
     return (
       <tr id="device2" className="edit">
@@ -89,8 +96,8 @@ class TableContentItemMaCa extends Component {
         <td>{contentItem.WeightOutMin}</td>
         <td>{contentItem.WeighOutMax}</td>
         <td>{nameProcess}</td>
-        <td>{contentItem.Group}</td>
-        <td>{contentItem.Classify}</td>
+        <td>{Group}</td>
+        <td>{Classify}</td>
         <td>
           <button
             type="button"

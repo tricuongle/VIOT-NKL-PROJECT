@@ -513,7 +513,7 @@ class QuanLyCongNhan extends Component {
                         required
                         onChange={this.onChange}
                       >
-                        <option value="null">---giới tính---</option>
+                        <option value="__">---giới tính---</option>
                         <option value="Nam">Nam</option>
                         <option value="Nữ">Nữ</option>
                         <option value="khác">Khác</option>

@@ -10,6 +10,7 @@ class TableItemTongHop extends Component {
       valueCard: [],
       valueDeviceRecordIn: [],
       valueRecordIn: [],
+      valueSection: [],
     };
   }
   componentDidMount = () => {
@@ -121,14 +122,37 @@ class TableItemTongHop extends Component {
       .catch((err) => {
         console.log(err);
       });
+
+    /*-----------------Lấy thông tin section và đổ vào select----------------------------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/Section?id=" +
+        contentItem.SectionId +
+        "&token=" +
+        `${Config.TOKEN}`,
+      data: null,
+    })
+      .then((res) => {
+        var ObjvalueSection = res.data;
+        this.setState({
+          valueSection: ObjvalueSection,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi lấy thông tin khu vực theo id- sections");
+      });
   };
-  
+
   render() {
     var {
       valueEmployee,
       valueCard,
       valueDeviceRecordIn,
       valueRecordIn,
+      valueSection,
     } = this.state;
     var { contentItem, index } = this.props;
     var dateFormat = require("dateformat");
@@ -160,6 +184,19 @@ class TableItemTongHop extends Component {
     /*hình ảnh */
     var imgOut =
       `${Config.API_URL}` + "/api/images/" + contentItem.Image + ".jpg";
+    // lấy tên khu vực cửa device
+    var nameSection;
+    if (valueSection == null) {
+      nameSection = "__";
+    } else {
+      nameSection = valueSection.Name;
+    }
+    var DinhMucCan;
+    if ( DinhMuc == 0 || DinhMuc == "" || DinhMuc == null ) {
+      DinhMucCan = "-";
+    } else {
+      DinhMucCan = DinhMuc;
+    }
     return (
       <tr>
         <td>{index + 1}</td>
@@ -177,8 +214,8 @@ class TableItemTongHop extends Component {
         <td>{contentItem.Weight}</td>
         <td>{dateNewTimeIn}</td>
         <td>{dateNewTimeOut}</td>
-        <td>{DinhMuc} </td>
-        <td>---</td> {/*valueDevice.SectionId*/}
+        <td>{DinhMucCan} </td>
+        {/*<td>{nameSection}</td> */}
         <td>
           <a href={imgIn} target="_blank">
             vào-
