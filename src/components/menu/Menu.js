@@ -14,10 +14,10 @@ import ManghinhSX01SuaCa from "../../pages/HienThiSanXuat/ManghinhSX01SuaCa";
 import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02FilletXeBuom";
 import ThemThe from "../../pages/QuanLyThe/ThemThe";
 import DinhMuc from "../../pages/SanXuat/DinhMuc";
-import RawData from '../../pages/RawData'
+import RawData from "../../pages/RawData";
+import LogContentQLCongNhan from '../../pages/HistoryLog/LogQLCongNhan/LogContentQLCongNhan'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import $ from "jquery";
 class Menu extends Component {
   render() {
     return (
@@ -89,7 +89,7 @@ class Menu extends Component {
               <ul className="sidebar-menu" data-widget="tree">
                 <li className="">
                   <Link to="/Tong-hop" className="linkTo">
-                    <i className="fa fa-dashboard"></i> <span>Tổng hợp</span>
+                    <i className="fa fa-cubes" aria-hidden="true"></i> <span>Tổng hợp</span>
                   </Link>
                 </li>
                 <li className="">
@@ -97,45 +97,7 @@ class Menu extends Component {
                     <i className="fa fa-dashboard"></i> <span>Raw data</span>
                   </Link>
                 </li>
-                {/*<li className="treeview">
-                  <a>
-                    <i className="fa fa-pie-chart"></i> <span>Giám sát</span>
-                    <span className="pull-right-container">
-                      <i className="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul className="treeview-menu">
-                    <li className="">
-                      <Link to="/Fillet-vao">Fillet - vào</Link>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/fillet-ra.html">Fillet - ra</a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/xe-buom-vao.html">Xẻ bướm - vào</a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/xe-buom-ra.html">Xẻ bướm - ra</a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/sua-ca-1.html">Sửa cá 1</a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/sua-ca-2.html">Sửa cá 2</a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/sua-ca-ra.html">Sửa cá - ra</a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/sua-ca-phan-size.html">
-                        Sửa cá - phân size
-                      </a>
-                    </li>
-                    <li className="">
-                      <a href="../giam-sat/phu-pham-ban.html">Phụ phẩm - bán</a>
-                    </li>
-                   </ul>
-                </li>*/}
+
                 <li className="">
                   <Link to="/Thong-ke" className="linkTo">
                     <i className="fa fa-calendar"></i>
@@ -162,25 +124,6 @@ class Menu extends Component {
                     </li>
                   </ul>
                 </li>
-                {/*<li className="treeview">
-                  <a>
-                    <i className="fa fa-industry" aria-hidden="true"></i>
-                    <span>Andon</span>
-                    <span className="pull-right-container">
-                      <i className="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul className="treeview-menu">
-                    <li className="">
-                      <Link to="/Mang-hinh-SX-01-Sua-Ca">Sửa cá</Link>
-                    </li>
-                    <li className="">
-                      <Link to="/Mang-hinh-SX-02-Fillet-Xe-Buom">
-                        Fillet-xẻ bướm
-                      </Link>
-                    </li>
-                  </ul>
-              </li>*/}
                 <li className="">
                   <Link to="/Tinh-tien">
                     <i className="fa fa-money" aria-hidden="true"></i>
@@ -205,13 +148,6 @@ class Menu extends Component {
                     </li>
                   </ul>
                 </li>
-
-                {/* <li className="">
-                  <Link to="/Quan-ly-cong-doan">
-                    <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                    <span>Quản lý công đoạn</span>
-                  </Link>
-                </li>*/}
                 <li className="">
                   <Link to="/Quan-Ly-cong-doann">
                     <i className="fa fa fa-tasks" aria-hidden="true"></i>
@@ -224,15 +160,43 @@ class Menu extends Component {
                     <span>Quản lý trạm cân</span>
                   </Link>
                 </li>
-                
-                
+
                 <li className="">
                   <Link to="/Quan-ly-cong-nhan">
-                    <i className="fa fa-user-circle"  aria-hidden="true"></i>
+                    <i className="fa fa-user-circle" aria-hidden="true"></i>
                     <span> Quản lý công nhân </span>
                   </Link>
                 </li>
-                <li className="">
+               
+                <li className="treeview">
+                  <a>
+                    <i className="fa fa-history" aria-hidden="true"></i> <span>Lịch sử Log</span>
+                    <span className="pull-right-container">
+                      <i className="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+                  <ul className="treeview-menu">
+                    <li className="">
+                      <Link to="">Quản lý mã cá</Link>
+                    </li>
+                    <li className="">
+                      <a href="">Quản lý thẻ</a>
+                    </li>
+                    <li className="">
+                      <a href="">
+                        Quản lý công đoạn
+                      </a>
+                    </li>
+                    <li className="">
+                      <a href="">Quản lý trạm cân</a>
+                    </li>
+                    <li className="">
+                      <Link to="/Log-Quan-ly-Cn">Quản lý công nhân</Link>
+                    </li>
+                  </ul>
+                </li>
+                {/*
+                 <li className="">
                   <a>
                     <i className="fa fa-users"></i> <span>Access controll</span>
                   </a>
@@ -242,12 +206,12 @@ class Menu extends Component {
                     <i className="fa fa-cogs"></i>
                     <span>Cấu hình thiết bị</span>
                   </a>
-                </li>
+                  </li>
                 <li className="treeview">
                   <a>
                     <i className="fa fa-info-circle"></i> <span>Liên hệ</span>
                   </a>
-                </li>
+                </li>*/}
               </ul>
             </section>
           </aside>
@@ -277,6 +241,7 @@ class Menu extends Component {
         <Route path="/Quan-ly-cong-nhan" exact component={quanLyCongNhan} />
         <Route path="/Dinh-muc-ma-ca" exact component={dinhMuc} />
         <Route path="/Raw-data" exact component={rawData} />
+        <Route path="/Log-Quan-ly-Cn" exact component={logContentQLCongNhan} />
       </Router>
     );
   }
@@ -288,7 +253,6 @@ const filletVao = () => {
   return <FilletVao />;
 };
 const thongKe = () => {
-
   return <ThongKe />;
 };
 const tinhTien = () => {
@@ -320,7 +284,6 @@ const manghinhSX02FilletXeBuom = () => {
   return <ManghinhSX02FilletXeBuom />;
 };
 const quanLyCongNhan = () => {
-
   return <QuanLyCongNhan />;
 };
 const themThe = () => {
@@ -332,5 +295,7 @@ const dinhMuc = () => {
 const rawData = () => {
   return <RawData />;
 };
-
+const logContentQLCongNhan = () => {
+  return <LogContentQLCongNhan />;
+};
 export default Menu;

@@ -10,6 +10,7 @@ import * as Config from "../untils/Config";
 var ArrayValue = [];
 var ArrayValueNoCheckStatus = [];
 var load = [];
+var valueEmployeeOld;
 
 var arrayEmployeeExcel = [];
 var valueNew;
@@ -105,6 +106,7 @@ class QuanLyCongNhan extends Component {
   };
   // hàm lấy nội dung khi nhấn vào một hàng trong bảng công nhân
   onGetId = (content) => {
+    valueEmployeeOld = content; // gán nội dung json
 
     this.setState((preState) => ({
       valueEmployee: {
@@ -131,14 +133,36 @@ class QuanLyCongNhan extends Component {
     document.getElementById("CNNDEmp").value = content.CMND;
     document.getElementById("DateEmp").value = content.BirthDay;
   };
+
+  // hàm random key value
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
+
   /*---------------sửa thông tin công nhân--------------- */
   onUpdateSave = (event) => {
     event.preventDefault();
-
     var { valueEmployee, contentItemsNoCheckStatus } = this.state;
     var valueEmployeeString = JSON.stringify(valueEmployee);
     var checkCardNo = true;
-    // kiểm tra trùng mã số công nhân 
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime();
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueEmployeeOld,
+      ValueNew: valueEmployee,
+      time: dateGetTimeNow
+    };
+    var valueLogString = JSON.stringify(valueLog);
+    // kiểm tra trùng mã số công nhân
     for (var k in contentItemsNoCheckStatus) {
       if (
         contentItemsNoCheckStatus[k].CardNo == valueEmployee.CardNo &&
@@ -170,6 +194,20 @@ class QuanLyCongNhan extends Component {
           console.log(err);
           console.log("Lỗi");
         });
+      // lưu dữ liệu vào log
+      axios({
+        method: "POST",
+        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+        data: {
+          Key: keyRandom,
+          Classify: "Employee-Log",
+          Value: valueLogString,
+          Description: "Employee NKL Log",
+        },
+      }).then((resEmp) => {
+        console.log("Save data in log ok !");
+        this.LoadData();
+      });
     } else {
       alert(
         "Lỗi! Mã số công nhân này đã tồn tại, hoặc đã được sở hữu bởi công nhân đã nghĩ."
@@ -368,11 +406,7 @@ class QuanLyCongNhan extends Component {
     selectFileExcel = event.target.files[0];
   };
   render() {
-    var {
-      valueEmployee,
-      contentItems,
-      keyword,
-    } = this.state;
+    var { valueEmployee, contentItems, keyword } = this.state;
     if (keyword) {
       // render ra nội dung khi tìm kiếm
       contentItems = contentItems.filter((contentItems) => {

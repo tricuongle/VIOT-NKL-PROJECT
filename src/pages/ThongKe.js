@@ -92,7 +92,6 @@ class ThongKe extends Component {
           valueRecode: arrayRecode,
         });
       })
-
       .catch((err) => {
         console.log(err);
       });
