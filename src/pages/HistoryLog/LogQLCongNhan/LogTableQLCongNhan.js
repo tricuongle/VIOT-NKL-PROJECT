@@ -2,14 +2,13 @@ import React, { Component } from "react";
 class LogTableQLCongNhan extends Component {
   render() {
     return (
-      <div>
-        <table id="tableData" className="table table-hover">
+      <div className= "employeeTable">
+        <table id="ttableData" className="table table-hover">
           <thead>
             <tr className="tieude">
               <th>STT</th>
               <th>Mã ID</th>
-              <th>Ngày thay đổi</th>
-              <th>Giờ thay đổi</th>
+              <th>Ngày/giờ thay đổi</th>
               <th>Thông tin mới</th>
               <th>Thông tin cũ</th>
             </tr>

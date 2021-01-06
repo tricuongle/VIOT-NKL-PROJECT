@@ -125,10 +125,15 @@ class ThongKe extends Component {
     } else {
       alert("Lỗi! Khoản thời gian không hợp lệ.");
     }
-    this.setState({
-      valueRecodeGetDay: arrayRecodeToDate,
-      keyword: "",
-    });
+    if (arrayRecodeToDate.length == 0) {
+      alert("Không có dữ liệu trong thời gian chọn!");
+    } else {
+      this.setState({
+        valueRecodeGetDay: arrayRecodeToDate,
+        keyword: "",
+      });
+    }
+
     this.LoadData();
   };
   /*------------------------------------- */

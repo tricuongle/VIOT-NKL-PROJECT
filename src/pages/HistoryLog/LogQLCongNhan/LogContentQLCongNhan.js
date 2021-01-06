@@ -5,52 +5,17 @@ import $ from "jquery";
 import axios from "axios";
 import * as Config from "../../../untils/Config";
 var arrayValueLog = [];
+var load = [];
 
 class LogContentQLCongNhan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       valueContentLog: [],
+      valueContentLogSortTime: [],
     };
   }
   componentDidMount = () => {
-    var contentLog = {
-      ValueOld: {
-        Id: "CN-NKL-030",
-        Name: "Tổ Xẻ Bướm",
-        gender: "",
-        CMND: "",
-        CardNo: "1",
-        BirthDay: "",
-        User: "",
-        PassWord: "",
-        IsLock: true,
-        JobLevel: 3,
-        Department: "",
-        Description: "công nhân NKL",
-      },
-      ValueNew: {
-        Id: "CN-NKL-030",
-        Name: "Tổ Xẻ Bướm123",
-        gender: "",
-        CMND: "",
-        CardNo: "1",
-        BirthDay: "",
-        User: "",
-        PassWord: "",
-        IsLock: true,
-        JobLevel: 3,
-        Department: "",
-        Description: "công nhân NKL",
-      },
-      time: 1609862768526
-    };
-    arrayValueLog.push(contentLog);
-    this.setState({
-      valueContentLog: arrayValueLog,
-    });
-    //---------test-------------
-
     axios({
       method: "GET",
       url:
@@ -70,23 +35,49 @@ class LogContentQLCongNhan extends Component {
         this.setState({
           valueContentLog: arrayValueLog,
         });
-        $("#tableData").DataTable({
-          searching: false,
-          ordering: false,
-          dom: "Bfrtip",
-          scrollX: true,
-          scrollY: 450,
-          paging: false,
-        });
       })
       .catch((err) => {
-        
         console.log(err);
       });
-      
+  };
+  // lọc ngày hàm
+  FilterDate = () => {
+    var dateIn = document.getElementById("filter-dateIn").value;
+    var dateOut = document.getElementById("filter-dateOut").value;
+    var { valueContentLog } = this.state;
+    var dateFormat = require("dateformat");
+    var dateBefore = new Date(dateFormat(dateIn, "yyyy,mm,dd"));
+    var dateAfter = new Date(dateFormat(dateOut, "yyyy,mm,dd"));
+    var arrayRecodeToDate = [];
+    dateAfter.setDate(dateAfter.getDate() + 1);
+
+    if (dateBefore.getTime() < dateAfter.getTime()) {
+      for (var k in valueContentLog) {
+        const dateRecord = new Date(valueContentLog[k].time * 1000); // ngày trong record
+        console.log(dateRecord);
+        if (
+          dateRecord.getTime() >= dateBefore.getTime() &&
+          dateRecord.getTime() <= dateAfter.getTime()
+        ) {
+          arrayRecodeToDate.push(valueContentLog[k]);
+        }
+      }
+    } else {
+      alert("Lỗi! Khoản thời gian không hợp lệ.");
+    }
+    if (arrayRecodeToDate.length == 0) {
+      alert("Không có dữ liệu trong khoảng thời gian chọn!");
+    } else {
+      this.setState({
+        valueContentLogSortTime: arrayRecodeToDate,
+      });
+    }
+  };
+  loadPage = () => {
+    window.location.reload();
   };
   render() {
-    var { valueContentLog } = this.state;
+    var { valueContentLogSortTime } = this.state;
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -133,14 +124,24 @@ class LogContentQLCongNhan extends Component {
                 id="btnLoc"
                 type="button"
                 className="form-control form-group btn btn-primary"
-                //onClick={this.FilterDate}
+                onClick={this.FilterDate}
               >
                 Lọc tìm kiếm
               </button>
             </div>
+            <div>
+              <button
+                id="btnLoc"
+                type="button"
+                className="form-control btn-success"
+                onClick={this.loadPage}
+              >
+                Làm mới trang
+              </button>
+            </div>
           </form>
           <LogTableQLCongNhan>
-            {this.showContentItems(valueContentLog)}
+            {this.showContentItems(valueContentLogSortTime)}
           </LogTableQLCongNhan>
         </section>
       </div>

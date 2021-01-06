@@ -30,17 +30,16 @@ class LogItemQLCongNhan extends Component {
       </p>
     );
     // lấy thời gian của log
-    var date = new Date();
-    var dateGetTimeNow = date.getTime();
+    var getTime = contentItem.time;
+    const TimeLog = new Date(getTime * 1000);
     var dateFormat = require("dateformat");
-    var day = dateFormat(dateGetTimeNow, "dd/mm/yyyy");
-    var time = dateFormat(dateGetTimeNow, "HH:MM:ss");
+    var day = dateFormat(TimeLog, "dd/mm/yyyy");
+    var time = dateFormat(TimeLog, "HH:MM:ss");
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
         <td>{contentItem.ValueNew.Id}</td>
-        <td>{day}</td>
-        <td>{time}</td>
+        <td>{day}-{time}</td>
         <td>{valueContentNew}</td>
         <td>{valueContentOld}</td>
       </tr>

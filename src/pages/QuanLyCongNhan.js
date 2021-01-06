@@ -154,12 +154,13 @@ class QuanLyCongNhan extends Component {
     var checkCardNo = true;
     // content value log
     var date = new Date();
-    var dateGetTimeNow = date.getTime();
+    var dateGetTimeNow = date.getTime() + ' ';
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0,10);
     var keyRandom = this.uuidv4();
     var valueLog = {
       ValueOld: valueEmployeeOld,
       ValueNew: valueEmployee,
-      time: dateGetTimeNow
+      time: dateGetTimeNowSubString
     };
     var valueLogString = JSON.stringify(valueLog);
     // kiểm tra trùng mã số công nhân
