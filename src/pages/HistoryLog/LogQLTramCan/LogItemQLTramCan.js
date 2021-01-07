@@ -15,8 +15,8 @@ class LogItemQLTramCan extends Component {
       nameItemModelGetIdNew: [],
       nameItemTypeGetIdNew: [],
 
-      valueSectionOld: [],
-      valueSectionNew: [],
+      nameSectionOld: [],
+      nameSectionNew: [],
     };
   }
   //-----------------Lấy thông tin section khu vực-----------------------------
@@ -107,27 +107,166 @@ class LogItemQLTramCan extends Component {
     }
     return this.state.nameItemModelGetIdOld + this.state.nameItemTypeGetIdOld;
   };
+
+  componentDidMount = () => {
+    var { contentItem } = this.props;
+    //---------------- láy tên process khu vực và type loại trong para Old---------------------
+    var stringParaOld = contentItem.ValueOld.Status.Para;
+    var arrTypeOld = [];
+    if (stringParaOld != "") {
+      var ObjectParaOld = JSON.parse(stringParaOld);
+      var arrayNameOld = [];
+      for (var k = 0; k < ObjectParaOld.length; k++) {
+        axios({
+          method: "GET",
+          url:
+            `${Config.API_URL}` +
+            "/api/data/valuekey?token=" +
+            `${Config.TOKEN}` +
+            "&Classify=Process&key=" +
+            ObjectParaOld[k].ProcessId +
+            "",
+          data: null,
+        })
+          .then((resProcess) => {
+            var ObjValueOld = JSON.parse(resProcess.data);
+            var nameProcess = ObjValueOld.Name;
+            arrayNameOld.push(nameProcess);
+
+            var setArray = Array.from(new Set(arrayNameOld)); // gợp các phần tử giống nhau trong arr
+
+            this.setState({
+              nameItemModelGetIdOld: setArray,
+              nameItemTypeGetIdOld: arrTypeOld,
+            });
+            console.log(this.state.nameItemModelGetIdOld);
+            console.log(this.state.nameItemTypeGetIdOld);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        // lấy type
+        arrTypeOld.push(ObjectParaOld[k].Type);
+        this.setState({
+          nameItemTypeGetIdOld: arrTypeOld,
+        });
+      }
+    }
+
+    //---------------- láy tên process khu vực và type loại trong para New---------------------
+    var stringParaNew = contentItem.ValueNew.Status.Para;
+    var arrTypeNew = [];
+    if (stringParaNew != "") {
+      var ObjectParaNew = JSON.parse(stringParaNew);
+      var arrayNameNew = [];
+      for (var k = 0; k < ObjectParaNew.length; k++) {
+        axios({
+          method: "GET",
+          url:
+            `${Config.API_URL}` +
+            "/api/data/valuekey?token=" +
+            `${Config.TOKEN}` +
+            "&Classify=Process&key=" +
+            ObjectParaNew[k].ProcessId +
+            "",
+          data: null,
+        })
+          .then((resProcess) => {
+            var ObjValueNew = JSON.parse(resProcess.data);
+            var nameProcess = ObjValueNew.Name;
+            arrayNameNew.push(nameProcess);
+
+            var setArray = Array.from(new Set(arrayNameNew)); // gợp các phần tử giống nhau trong arr
+
+            this.setState({
+              nameItemModelGetIdNew: setArray,
+              nameItemTypeGetIdNew: arrTypeNew,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        // lấy type
+        arrTypeNew.push(ObjectParaNew[k].Type);
+        this.setState({
+          nameItemTypeGetIdNew: arrTypeNew,
+        });
+      }
+    }
+
+    //-----------------Lấy thông tin section khu vực Old-----------------------------
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/Section?id=" +
+        contentItem.ValueOld.SectionId +
+        "&token=" +
+        `${Config.TOKEN}`,
+      data: null,
+    })
+      .then((res) => {
+        var ObjvalueSection = res.data;
+        this.setState({
+          nameSectionOld: ObjvalueSection.Name,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi lấy thông tin khu vực theo id- sections");
+      });
+    //-----------------Lấy thông tin section khu vực New-----------------------------
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/Section?id=" +
+        contentItem.ValueNew.SectionId +
+        "&token=" +
+        `${Config.TOKEN}`,
+      data: null,
+    })
+      .then((res) => {
+        var ObjvalueSection = res.data;
+        this.setState({
+          nameSectionNew: ObjvalueSection.Name,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("Lỗi lấy thông tin khu vực theo id- sections");
+      });
+  };
   render() {
     var { contentItem, index } = this.props;
-    var { nameItemTypeGetIdOld, nameItemModelGetIdOld } = this.state;
+    var {
+      nameItemModelGetIdOld,
+      nameItemTypeGetIdOld,
+
+      nameItemModelGetIdNew,
+      nameItemTypeGetIdNew,
+
+      nameSectionOld,
+      nameSectionNew,
+    } = this.state;
     var valueContentNew = (
       <p>
         Tên: {contentItem.ValueNew.Name} <br />
-        Type: {}
+        Type: {nameItemTypeGetIdNew + " "}
         <br />
-        Công đoạn: {}
+        Công đoạn: {nameItemModelGetIdNew + " "}
         <br />
-        Khu vực: {}
+        Khu vực: {nameSectionNew}
       </p>
     );
     var valueContentOld = (
       <p>
         Tên: {contentItem.ValueOld.Name} <br />
-        Type: {}
+        Type: {nameItemTypeGetIdOld + " "}
         <br />
-        Công đoạn: {}
+        Công đoạn: {nameItemModelGetIdOld + " "}
         <br />
-        Khu vực: {}
+        Khu vực: {nameSectionOld}
       </p>
     );
     // lấy thời gian của log
