@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class TableContentItemsCongDoann extends Component {
 
 onUpdate =() => {
-  this.props.onUpdate(this.props.contentItem.Id);
+  this.props.onUpdate(this.props.contentItem.Id,this.props.contentItem );
 }
 
   render() {

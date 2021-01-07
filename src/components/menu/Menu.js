@@ -15,8 +15,11 @@ import ManghinhSX02FilletXeBuom from "../../pages/HienThiSanXuat/ManghinhSX02Fil
 import ThemThe from "../../pages/QuanLyThe/ThemThe";
 import DinhMuc from "../../pages/SanXuat/DinhMuc";
 import RawData from "../../pages/RawData";
-import LogContentQLCongNhan from '../../pages/HistoryLog/LogQLCongNhan/LogContentQLCongNhan'
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import LogContentQLCongNhan from "../../pages/HistoryLog/LogQLCongNhan/LogContentQLCongNhan";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import LogContentQLTramCan from "../../pages/HistoryLog/LogQLTramCan/LogContentQLTramCan";
+import LogContentQLCongDoan from "../../pages/HistoryLog/LogQLCongDoan/LogContentQLCongDoan";
+import LogContentQLThe from "../../pages/HistoryLog/LogQLThe/LogContentQLThe";
 
 class Menu extends Component {
   render() {
@@ -89,7 +92,8 @@ class Menu extends Component {
               <ul className="sidebar-menu" data-widget="tree">
                 <li className="">
                   <Link to="/Tong-hop" className="linkTo">
-                    <i className="fa fa-cubes" aria-hidden="true"></i> <span>Tổng hợp</span>
+                    <i className="fa fa-cubes" aria-hidden="true"></i>{" "}
+                    <span>Tổng hợp</span>
                   </Link>
                 </li>
                 <li className="">
@@ -167,10 +171,11 @@ class Menu extends Component {
                     <span> Quản lý công nhân </span>
                   </Link>
                 </li>
-               
+
                 <li className="treeview">
                   <a>
-                    <i className="fa fa-history" aria-hidden="true"></i> <span>Lịch sử Log</span>
+                    <i className="fa fa-history" aria-hidden="true"></i>{" "}
+                    <span>Lịch sử Log</span>
                     <span className="pull-right-container">
                       <i className="fa fa-angle-left pull-right"></i>
                     </span>
@@ -180,15 +185,13 @@ class Menu extends Component {
                       <Link to="">Quản lý mã cá</Link>
                     </li>
                     <li className="">
-                      <a href="">Quản lý thẻ</a>
+                      <Link to="/Log-Quan-ly-The">Quản lý thẻ</Link>
                     </li>
                     <li className="">
-                      <a href="">
-                        Quản lý công đoạn
-                      </a>
+                      <Link to="/Log-Quan-ly-Cong-Doan">Quản lý công đoạn</Link>
                     </li>
                     <li className="">
-                      <a href="">Quản lý trạm cân</a>
+                      <Link to="/Log-Quan-ly-Can">Quản lý trạm cân</Link>
                     </li>
                     <li className="">
                       <Link to="/Log-Quan-ly-Cn">Quản lý công nhân</Link>
@@ -242,6 +245,9 @@ class Menu extends Component {
         <Route path="/Dinh-muc-ma-ca" exact component={dinhMuc} />
         <Route path="/Raw-data" exact component={rawData} />
         <Route path="/Log-Quan-ly-Cn" exact component={logContentQLCongNhan} />
+        <Route path="/Log-Quan-ly-Can" exact component={logContentQLTramCan} />
+        <Route path="/Log-Quan-ly-Cong-Doan" exact component={logContentQLCongDoan} />
+        <Route path="/Log-Quan-ly-The" exact component={logContentQLThe} />
       </Router>
     );
   }
@@ -297,5 +303,14 @@ const rawData = () => {
 };
 const logContentQLCongNhan = () => {
   return <LogContentQLCongNhan />;
+};
+const logContentQLTramCan = () => {
+  return <LogContentQLTramCan />;
+};
+const logContentQLCongDoan = () => {
+  return <LogContentQLCongDoan />;
+};
+const logContentQLThe = () => {
+  return <LogContentQLThe />;
 };
 export default Menu;

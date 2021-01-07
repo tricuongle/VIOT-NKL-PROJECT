@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-class LogTableQLCongNhan extends Component {
+class LogTableContent extends Component {
   render() {
     return (
       <div className= "employeeTable">
@@ -19,4 +19,4 @@ class LogTableQLCongNhan extends Component {
     );
   }
 }
-export default LogTableQLCongNhan;
+export default LogTableContent;

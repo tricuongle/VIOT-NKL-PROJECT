@@ -14,6 +14,7 @@ var arrayValueModel = [];
 var arrayValueEmp = [];
 var arrayValueProcess = [];
 var load = [];
+var valueContentLog;
 class QuanLyThongTinThe extends Component {
   constructor(props) {
     super(props);
@@ -108,6 +109,7 @@ class QuanLyThongTinThe extends Component {
   };
 
   getIDChange = (contentItem, nameEmp, nameProcess) => {
+    valueContentLog = contentItem;
     var date = new Date();
     var dayCreate = date.valueOf();
     this.setState((preState) => ({
@@ -241,13 +243,37 @@ class QuanLyThongTinThe extends Component {
       });
   };
 
+  // hàm random key value
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
   /*-------------Hàm sửa thẻ vào công nhân------------- */
   createNewCard = (event) => {
     event.preventDefault();
     var { valueCard } = this.state;
     var stringValueCard = JSON.stringify(valueCard);
-    console.log(stringValueCard);
-    //--------------sửa thẻ mới ---------------------
+
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueContentLog,
+      ValueNew: valueCard,
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
+    //---------------
+
+    //--------------sửa thẻ ---------------------
     axios({
       method: "PUT",
       url:
@@ -262,6 +288,19 @@ class QuanLyThongTinThe extends Component {
     })
       .then((res) => {
         alert("Thay đổi thông tin thẻ " + valueCard.Id + " thành công!");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Card-Log",
+            Value: valueLogString,
+            Description: "Card NKL Log",
+          },
+        }).then((resDevice) => {
+          console.log("Save data in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {
@@ -373,7 +412,8 @@ class QuanLyThongTinThe extends Component {
                     <div className="form-group">
                       <label htmlFor="devices">
                         <h5>
-                          Tên công nhân: <span className="infoCard" id="nameEmp"></span>
+                          Tên công nhân:{" "}
+                          <span className="infoCard" id="nameEmp"></span>
                         </h5>
                       </label>
                       <select
@@ -404,7 +444,8 @@ class QuanLyThongTinThe extends Component {
                       <label htmlFor="area" id="areaDevice">
                         <h5>
                           {" "}
-                          Công đoạn: <span className="infoCard" id="nameProcess"></span>
+                          Công đoạn:{" "}
+                          <span className="infoCard" id="nameProcess"></span>
                         </h5>
                       </label>
                       <select
@@ -422,7 +463,8 @@ class QuanLyThongTinThe extends Component {
                       <label htmlFor="area" id="areaDevice">
                         <h5>
                           {" "}
-                          Classify (Loại): <span className="infoCard" id="nameClassify"></span>
+                          Classify (Loại):{" "}
+                          <span className="infoCard" id="nameClassify"></span>
                         </h5>
                       </label>
                       <select
@@ -441,7 +483,8 @@ class QuanLyThongTinThe extends Component {
                       <label htmlFor="area" id="areaDevice">
                         <h5>
                           {" "}
-                          Màu thẻ: <span className="infoCard" id="nameColor"></span>
+                          Màu thẻ:{" "}
+                          <span className="infoCard" id="nameColor"></span>
                         </h5>
                       </label>
                       <select
@@ -532,7 +575,7 @@ class QuanLyThongTinThe extends Component {
       result = contentEmp.map((contentItem, index) => {
         return (
           <option key={index} value={contentItem.Id}>
-           Tên: {contentItem.Name} - Mã số: {contentItem.CardNo}
+            Tên: {contentItem.Name} - Mã số: {contentItem.CardNo}
           </option>
         );
       });

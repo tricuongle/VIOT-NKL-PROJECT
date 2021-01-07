@@ -1,13 +1,12 @@
 import { Component } from "react";
 import LogTableContent from "../LogTableContent";
-import LogItemQLCongNhan from "./LogItemQLCongNhan";
-import $ from "jquery";
+import LogItemQLCongDoan from "./LogItemQLCongDoan";
 import axios from "axios";
 import * as Config from "../../../untils/Config";
 var arrayValueLog = [];
 var load = [];
 
-class LogContentQLCongNhan extends Component {
+class LogContentQLCongDoan extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +21,7 @@ class LogContentQLCongNhan extends Component {
         `${Config.API_URL}` +
         "/api/data/Values?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Employee-Log",
+        "&Classify=Process-Log",
       data: null,
     })
       .then((res) => {
@@ -81,14 +80,14 @@ class LogContentQLCongNhan extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>LỊCH SỬ QUẢN LÝ CÔNG NHÂN</h1>
+          <h1>LỊCH SỬ QUẢN LÝ CÔNG ĐOẠN</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Lịch sử quản lý công nhân</li>
+            <li className="active">Lịch sử quản lý công đoạn</li>
           </ol>
         </section>
         <section className="content">
@@ -152,7 +151,7 @@ class LogContentQLCongNhan extends Component {
     if (contentItems.length >= 0) {
       result = contentItems.map((contentItem, index) => {
         return (
-          <LogItemQLCongNhan
+          <LogItemQLCongDoan
             key={index}
             contentItem={contentItem}
             index={index}
@@ -163,4 +162,4 @@ class LogContentQLCongNhan extends Component {
     return result;
   }
 }
-export default LogContentQLCongNhan;
+export default LogContentQLCongDoan;

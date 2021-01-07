@@ -21,6 +21,7 @@ var valueNew;
 var Description;
 var IdProcessOld;
 var load = [];
+var valueContentLog;
 class QuanLyCongDoann extends Component {
   constructor(props) {
     super(props);
@@ -93,7 +94,8 @@ class QuanLyCongDoann extends Component {
       });
   };
   /*-------------- nhận ID từ buton Chỉnh sửa và Xóa------------------------- */
-  onUpdate = (Id) => {
+  onUpdate = (Id, valueContent) => {
+    valueContentLog = valueContent;
     axios({
       method: "GET",
       url:
@@ -119,6 +121,17 @@ class QuanLyCongDoann extends Component {
       });
   };
 
+  // hàm random key value
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
   /*-------------- Hàm xử lý gọi api xóa------------------------- */
   onDeleteSave = (event) => {
     event.preventDefault();
@@ -170,7 +183,6 @@ class QuanLyCongDoann extends Component {
     event.preventDefault();
     Description = document.getElementById("idInfoDes").value;
     var Namee = this.state.contentGetProcessId.Name;
-    console.log(Namee);
     var { contentGetProcessId, Name, Level, Before, After } = this.state;
     var nameNew;
     if (Name == "") {
@@ -193,6 +205,20 @@ class QuanLyCongDoann extends Component {
       '","After":"' +
       After +
       '"}';
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var ObjvalueNew = JSON.parse(valueNew);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueContentLog,
+      ValueNew: ObjvalueNew,
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
+
+    //---------------
     axios({
       method: "PUT",
       url:
@@ -209,6 +235,19 @@ class QuanLyCongDoann extends Component {
     })
       .then((res) => {
         alert("Sửa khu vực " + this.state.Name + " thành công !");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Process-Log",
+            Value: valueLogString,
+            Description: "Process NKL Log",
+          },
+        }).then((resDevice) => {
+          console.log("Save data in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {
@@ -367,6 +406,7 @@ class QuanLyCongDoann extends Component {
                         id="idInfoDes"
                         className="form-control"
                         rows="3"
+                        required
                         placeholder="mô tả ngắn khi thay đổi"
                       ></textarea>
                     </div>

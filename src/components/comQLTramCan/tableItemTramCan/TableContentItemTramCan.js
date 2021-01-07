@@ -1,32 +1,25 @@
 import React, { Component } from "react";
 import axios from "axios";
 import * as Config from "../../../untils/Config";
-var textName;
-var ObjName;
 var ObjValue;
-var contentItemss;
 class TableContentItemTramCan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contentItemModelGetId: [],
       nameItemModelGetId: [],
       nameItemTypeGetId: [],
       valueSection: [],
     };
   }
-  /*----------------------get ID of table process to call name process ----------------------------- */
   componentDidMount = () => {
     var { contentItem } = this.props;
     var stringPara = contentItem.Status.Para;
     var arrType = [];
     if (stringPara != "") {
       var ObjectPara = JSON.parse(stringPara);
-      /*var textString = contentItem.Status.ProcessId + "";
-      var arrayIdProcess = textString.split(","); // tách chuỗi từ Process ID*/
       var arrayName = [];
       for (var k = 0; k < ObjectPara.length; k++) {
-        // láy tên process theo id trong Para
+        //---------------- láy tên process khu vực và type loại trong para---------------------
         axios({
           method: "GET",
           url:
@@ -60,7 +53,7 @@ class TableContentItemTramCan extends Component {
         });
       }
     }
-    /*-----------------Lấy thông tin section và đổ vào select----------------------------- */
+    //-----------------Lấy thông tin section khu vực-----------------------------
     axios({
       method: "GET",
       url:
@@ -84,18 +77,14 @@ class TableContentItemTramCan extends Component {
   };
 
   onGetIdEdit = () => {
-    this.props.onGetIdEdit(this.props.contentItem.Id);
+    //----------- truyền id và nội dung của thiết bị cân------------------
+    this.props.onGetIdEdit(this.props.contentItem.Id, this.props.contentItem);
   };
 
   render() {
     var { contentItem, index } = this.props;
 
-    var {
-      contentItemModelGetId,
-      nameItemModelGetId,
-      valueSection,
-      nameItemTypeGetId,
-    } = this.state;
+    var { nameItemModelGetId, valueSection, nameItemTypeGetId } = this.state;
     var nameSection;
     if (valueSection == null) {
       nameSection = "__";

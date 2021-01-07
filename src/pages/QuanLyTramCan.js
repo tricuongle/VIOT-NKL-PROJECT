@@ -16,6 +16,7 @@ var arrayParaNew = [];
 var arrNewTest = [];
 var arrParaConcar = [];
 var Type = "";
+var valueDeviceOld;
 
 class QuanLyTramCan extends Component {
   constructor(props) {
@@ -160,10 +161,11 @@ class QuanLyTramCan extends Component {
       });
   };
 
-  onGetIdEdit = (IdDevice) => {
+  onGetIdEdit = (IdDevice, valueDevice) => {
     /*-----------------------function get list process to api ---------------------------------- */
     document.getElementById("btnEditDevice").disabled = false;
-
+    valueDeviceOld = valueDevice;
+    console.log(valueDeviceOld);
     axios({
       method: "GET",
       url:
@@ -371,7 +373,17 @@ class QuanLyTramCan extends Component {
 
     return arrayvalue;
   };
-
+  // hàm random key value
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
   // hàm edit thiết bị
   onEditDevice = (event) => {
     event.preventDefault();
@@ -394,27 +406,19 @@ class QuanLyTramCan extends Component {
     tempContentDevice.Name = nameEditDevice;
     tempContentDevice.SectionId = idSection;
     tempContentDevice.Status.Para = pareString;
-    console.log(tempContentDevice);
 
-    /*axios({
-      method: "PUT",
-      url:
-        `${Config.API_URL}` +
-        "/api/iotdevice/" +
-        Id +
-        "?token=" +
-        `${Config.TOKEN}`,
-      data: {
-        Para: pareString,
-      },
-    })
-      .then((res) => {
-        alert("Sửa thành thiết bị cân công !");
-        this.LoadData();
-      })
-      .catch((err) => {
-        console.log(err);
-      });*/
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueDeviceOld,
+      ValueNew: tempContentDevice,
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
+    //---------------
 
     axios({
       method: "POST",
@@ -426,6 +430,19 @@ class QuanLyTramCan extends Component {
     })
       .then((res) => {
         alert("Sửa thiết bị cân thành công !");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Device-Log",
+            Value: valueLogString,
+            Description: "Device NKL Log",
+          },
+        }).then((resDevice) => {
+          console.log("Save data in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {

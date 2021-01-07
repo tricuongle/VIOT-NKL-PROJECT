@@ -40,7 +40,7 @@ class QLTTableContentItemThe extends Component {
         console.log("lỗi lấy tên công nhân !");
       });
 
-    /*----------láy tên khu vực ----------- */
+    /*----------láy tên công đoạn----------- */
     axios({
       method: "GET",
       url:
@@ -59,7 +59,7 @@ class QLTTableContentItemThe extends Component {
       })
       .catch((err) => {
         console.log(err);
-        console.log("lỗi lấy tên công nhân !");
+        console.log("lỗi lấy tên công đoạn !");
       });
     /*----------lấy tên công đoạn (mã cá)-------------- */
     axios({
