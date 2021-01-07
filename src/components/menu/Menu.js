@@ -20,6 +20,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import LogContentQLTramCan from "../../pages/HistoryLog/LogQLTramCan/LogContentQLTramCan";
 import LogContentQLCongDoan from "../../pages/HistoryLog/LogQLCongDoan/LogContentQLCongDoan";
 import LogContentQLThe from "../../pages/HistoryLog/LogQLThe/LogContentQLThe";
+import LogContentQLMaCa from "../../pages/HistoryLog/LogQLMaCa/LogContentQLMaCa";
 
 class Menu extends Component {
   render() {
@@ -182,7 +183,7 @@ class Menu extends Component {
                   </a>
                   <ul className="treeview-menu">
                     <li className="">
-                      <Link to="">Quản lý mã cá</Link>
+                      <Link to="/Log-Quan-ly-Ma-Ca">Quản lý mã cá</Link>
                     </li>
                     <li className="">
                       <Link to="/Log-Quan-ly-The">Quản lý thẻ</Link>
@@ -248,6 +249,7 @@ class Menu extends Component {
         <Route path="/Log-Quan-ly-Can" exact component={logContentQLTramCan} />
         <Route path="/Log-Quan-ly-Cong-Doan" exact component={logContentQLCongDoan} />
         <Route path="/Log-Quan-ly-The" exact component={logContentQLThe} />
+        <Route path="/Log-Quan-ly-Ma-Ca" exact component={logContentQLMaCa} />
       </Router>
     );
   }
@@ -312,5 +314,8 @@ const logContentQLCongDoan = () => {
 };
 const logContentQLThe = () => {
   return <LogContentQLThe />;
+};
+const logContentQLMaCa= () => {
+  return <LogContentQLMaCa />;
 };
 export default Menu;

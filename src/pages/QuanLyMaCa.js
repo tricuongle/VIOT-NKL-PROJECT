@@ -16,7 +16,8 @@ var JsonName;
 var ArrayValue = [];
 var ArrayNameProcess = [];
 var load = [];
- var nameProcess ='';
+var nameProcess = "";
+var valueContentModelLog;
 // khi gọi về chỉ hiển thị id của khu vực, dùng id lấy tên
 var i;
 class QuanLyMaCa extends Component {
@@ -63,10 +64,10 @@ class QuanLyMaCa extends Component {
         [name]: value,
       },
     }));
-    if( name == "ProcessId"){
+    if (name == "ProcessId") {
       var valueProcess = this.state.contentProcess;
-      for(var k in valueProcess){
-        if( valueProcess[k].Id == value){
+      for (var k in valueProcess) {
+        if (valueProcess[k].Id == value) {
           nameProcess = valueProcess[k].Name;
         }
       }
@@ -146,7 +147,7 @@ class QuanLyMaCa extends Component {
   };
   /*--------------hàm truyền dữ liệu từ một hàng trong table---------------- */
   onUpdate = (content, namePro) => {
-
+    valueContentModelLog= content; // gán giá trị cho log
     this.setState((preState) => ({
       valueModel: {
         ...preState.valueModel,
@@ -162,20 +163,43 @@ class QuanLyMaCa extends Component {
         Group: content.Group,
       },
     }));
-    nameProcess= namePro; // gán tên với tên lấy được
+    nameProcess = namePro; // gán tên với tên lấy được
     document.getElementById("idNameModel").value = content.Name;
     document.getElementById("idModel").value = content.Id;
-
 
     document.getElementById("idGroupp").value = content.Group;
     document.getElementById("idClassifyy").value = content.Classify;
   };
+  // hàm random key value
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
+
   /*-----------------hàm Edit Mã cá ------------------*/
   onEditMaCa = (event) => {
     event.preventDefault();
     var { valueModel } = this.state;
     var valueModelString = JSON.stringify(valueModel);
-    console.log(valueModelString);
+
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueContentModelLog,
+      ValueNew: valueModel,
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
+
     axios({
       method: "PUT",
       url:
@@ -190,6 +214,20 @@ class QuanLyMaCa extends Component {
     })
       .then((resModel) => {
         alert("Sửa công đoạn " + valueModel.Name + " thành công!");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Model-Log",
+            Value: valueLogString,
+            Description: "Model NKL Log",
+          },
+        }).then((resDevice) => {
+          console.log("Save data in log ok !");
+        });
+        this.LoadData();
         this.LoadData();
       })
       .catch((err) => {
@@ -452,7 +490,12 @@ class QuanLyMaCa extends Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="devices">
-                        <h5>Công đoạn: <span className="infoModel" id= "idModelName">{nameProcess}</span></h5>
+                        <h5>
+                          Công đoạn:{" "}
+                          <span className="infoModel" id="idModelName">
+                            {nameProcess}
+                          </span>
+                        </h5>
                       </label>
                       <br />
                       <select
@@ -480,7 +523,7 @@ class QuanLyMaCa extends Component {
                             type="number"
                             placeholder="khối lượng Kg"
                             className="form-control"
-                            id="idWeightInMin"    
+                            id="idWeightInMin"
                             name="WeightInMin"
                             required
                             min={0}
