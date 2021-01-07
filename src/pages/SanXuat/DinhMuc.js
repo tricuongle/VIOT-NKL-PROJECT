@@ -12,6 +12,7 @@ import TableItemDinhMuc from "../../components/comSanXuat/comDinhMuc/TableItemDi
 var ArrayValue = [];
 var arrayValueFishCode = [];
 var load = [];
+var valueDinhmucLog;
 class DinhMuc extends Component {
   constructor(props) {
     super(props);
@@ -137,8 +138,8 @@ class DinhMuc extends Component {
   };
 
   /*-------------- truyền data khi ấn button tạo mới------------------------- */
-  onUpdateDinhMuc = (ID, NameModel) => {
-    console.log(ID);
+  onUpdateDinhMuc = (ID, NameModel, valueContent) => {
+    valueDinhmucLog = valueContent;
     axios({
       method: "GET",
       url:
@@ -189,6 +190,17 @@ class DinhMuc extends Component {
         console.log(err);
       });
   };
+  // hàm random key value
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
   /*---------------Tạo mới giá định mức-------------------------- */
   onCreateDinhMuc = (event) => {
     event.preventDefault();
@@ -219,7 +231,17 @@ class DinhMuc extends Component {
     event.preventDefault();
     var { valueDinhMuc } = this.state;
     var stringValueDinhMuc = JSON.stringify(valueDinhMuc);
-    console.log(stringValueDinhMuc);
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueDinhmucLog,
+      ValueNew: valueDinhMuc,
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
     axios({
       method: "PUT",
       url:
@@ -235,6 +257,19 @@ class DinhMuc extends Component {
     })
       .then((resFishCode) => {
         alert("Sửa đinh giá " + valueDinhMuc.Name + "thành công !");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "FishCode-Log",
+            Value: valueLogString,
+            Description: "FishCode NKL Log",
+          },
+        }).then((resEmp) => {
+          console.log("Save data in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {
@@ -248,7 +283,17 @@ class DinhMuc extends Component {
     event.preventDefault();
     var { valueDinhMuc } = this.state;
     var stringValueDinhMuc = JSON.stringify(valueDinhMuc);
-    console.log(stringValueDinhMuc);
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueDinhMuc,
+      ValueNew: "Thông tin đã xóa",
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
     axios({
       method: "PUT",
       url:
@@ -264,6 +309,19 @@ class DinhMuc extends Component {
     })
       .then((resFishCode) => {
         alert("Xóa đinh giá " + valueDinhMuc.Name + "thành công !");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "FishCode-Log",
+            Value: valueLogString,
+            Description: "FishCode NKL Log",
+          },
+        }).then((resEmp) => {
+          console.log("Save data in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {

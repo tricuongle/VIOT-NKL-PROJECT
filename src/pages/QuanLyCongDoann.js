@@ -156,6 +156,20 @@ class QuanLyCongDoann extends Component {
       '","After":"' +
       After +
       '"}';
+       // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var ObjvalueNew = JSON.parse(valueNew);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: ObjvalueNew,
+      ValueNew: "Thông tin đã xóa",
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
+
+    //---------------
     axios({
       method: "PUT",
       url:
@@ -171,6 +185,19 @@ class QuanLyCongDoann extends Component {
     })
       .then((res) => {
         alert("Xóa công đoạn " + this.state.Name + " thành công !");
+         // lưu dữ liệu vào log
+         axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Process-Log",
+            Value: valueLogString,
+            Description: "Process NKL Log",
+          },
+        }).then((resDevice) => {
+          console.log("Save data in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {

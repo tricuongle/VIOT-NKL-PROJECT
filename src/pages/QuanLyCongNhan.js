@@ -222,6 +222,18 @@ class QuanLyCongNhan extends Component {
     var valueEmpDelete = valueEmployee;
     valueEmpDelete.IsLock = false;
     var valueEmployeeString = JSON.stringify(valueEmpDelete);
+
+    // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + ' ';
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0,10);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: valueEmpDelete,
+      ValueNew: "Thông tin đã xóa",
+      time: dateGetTimeNowSubString
+    };
+    var valueLogString = JSON.stringify(valueLog);
     axios({
       method: "PUT",
       url:
@@ -236,6 +248,19 @@ class QuanLyCongNhan extends Component {
     })
       .then((resEmp) => {
         alert("Xóa thông tin công nhân " + valueEmployee.Name + " thành công!");
+        // lưu dữ liệu vào log
+      axios({
+        method: "POST",
+        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+        data: {
+          Key: keyRandom,
+          Classify: "Employee-Log",
+          Value: valueLogString,
+          Description: "Employee NKL Log",
+        },
+      }).then((resEmp) => {
+        console.log("Save data  in log ok !");
+      });
         this.LoadData();
       })
       .catch((err) => {

@@ -235,7 +235,7 @@ class QuanLyMaCa extends Component {
         console.log("Lỗi");
       });
   };
-  /*----------------DELETE công đoạn------------------------ */
+  /*----------------DELETE mã cá------------------------ */
   onDeleteMaCa = (event) => {
     event.preventDefault();
     var arrayValueFishcode = [];
@@ -263,7 +263,20 @@ class QuanLyMaCa extends Component {
       '","status":' +
       statusDELETE +
       "}";
-    console.log(valueModelString);
+       // content value log
+    var date = new Date();
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+    var ObjvalueNew = JSON.parse(valueModelString);
+    var keyRandom = this.uuidv4();
+    var valueLog = {
+      ValueOld: ObjvalueNew,
+      ValueNew: "Thông tin đã xóa",
+      time: dateGetTimeNowSubString,
+    };
+    var valueLogString = JSON.stringify(valueLog);
+
+    //---------------
     /*lấy datta định mức theo mã cá */
     axios({
       method: "GET",
@@ -304,6 +317,19 @@ class QuanLyMaCa extends Component {
     })
       .then((resModel) => {
         alert("Xóa mã cá " + valueModel.Name + " thành công!");
+        // lưu dữ liệu vào log
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Model-Log",
+            Value: valueLogString,
+            Description: "Model NKL Log",
+          },
+        }).then((resDevice) => {
+          console.log("Save data in log ok !");
+        });
 
         /*Xóa thay đổi status định mức mã cá == sai */
         axios({

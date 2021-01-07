@@ -194,9 +194,34 @@ class QuanLyThongTinThe extends Component {
   };
 
   // hàm xóa thẻ
-  getIDDeleteChange = (idRFID) => {
+  getIDDeleteChange = (idRFID, contentCard) => {
     var notionDelete = window.confirm("Bạn có đồng ý xóa thẻ nào không?");
     if (notionDelete) {
+      // content value log
+      var date = new Date();
+      var dateGetTimeNow = date.getTime() + " ";
+      var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
+      var keyRandom = this.uuidv4();
+      var valueLog = {
+        ValueOld: contentCard,
+        ValueNew: "Thông tin đã xóa",
+        time: dateGetTimeNowSubString,
+      };
+      var valueLogString = JSON.stringify(valueLog);
+      //---------------
+      // lưu dữ liệu vào log
+      axios({
+        method: "POST",
+        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+        data: {
+          Key: keyRandom,
+          Classify: "Card-Log",
+          Value: valueLogString,
+          Description: "Card NKL Log",
+        },
+      }).then((resDevice) => {
+        console.log("Save data in log ok !");
+      });
       axios({
         method: "DELETE",
         url:
@@ -209,8 +234,7 @@ class QuanLyThongTinThe extends Component {
       })
         .then((res) => {
           this.LoadData();
-        })
-        .catch((err) => {});
+        });
     }
   };
   /*-------------hàm lấy type từ process ---------------------- */

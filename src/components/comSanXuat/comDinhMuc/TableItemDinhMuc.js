@@ -11,11 +11,11 @@ class TableItemDinhMuc extends Component {
   }
   onUpdateDinhMuc = () => {
     var {contentItem} = this.props;
-    this.props.onUpdateDinhMuc(contentItem.ID,this.state.NameModel);
+    this.props.onUpdateDinhMuc(contentItem.ID,this.state.NameModel,contentItem);
   };
   onDelDinhMuc =()=>{
     var {contentItem} = this.props;
-    this.props.onDelDinhMuc(contentItem.ID,this.state.NameModel);
+    this.props.onDelDinhMuc(contentItem.ID,this.state.NameModel , contentItem);
   }
   componentDidMount = () => {
     var { contentItem } = this.props;

@@ -21,6 +21,7 @@ import LogContentQLTramCan from "../../pages/HistoryLog/LogQLTramCan/LogContentQ
 import LogContentQLCongDoan from "../../pages/HistoryLog/LogQLCongDoan/LogContentQLCongDoan";
 import LogContentQLThe from "../../pages/HistoryLog/LogQLThe/LogContentQLThe";
 import LogContentQLMaCa from "../../pages/HistoryLog/LogQLMaCa/LogContentQLMaCa";
+import LogContentQLDinhMuc from "../../pages/HistoryLog/LogQLDinhMuc/LogContentQLDinhMuc";
 
 class Menu extends Component {
   render() {
@@ -186,6 +187,9 @@ class Menu extends Component {
                       <Link to="/Log-Quan-ly-Ma-Ca">Quản lý mã cá</Link>
                     </li>
                     <li className="">
+                      <Link to="/Log-Quan-ly-Dinh-Muc">Quản lý định mức</Link>
+                    </li>
+                    <li className="">
                       <Link to="/Log-Quan-ly-The">Quản lý thẻ</Link>
                     </li>
                     <li className="">
@@ -250,6 +254,7 @@ class Menu extends Component {
         <Route path="/Log-Quan-ly-Cong-Doan" exact component={logContentQLCongDoan} />
         <Route path="/Log-Quan-ly-The" exact component={logContentQLThe} />
         <Route path="/Log-Quan-ly-Ma-Ca" exact component={logContentQLMaCa} />
+        <Route path="/Log-Quan-ly-Dinh-Muc" exact component={logContentQLDinhMuc} />
       </Router>
     );
   }
@@ -317,5 +322,8 @@ const logContentQLThe = () => {
 };
 const logContentQLMaCa= () => {
   return <LogContentQLMaCa />;
+};
+const logContentQLDinhMuc= () => {
+  return <LogContentQLDinhMuc />;
 };
 export default Menu;

@@ -91,7 +91,7 @@ class QLTTableContentItemThe extends Component {
   // truyền id RFID để xóa
   getIDDeleteChange = () => {
     var {contentItem}= this.props
-    this.props.getIDDeleteChange(contentItem.RFID);
+    this.props.getIDDeleteChange(contentItem.RFID, contentItem);
   };
   render() {
     var { contentItem, index } = this.props;

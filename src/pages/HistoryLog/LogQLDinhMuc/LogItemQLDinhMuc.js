@@ -1,100 +1,89 @@
 import React, { Component } from "react";
-import axios from "axios";
 import * as Config from "../../../untils/Config";
-class LogItemQLMaCa extends Component {
+import axios from "axios";
+class LogItemQLDinhMuc extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nameProcessOld: "",
-      nameProcessNew: "",
+      nameModelOld: "",
+      nameModelNew: "",
     };
   }
   componentDidMount = () => {
     var { contentItem } = this.props;
-    var idProcessOld = contentItem.ValueOld.ProcessId;
-    var idProcessNew = contentItem.ValueNew.ProcessId;
-    /*------lấy tên công đoạn cũ ----------- */
+    var nameModelOldID = contentItem.ValueOld.ModelId;
+    var nameModelNewID = contentItem.ValueNew.ModelId;
+
+    /*------lấy tên mã cá cũ ----------- */
     axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
         "/api/data/valuekey?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Process&key=" +
-        idProcessOld,
+        "&Classify=Model&key=" +
+        nameModelOldID,
       data: null,
     })
       .then((res) => {
         var Object = JSON.parse(res.data);
         this.setState({
-          nameProcessOld: Object.Name,
+          nameModelOld: Object.Name,
         });
       })
       .catch((err) => {
         console.log(err);
-        console.log("lỗi lấy tên công đoạn !");
+        console.log("lỗi lấy tên Mã cá !");
       });
-    /*------lấy tên công đoạn mới ----------- */
+    /*------lấy tên mã cá mới ----------- */
     axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
         "/api/data/valuekey?token=" +
         `${Config.TOKEN}` +
-        "&Classify=Process&key=" +
-        idProcessNew,
+        "&Classify=Model&key=" +
+        nameModelNewID,
       data: null,
     })
       .then((res) => {
         var Object = JSON.parse(res.data);
         this.setState({
-          nameProcessNew: Object.Name,
+          nameModelNew: Object.Name,
         });
       })
       .catch((err) => {
         console.log(err);
-        console.log("lỗi lấy tên công đoạn !");
+        console.log("lỗi lấy tên mã cá !");
       });
   };
+
   render() {
     var { contentItem, index } = this.props;
-    var { nameProcessNew, nameProcessOld } = this.state;
+    var { nameModelOld, nameModelNew } = this.state;
     var valueContentNew;
-
     if (contentItem.ValueNew == "Thông tin đã xóa") {
       valueContentNew = contentItem.ValueNew;
     } else {
       valueContentNew = (
         <p>
-          Tên: {contentItem.ValueNew.Name} <br />
-          KL vào Min/Max: {contentItem.ValueNew.WeightInMin}/
-          {contentItem.ValueNew.WeighInMax}
+          Tên mã cá: {nameModelNew} <br />
+          Tên định mức giá: {contentItem.ValueNew.Name}
           <br />
-          KL ra Min/Max: {contentItem.ValueNew.WeightOutMin}/
-          {contentItem.ValueNew.WeighOutMax}
+          Khối lượng: {contentItem.ValueNew.Weight}
           <br />
-          công đoạn: {nameProcessNew}
-          <br />
-          Nhóm: {contentItem.ValueNew.Group}
-          <br />
-          Classify: {contentItem.ValueNew.Classify}
+          Đơn giá: {contentItem.ValueNew.Price}
         </p>
       );
     }
     var valueContentOld = (
       <p>
-        Tên: {contentItem.ValueOld.Name} <br />
-        KL vào Min/Max: {contentItem.ValueOld.WeightInMin}/
-        {contentItem.ValueOld.WeighInMax}
+        Tên mã cá: {nameModelOld} <br />
+        Tên định mức giá: {contentItem.ValueOld.Name}
         <br />
-        KL ra Min/Max: {contentItem.ValueOld.WeightOutMin}/
-        {contentItem.ValueOld.WeighOutMax}
+        Khối lượng: {contentItem.ValueOld.Weight}
         <br />
-        công đoạn: {nameProcessOld}
-        <br />
-        Nhóm: {contentItem.ValueOld.Group}
-        <br />
-        Classify: {contentItem.ValueOld.Classify}
+        Đơn giá: {contentItem.ValueOld.Price}
       </p>
     );
     // lấy thời gian của log
@@ -106,7 +95,7 @@ class LogItemQLMaCa extends Component {
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
-        <td>{contentItem.ValueOld.Id}</td>
+        <td>{contentItem.ValueOld.ID}</td>
         <td>
           {day}-{time}
         </td>
@@ -116,4 +105,4 @@ class LogItemQLMaCa extends Component {
     );
   }
 }
-export default LogItemQLMaCa;
+export default LogItemQLDinhMuc;

@@ -60,7 +60,7 @@ class LogItemQLThe extends Component {
         console.log(err);
         console.log("lỗi lấy tên công nhân !");
       });
-      /*------lấy tên công đoạn cũ ----------- */
+    /*------lấy tên công đoạn cũ ----------- */
     axios({
       method: "GET",
       url:
@@ -106,20 +106,29 @@ class LogItemQLThe extends Component {
 
   render() {
     var { contentItem, index } = this.props;
-    var { nameEmployeeOld, nameEmployeeNew, nameProcessNew, nameProcessOld } = this.state;
-
-    var valueContentNew = (
-      <p>
-        Tên thẻ: {contentItem.ValueNew.Id} <br />
-        Tên công nhân: {nameEmployeeNew}
-        <br />
-        Màu: {contentItem.ValueNew.Color}
-        <br />
-        Công đoạn: {nameProcessNew}
-        <br />
-        Loại: {contentItem.ValueNew.Classify}
-      </p>
-    );
+    var {
+      nameEmployeeOld,
+      nameEmployeeNew,
+      nameProcessNew,
+      nameProcessOld,
+    } = this.state;
+    var valueContentNew;
+    if (contentItem.ValueNew == "Thông tin đã xóa") {
+      valueContentNew = contentItem.ValueNew;
+    } else {
+      valueContentNew = (
+        <p>
+          Tên thẻ: {contentItem.ValueNew.Id} <br />
+          Tên công nhân: {nameEmployeeNew}
+          <br />
+          Màu: {contentItem.ValueNew.Color}
+          <br />
+          Công đoạn: {nameProcessNew}
+          <br />
+          Loại: {contentItem.ValueNew.Classify}
+        </p>
+      );
+    }
     var valueContentOld = (
       <p>
         tên thẻ: {contentItem.ValueOld.Id} <br />
@@ -141,7 +150,7 @@ class LogItemQLThe extends Component {
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
-        <td>{contentItem.ValueNew.RFID}</td>
+        <td>{contentItem.ValueOld.RFID}</td>
         <td>
           {day}-{time}
         </td>

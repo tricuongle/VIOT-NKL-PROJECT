@@ -5,11 +5,17 @@ class LogItemQLCongDoan extends Component {
   }
   render() {
     var { contentItem, index } = this.props;
-    var valueContentNew = (
-      <p>
-        Tên: {contentItem.ValueNew.Name} <br />
-      </p>
-    );
+    var valueContentNew;
+    if (contentItem.ValueNew == "Thông tin đã xóa") {
+      valueContentNew = contentItem.ValueNew;
+    } else {
+      valueContentNew = (
+        <p>
+          Tên: {contentItem.ValueNew.Name} <br />
+        </p>
+      );
+    }
+
     var valueContentOld = (
       <p>
         tên: {contentItem.ValueOld.Name} <br />
@@ -24,8 +30,10 @@ class LogItemQLCongDoan extends Component {
     return (
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
-        <td>{contentItem.ValueNew.Id}</td>
-        <td>{day}-{time}</td>
+        <td>{contentItem.ValueOld.Id}</td>
+        <td>
+          {day}-{time}
+        </td>
         <td>{valueContentNew}</td>
         <td>{valueContentOld}</td>
       </tr>
