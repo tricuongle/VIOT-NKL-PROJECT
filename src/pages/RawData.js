@@ -37,6 +37,8 @@ class RawData extends Component {
       .then((res) => {
         arrayRecode = [];
         var date = new Date();
+        var dateGetTimeNow = date.getTime() + " ";
+        var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
         dayToDay2 =
           date.getDate() +
           "/" +
@@ -47,8 +49,9 @@ class RawData extends Component {
           contentItem = JSON.parse(contentItem);
 
           var dayRawData = this.convertData(contentItem.ReadTime); // Lấy thời gian record
+          var dayToDay= this.convertData(dateGetTimeNowSubString); // lấy thời gian trong record
 
-          if (dayRawData == dayToDay2) { // So sách ngày
+          if (dayRawData == dayToDay) { // So sách ngày
             arrayRecode.push(contentItem);
           }
           this.setState({
@@ -68,7 +71,7 @@ class RawData extends Component {
               res.data.map((contentItem) => {
                 contentItem = JSON.parse(contentItem);
                 var dayRawData = this.convertData(contentItem.ReadTime); // thời gian record
-                if (dayRawData == dayToDay2) {
+                if (dayRawData == dayToDay) {
                   arrayRecode.push(contentItem);
                 }
               });

@@ -98,6 +98,8 @@ class TongHop extends Component {
       .then((res) => {
         arrayRecode = [];
         var date = new Date();
+        var dateGetTimeNow = date.getTime() + " ";
+        var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
         dayToDay2 =
           date.getDate() +
           "/" +
@@ -107,8 +109,9 @@ class TongHop extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           var dayRawData = this.convertData(contentItem.ReadTime); // lấy thời gian trong record
+          var dayToDay= this.convertData(dateGetTimeNowSubString); // lấy thời gian trong record
           // so sánh ngày
-          if (dayRawData == dayToDay2) {
+          if (dayRawData == dayToDay) {
             arrayRecode.push(contentItem);
           }
         });
@@ -263,7 +266,7 @@ class TongHop extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1 >
+          <h1>
             TỔNG HỢP CÔNG ĐOẠN TRONG NGÀY <b>{dayToDay2}</b>
           </h1>
           <ol className="breadcrumb">
@@ -276,7 +279,6 @@ class TongHop extends Component {
           </ol>
         </section>
         <section className="content">
-         
           <form className="filter-section form-inline">
             <h4 id="idWeight">
               Tổng khối lượng Vào: <b>{sumWeightIn}</b> Kg
