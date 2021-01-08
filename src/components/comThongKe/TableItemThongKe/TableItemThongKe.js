@@ -124,7 +124,7 @@ class TableItemTongHop extends Component {
       });
 
     /*-----------------Lấy thông tin section và đổ vào select----------------------------- */
-    axios({
+    /*axios({
       method: "GET",
       url:
         `${Config.API_URL}` +
@@ -141,9 +141,8 @@ class TableItemTongHop extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
-        console.log("Lỗi lấy thông tin khu vực theo id- sections");
-      });
+        console.log("Lỗi lấy khu vực sections");
+      });*/
   };
 
   render() {
@@ -185,12 +184,13 @@ class TableItemTongHop extends Component {
     var imgOut =
       `${Config.API_URL}` + "/api/images/" + contentItem.Image + ".jpg";
     // lấy tên khu vực cửa device
-    var nameSection;
+    /*var nameSection;
     if (valueSection == null) {
       nameSection = "__";
     } else {
       nameSection = valueSection.Name;
-    }
+    }*/
+    // lấy dinh muc can
     var DinhMucCan;
     if ( DinhMuc == 0 || DinhMuc == "" || DinhMuc == null ) {
       DinhMucCan = "-";

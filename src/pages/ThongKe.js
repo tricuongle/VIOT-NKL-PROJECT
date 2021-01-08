@@ -43,16 +43,8 @@ class ThongKe extends Component {
         this.setState({
           valueRecode: arrayRecode,
         });
-        $("#tableData").DataTable({
-          searching: false,
-          ordering: false,
-          dom: "Bfrtip",
-          scrollX: true,
-          scrollY: 450,
-          paging: false,
-        });
+        console.log(this.state.valueRecode.length);
       })
-
       .catch((err) => {
         console.log(err);
       });
@@ -112,29 +104,35 @@ class ThongKe extends Component {
     var arrayRecodeToDate = [];
     dateAfter.setDate(dateAfter.getDate() + 1);
 
-    if (dateBefore.getTime() < dateAfter.getTime()) {
-      for (var k in valueRecode) {
-        const dateRecord = new Date(valueRecode[k].ReadTime * 1000); // ngày trong record
-        if (
-          dateRecord.getTime() >= dateBefore.getTime() &&
-          dateRecord.getTime() <= dateAfter.getTime()
-        ) {
-          arrayRecodeToDate.push(valueRecode[k]);
+    console.log(this.state.valueRecode.length);
+
+    if (this.state.valueRecode.length == 0) {
+      alert("Đang tải dữ liệu, vui lòng đợi và thử lại...");
+    } else {
+      if (dateBefore.getTime() < dateAfter.getTime()) {
+        for (var k in valueRecode) {
+          const dateRecord = new Date(valueRecode[k].ReadTime * 1000); // ngày trong record
+          if (
+            dateRecord.getTime() >= dateBefore.getTime() &&
+            dateRecord.getTime() <= dateAfter.getTime()
+          ) {
+            arrayRecodeToDate.push(valueRecode[k]);
+          }
         }
+      } else {
+        alert("Lỗi! Khoản thời gian không hợp lệ...");
       }
-    } else {
-      alert("Lỗi! Khoản thời gian không hợp lệ.");
-    }
-    if (arrayRecodeToDate.length == 0) {
-      alert("Không có dữ liệu trong thời gian chọn!");
-    } else {
-      this.setState({
-        valueRecodeGetDay: arrayRecodeToDate,
-        keyword: "",
-      });
+      if (arrayRecodeToDate.length == 0) {
+        alert("Không có dữ liệu trong thời gian chọn!");
+      } else {
+        this.setState({
+          valueRecodeGetDay: arrayRecodeToDate,
+          keyword: "",
+        });
+      }
     }
 
-    this.LoadData();
+    //this.LoadData();
   };
   /*------------------------------------- */
   // kiểm tra đồng ý xuất excel
@@ -248,7 +246,7 @@ class ThongKe extends Component {
               <button
                 id="btnLoc"
                 type="button"
-                className=" form-control form-group btn btn-warning  btn-ladda"
+                className=" form-control form-group btn btn-warning  btn-ladda "
                 data-style="expand-left"
                 onClick={this.FilterDate}
               >

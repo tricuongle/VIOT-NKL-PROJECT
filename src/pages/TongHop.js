@@ -86,7 +86,6 @@ class TongHop extends Component {
     return sumOut;
   };
   componentDidMount = () => {
-
     axios({
       method: "GET",
       url:

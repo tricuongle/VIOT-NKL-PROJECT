@@ -133,7 +133,6 @@ class QuanLyCongNhan extends Component {
     document.getElementById("CNNDEmp").value = content.CMND;
     document.getElementById("DateEmp").value = content.BirthDay;
   };
-
   // hàm random key value
   uuidv4 = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -145,7 +144,6 @@ class QuanLyCongNhan extends Component {
       }
     );
   };
-
   /*---------------sửa thông tin công nhân--------------- */
   onUpdateSave = (event) => {
     event.preventDefault();
@@ -154,13 +152,13 @@ class QuanLyCongNhan extends Component {
     var checkCardNo = true;
     // content value log
     var date = new Date();
-    var dateGetTimeNow = date.getTime() + ' ';
-    var dateGetTimeNowSubString = dateGetTimeNow.substring(0,10);
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
     var keyRandom = this.uuidv4();
     var valueLog = {
       ValueOld: valueEmployeeOld,
       ValueNew: valueEmployee,
-      time: dateGetTimeNowSubString
+      time: dateGetTimeNowSubString,
     };
     var valueLogString = JSON.stringify(valueLog);
     // kiểm tra trùng mã số công nhân
@@ -225,13 +223,13 @@ class QuanLyCongNhan extends Component {
 
     // content value log
     var date = new Date();
-    var dateGetTimeNow = date.getTime() + ' ';
-    var dateGetTimeNowSubString = dateGetTimeNow.substring(0,10);
+    var dateGetTimeNow = date.getTime() + " ";
+    var dateGetTimeNowSubString = dateGetTimeNow.substring(0, 10);
     var keyRandom = this.uuidv4();
     var valueLog = {
       ValueOld: valueEmpDelete,
       ValueNew: "Thông tin đã xóa",
-      time: dateGetTimeNowSubString
+      time: dateGetTimeNowSubString,
     };
     var valueLogString = JSON.stringify(valueLog);
     axios({
@@ -249,18 +247,18 @@ class QuanLyCongNhan extends Component {
       .then((resEmp) => {
         alert("Xóa thông tin công nhân " + valueEmployee.Name + " thành công!");
         // lưu dữ liệu vào log
-      axios({
-        method: "POST",
-        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
-        data: {
-          Key: keyRandom,
-          Classify: "Employee-Log",
-          Value: valueLogString,
-          Description: "Employee NKL Log",
-        },
-      }).then((resEmp) => {
-        console.log("Save data  in log ok !");
-      });
+        axios({
+          method: "POST",
+          url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+          data: {
+            Key: keyRandom,
+            Classify: "Employee-Log",
+            Value: valueLogString,
+            Description: "Employee NKL Log",
+          },
+        }).then((resEmp) => {
+          console.log("Save data  in log ok !");
+        });
         this.LoadData();
       })
       .catch((err) => {
@@ -303,9 +301,9 @@ class QuanLyCongNhan extends Component {
     });
     this.dataTableLoad();
   };
-  /*------------------------------------- */
+  /*--------------- hàm tạo id công nhân------------ */
   createIDEmployee = () => {
-    /*--------------- hàm tạo id công nhân------------ */
+    var countString;
     axios({
       method: "GET",
       url:
@@ -329,7 +327,7 @@ class QuanLyCongNhan extends Component {
         if (idNew < 0) {
           idNew = 1;
         }
-        var countString = "CN-NKL-0" + idNew;
+        countString = "CN-NKL-0" + idNew;
         this.setState({
           countStringIDEmployee: countString,
         });
@@ -343,12 +341,13 @@ class QuanLyCongNhan extends Component {
       .catch((err) => {
         console.log(err);
       });
+    return this.state.countStringIDEmployee;
   };
   // hàm nhập file excel từ máy tính
   exportExcel = () => {
     let rowObject;
     var exExcel = window.confirm(
-      "Bạn muốn nhập thông tin công nhân từ file excel? Vui lòng chọn file excel từ thiết bị!"
+      "Bạn muốn nhập thông tin công nhân từ file excel?"
     );
     if (exExcel) {
       if (selectFileExcel) {
@@ -370,6 +369,9 @@ class QuanLyCongNhan extends Component {
                 " dòng trong file excel"
             );
           });
+          /*for (var k = 0; k < rowObject.length; k++) {
+            
+          }*/
 
           /*axios({
             method: "GET",

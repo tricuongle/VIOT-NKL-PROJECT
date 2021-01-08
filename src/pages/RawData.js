@@ -8,7 +8,7 @@ import TableItemRawDataOut from "../components/comRawData/TableItemRawData/Table
 import TableItemRawDataIn from "../components/comRawData/TableItemRawData/TableItemRawDataIn";
 
 var arrayRecode = [];
-var dayToDay2='---';
+var dayToDay2 = "---";
 class RawData extends Component {
   constructor(props) {
     super(props);
@@ -49,9 +49,10 @@ class RawData extends Component {
           contentItem = JSON.parse(contentItem);
 
           var dayRawData = this.convertData(contentItem.ReadTime); // Lấy thời gian record
-          var dayToDay= this.convertData(dateGetTimeNowSubString); // lấy thời gian trong record
+          var dayToDay = this.convertData(dateGetTimeNowSubString); // lấy thời gian trong record
 
-          if (dayRawData == dayToDay) { // So sách ngày
+          if (dayRawData == dayToDay) {
+            // So sách ngày
             arrayRecode.push(contentItem);
           }
           this.setState({
@@ -86,7 +87,10 @@ class RawData extends Component {
         });
         this.state.valueRecodeOut.sort().reverse(); // đảo mảng record Out
         this.state.valueRecodeIn.sort().reverse(); // đảo mảng record In
-        if(this.state.valueRecodeIn.length == 0 && this.state.valueRecodeOut ==0 ){
+        if (
+          this.state.valueRecodeIn.length == 0 &&
+          this.state.valueRecodeOut == 0
+        ) {
           alert("Thông báo, chưa có dữ liệu mới trong ngày " + dayToDay2);
         }
 
@@ -117,7 +121,9 @@ class RawData extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>DỮ LIỆU QUÉT THIẾT BỊ CÂN TRONG NGÀY <b>{dayToDay2}</b></h1>
+          <h1>
+            DỮ LIỆU QUÉT THIẾT BỊ CÂN TRONG NGÀY <b>{dayToDay2}</b>
+          </h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">

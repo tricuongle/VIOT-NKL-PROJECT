@@ -51,26 +51,30 @@ class LogContentQLCongNhan extends Component {
     var arrayRecodeToDate = [];
     dateAfter.setDate(dateAfter.getDate() + 1);
 
-    if (dateBefore.getTime() < dateAfter.getTime()) {
-      for (var k in valueContentLog) {
-        const dateRecord = new Date(valueContentLog[k].time * 1000); // ngày trong record
-        console.log(dateRecord);
-        if (
-          dateRecord.getTime() >= dateBefore.getTime() &&
-          dateRecord.getTime() <= dateAfter.getTime()
-        ) {
-          arrayRecodeToDate.push(valueContentLog[k]);
+    if (this.state.valueContentLog.length == 0) {
+      alert("Đang tải dữ liệu, vui lòng đợi và thử lại...");
+    } else {
+      if (dateBefore.getTime() < dateAfter.getTime()) {
+        for (var k in valueContentLog) {
+          const dateRecord = new Date(valueContentLog[k].time * 1000); // ngày trong record
+          console.log(dateRecord);
+          if (
+            dateRecord.getTime() >= dateBefore.getTime() &&
+            dateRecord.getTime() <= dateAfter.getTime()
+          ) {
+            arrayRecodeToDate.push(valueContentLog[k]);
+          }
         }
+      } else {
+        alert("Lỗi! Khoản thời gian không hợp lệ.");
       }
-    } else {
-      alert("Lỗi! Khoản thời gian không hợp lệ.");
-    }
-    if (arrayRecodeToDate.length == 0) {
-      alert("Không có dữ liệu trong khoảng thời gian chọn!");
-    } else {
-      this.setState({
-        valueContentLogSortTime: arrayRecodeToDate,
-      });
+      if (arrayRecodeToDate.length == 0) {
+        alert("Không có dữ liệu trong khoảng thời gian chọn!");
+      } else {
+        this.setState({
+          valueContentLogSortTime: arrayRecodeToDate,
+        });
+      }
     }
   };
   loadPage = () => {
