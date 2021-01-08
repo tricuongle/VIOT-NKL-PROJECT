@@ -86,6 +86,7 @@ class TongHop extends Component {
     return sumOut;
   };
   componentDidMount = () => {
+
     axios({
       method: "GET",
       url:
@@ -109,7 +110,7 @@ class TongHop extends Component {
         res.data.map((contentItem) => {
           contentItem = JSON.parse(contentItem);
           var dayRawData = this.convertData(contentItem.ReadTime); // lấy thời gian trong record
-          var dayToDay= this.convertData(dateGetTimeNowSubString); // lấy thời gian trong record
+          var dayToDay = this.convertData(dateGetTimeNowSubString); // lấy thời gian trong record
           // so sánh ngày
           if (dayRawData == dayToDay) {
             arrayRecode.push(contentItem);
