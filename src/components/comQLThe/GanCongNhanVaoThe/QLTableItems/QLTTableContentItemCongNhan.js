@@ -127,6 +127,7 @@ class QLTTableContentItemCongNhan extends Component {
             <option value="Đỏ">Đỏ</option>
             <option value="Vàng">Vàng</option>
             <option value="Đen">Đen</option>
+            <option value="Tím">Tím</option>
           </select>
         </td>
         <td>

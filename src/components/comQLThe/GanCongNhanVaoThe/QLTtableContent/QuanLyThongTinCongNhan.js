@@ -361,7 +361,8 @@ class QuanLyThongTinCongNhan extends Component {
 
           {/*đổ dữ liệu công nhân sau khi tìm kiếm vào talbe */}
           <p>
-            Gợi ý: Gõ họ tên, hoặc số thẻ nhân viên, sau đó chọn thông tin cần thiết.
+            Gợi ý: Để tìm công nhân, gõ họ tên, hoặc số thẻ nhân viên, sau đó
+            chọn thông tin cần thiết.
           </p>
           <QLTTableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItemss)}
@@ -372,6 +373,7 @@ class QuanLyThongTinCongNhan extends Component {
   }
   // hiện thị lên table
   showContentItems(contentItemss) {
+    contentItemss.sort().reverse(); // sort đảo mảng
     var result = null;
     if ((contentItemss.length = 1)) {
       result = contentItemss.map((contentItem, index) => {
