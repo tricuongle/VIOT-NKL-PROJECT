@@ -17,6 +17,7 @@ class QuanLyThongTinCongNhan extends Component {
     super(props);
     this.state = {
       contentItems: [],
+      contentItemsSortMax: [],
       contentItemss: [],
       contentNewCard: [],
       contentEmployee: [],
@@ -93,6 +94,7 @@ class QuanLyThongTinCongNhan extends Component {
         }
         this.setState({
           contentItems: ArrayValue,
+          contentItemsSortMax: ArrayValue,
         });
       })
       .catch((err) => {
@@ -298,12 +300,19 @@ class QuanLyThongTinCongNhan extends Component {
     });
     this.dataTableLoad();
   };
+  HoanVi = (a, b) => {
+    var temp;
+    temp = a;
+    a = b;
+    b = temp;
+  };
   /*------------------------------------- */
   render() {
     //setTimeout(this.componentDidMount,500);
     var {
       contentItemss,
       contentItems,
+      contentItemsSortMax,
       keyword,
       status,
       contentNewCard,
@@ -311,20 +320,39 @@ class QuanLyThongTinCongNhan extends Component {
     } = this.state;
     // hàm xử lý tìm kiếm công nhân
     if (keyword) {
-      // render ra nội dung khi tìm kiếm
-      contentItemss = contentItems.filter((contentItems) => {
+      // chuyển cardNo về kiểu int để sort
+      for (var g in contentItemsSortMax) {
+        contentItemsSortMax[g].CardNo = parseInt(contentItemsSortMax[g].CardNo);
+      }
+      // xếp mảng theo tăng dần
+      var temp;
+      for (var i = 0; i < contentItemsSortMax.length; i++) {
+        for (var j = i + 1; j < contentItemsSortMax.length; j++) {
+          if (contentItemsSortMax[i].CardNo < contentItemsSortMax[j].CardNo) {
+            temp = contentItemsSortMax[i];
+            contentItemsSortMax[i] = contentItemsSortMax[j];
+            contentItemsSortMax[j] = temp;
+          }
+        }
+      }
+      // chuyển cardNo về kiêu string để tìm kiếm
+      for (var g in contentItemsSortMax) {
+        contentItemsSortMax[g].CardNo = contentItemsSortMax[g].CardNo + "";
+      }
+      console.log(contentItemsSortMax);
+      contentItemss = contentItemsSortMax.filter((contentItemsSortMax) => {
         return (
-          //contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
-          contentItems.Name.toLowerCase().indexOf(keyword) !== -1 ||
-          //contentItems.CMND.toLowerCase().indexOf(keyword) !== -1 ||
-          contentItems.CardNo.toLowerCase().indexOf(keyword) !== -1
+          //contentItemsSortMax.Id.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItemsSortMax.Name.toLowerCase().indexOf(keyword) !== -1 ||
+          //contentItemsSortMax.CMND.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItemsSortMax.CardNo.toLowerCase().indexOf(keyword) !== -1
         );
       });
-      contentItems = contentItems.filter((contentItems) => {
+      contentItemsSortMax = contentItemsSortMax.filter((contentItemsSortMax) => {
         if (status === -1) {
-          return contentItems;
+          return contentItemsSortMax;
         } else {
-          return contentItems.IsLock === (status === 1 ? true : false);
+          return contentItemsSortMax.IsLock === (status === 1 ? true : false);
         }
       });
     }
