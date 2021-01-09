@@ -162,6 +162,8 @@ class QuanLyCongNhan extends Component {
     };
     var valueLogString = JSON.stringify(valueLog);
     // kiểm tra trùng mã số công nhân
+    console.log(contentItemsNoCheckStatus);
+    console.log(valueEmployee);
     for (var k in contentItemsNoCheckStatus) {
       if (
         contentItemsNoCheckStatus[k].CardNo == valueEmployee.CardNo &&
@@ -187,26 +189,25 @@ class QuanLyCongNhan extends Component {
           alert(
             "Sửa thông tin công nhân " + valueEmployee.Name + " thành công!"
           );
+          // lưu dữ liệu vào log
+          axios({
+            method: "POST",
+            url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
+            data: {
+              Key: keyRandom,
+              Classify: "Employee-Log",
+              Value: valueLogString,
+              Description: "Employee NKL Log",
+            },
+          }).then((resEmp) => {
+            console.log("Save data in log ok !");
+          });
           this.LoadData();
         })
         .catch((err) => {
           console.log(err);
           console.log("Lỗi");
         });
-      // lưu dữ liệu vào log
-      axios({
-        method: "POST",
-        url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
-        data: {
-          Key: keyRandom,
-          Classify: "Employee-Log",
-          Value: valueLogString,
-          Description: "Employee NKL Log",
-        },
-      }).then((resEmp) => {
-        console.log("Save data in log ok !");
-        this.LoadData();
-      });
     } else {
       alert(
         "Lỗi! Mã số công nhân này đã tồn tại, hoặc đã được sở hữu bởi công nhân đã nghĩ."
@@ -288,6 +289,7 @@ class QuanLyCongNhan extends Component {
         ArrayValue.sort().reverse(); // sort đảo mảng
         this.setState({
           contentItems: ArrayValue,
+          contentItemsNoCheckStatus: ArrayValue,
         });
       })
       .catch((err) => {
@@ -331,19 +333,13 @@ class QuanLyCongNhan extends Component {
         this.setState({
           countStringIDEmployee: countString,
         });
-        /* this.setState((preState) => ({
-          valueEmp: {
-            ...preState.valueEmp,
-            Id: countString,
-          },
-        }));*/
       })
       .catch((err) => {
         console.log(err);
       });
     return this.state.countStringIDEmployee;
   };
-  // hàm nhập file excel từ máy tính
+  // hàm nhập file excel từ dữ liệu máy tính
   exportExcel = () => {
     let rowObject;
     var exExcel = window.confirm(
@@ -446,7 +442,6 @@ class QuanLyCongNhan extends Component {
         );
       });
     }
-
     return (
       <div className="content-wrapper">
         <section className="content-header">
@@ -461,6 +456,7 @@ class QuanLyCongNhan extends Component {
           </ol>
         </section>
 
+        {/*các button chức năng */}
         <section className="content">
           <form className="filter-section form-inline">
             <div className="input-group inputSeach">

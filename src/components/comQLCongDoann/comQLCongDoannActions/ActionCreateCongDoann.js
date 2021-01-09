@@ -58,7 +58,6 @@ class ActionCreateCongDoann extends Component {
   };
 
   onSave = (event) => {
-    
     event.preventDefault();
     var { Id } = this.state;
     valueNew = JSON.stringify(this.state);
@@ -89,6 +88,7 @@ class ActionCreateCongDoann extends Component {
       })
       .catch((err) => {
         console.log(err);
+        alert("Lỗi. không tạo công đoạn được!");
       });
   };
   render() {
@@ -139,6 +139,7 @@ class ActionCreateCongDoann extends Component {
                     name="info"
                     id="info"
                     className="form-control"
+                    required
                     rows="3"
                     placeholder="mô tả ngắn gọn về hoạt động của công đoạn"
                   ></textarea>
