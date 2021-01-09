@@ -389,8 +389,8 @@ class QuanLyThongTinCongNhan extends Component {
 
           {/*đổ dữ liệu công nhân sau khi tìm kiếm vào talbe */}
           <p>
-            Gợi ý: Để tìm công nhân, gõ họ tên, hoặc số thẻ nhân viên, sau đó
-            chọn thông tin cần thiết.
+            Gợi ý: Tìm công nhân, gõ họ tên, hoặc số thẻ nhân viên, sau đó
+            chọn thông tin cần thiết vd: Nếu mã CN = 01 gõ 1 để tìm.
           </p>
           <QLTTableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItemss)}
