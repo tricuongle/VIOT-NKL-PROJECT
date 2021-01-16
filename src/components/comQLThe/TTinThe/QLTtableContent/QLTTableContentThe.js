@@ -10,6 +10,7 @@ class QLTTableContentThe extends Component {
           <thead>
             <tr className="tieude">
             <th>STT</th>
+            <th>Ngày giờ tạo</th>
               <th>ID RFID thẻ</th>
               <th>Tên thẻ</th>
               <th>Tên công nhân</th>

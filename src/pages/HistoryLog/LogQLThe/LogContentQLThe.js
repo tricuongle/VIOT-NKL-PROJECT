@@ -56,7 +56,6 @@ class LogContentQLThe extends Component {
       if (dateBefore.getTime() < dateAfter.getTime()) {
         for (var k in valueContentLog) {
           const dateRecord = new Date(valueContentLog[k].time * 1000); // ngày trong record
-          console.log(dateRecord);
           if (
             dateRecord.getTime() >= dateBefore.getTime() &&
             dateRecord.getTime() <= dateAfter.getTime()

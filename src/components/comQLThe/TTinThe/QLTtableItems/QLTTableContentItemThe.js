@@ -6,7 +6,7 @@ class QLTTableContentItemThe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nameEmp: "",
+      valueEmp: "",
       nameModel: "",
       nameProcess: "",
     };
@@ -14,7 +14,7 @@ class QLTTableContentItemThe extends Component {
 
   componentDidMount = () => {
     var { contentItem } = this.props;
-    var nameEmp = contentItem.Employee;
+    var iDEmp = contentItem.Employee;
     var nameModel = contentItem.ModelId;
     var nameProcess = contentItem.ProcessId;
 
@@ -26,13 +26,13 @@ class QLTTableContentItemThe extends Component {
         "/api/data/valuekey?token=" +
         `${Config.TOKEN}` +
         "&Classify=Employee&key=" +
-        nameEmp,
+        iDEmp,
       data: null,
     })
       .then((res) => {
         var Object = JSON.parse(res.data);
         this.setState({
-          nameEmp: Object,
+          valueEmp: Object,
         });
       })
       .catch((err) => {
@@ -61,32 +61,13 @@ class QLTTableContentItemThe extends Component {
         console.log(err);
         console.log("lỗi lấy tên công đoạn !");
       });
-    /*----------lấy tên công đoạn (mã cá)-------------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Model&key=" +
-        nameModel,
-      data: null,
-    })
-      .then((res) => {
-        var Object = JSON.parse(res.data);
-        this.setState({
-          nameModel: Object.Name,
-        });
-      })
-      .catch((err) => {
-        console.log("lỗi lấy tên mã cá!");
-      });
+ 
   };
   // truyền dữ liệu ra ngoài
   getIDChange = () => {
-    var { nameEmp, nameProcess } = this.state;
+    var { valueEmp, nameProcess } = this.state;
     var { contentItem } = this.props;
-    this.props.getIDChange(contentItem, nameEmp.Name, nameProcess);
+    this.props.getIDChange(contentItem, valueEmp, nameProcess);
   };
   // truyền id RFID để xóa
   getIDDeleteChange = () => {
@@ -95,16 +76,27 @@ class QLTTableContentItemThe extends Component {
   };
   render() {
     var { contentItem, index } = this.props;
-    var { nameEmp, nameProcess } = this.state;
-    const dataDay = parseInt(contentItem.BirthDay);
+    if (contentItem.RegistTime != "" ) {
+      var time = contentItem.RegistTime + "";
+      var timeEdit = time.substring(0, 10); // cắt chuỗi số ngày
+      var timeEditInt = parseInt(timeEdit); // chuyển về kiểu Int
+      var dateFormat = require("dateformat");
+      if (timeEditInt != '') {
+        const unixTimeOut = timeEditInt;
+        const dateOut = new Date(unixTimeOut * 1000);
+        var dateNewOut = dateFormat(dateOut, "dd/mm/yyyy");
+        var dateNewTimeOut = dateFormat(dateOut, "HH:MM:ss");
+      }
+    }
     return (
       <tr id="device2" className="edit form-check form-check-inlines">
         <td>{index + 1}</td>
+        <td>{dateNewOut}-{dateNewTimeOut}</td>
         <td>{contentItem.RFID}</td>
         <td>{contentItem.Id}</td>
-        <td>{nameEmp.Name}</td>
+        <td>{contentItem.Employee}</td>
         <td>{contentItem.Color}</td>
-        <td>{nameProcess}</td>
+        <td>{contentItem.ProcessId}</td>
         <td>{contentItem.Classify}</td>
         <td>
           <div className="infoCard ">

@@ -13,13 +13,21 @@ var ArrayValue = [];
 var arrayValueModel = [];
 var arrayValueEmp = [];
 var arrayValueProcess = [];
+var arrayItemsGetName = [];
 var load = [];
 var valueContentLog;
+var temp;
+
 class QuanLyThongTinThe extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contentItems: [],
+
+      contentItemsGetName: [],
+      nameEmp: "",
+      nameProcess: "",
+
       contentGetCardId: [],
       contentModel: [],
       contentProcess: [],
@@ -50,6 +58,40 @@ class QuanLyThongTinThe extends Component {
       keyword: keyword.toLowerCase(),
     });
   };
+
+  // hàm lấy tên công nhân và công đoạn dựa vào id
+  getEmpToID = (k, idEmp) => {
+    /*------lấy tên công nhân----------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Employee&key=" +
+        idEmp,
+      data: null,
+    }).then((res) => {
+      var Object = JSON.parse(res.data);
+      ArrayValue[k].Employee = Object.Name;
+    });
+  };
+  getProcessToID = (k, idProcess) => {
+    /*----------láy tên công đoạn----------- */
+    axios({
+      method: "GET",
+      url:
+        `${Config.API_URL}` +
+        "/api/data/valuekey?token=" +
+        `${Config.TOKEN}` +
+        "&Classify=Process&key=" +
+        idProcess,
+      data: null,
+    }).then((res) => {
+      var Object = JSON.parse(res.data);
+      ArrayValue[k].ProcessId = Object.Name;
+    });
+  };
   /*---------get thông tin thẻ---------*/
   componentDidMount = () => {
     axios({
@@ -67,7 +109,14 @@ class QuanLyThongTinThe extends Component {
           JsonValue = JSON.parse(res.data[i]);
           ArrayValue.push(JsonValue);
         }
+
         ArrayValue.sort().reverse(); // sort đảo mảng
+        // vòng for gán tên công nhân từ id công nhân và công đoạn
+        for (var k in ArrayValue) {
+          this.getEmpToID(k, ArrayValue[k].Employee);
+          this.getProcessToID(k, ArrayValue[k].ProcessId);
+        }
+
         this.setState({
           contentItems: ArrayValue,
         });
@@ -108,10 +157,8 @@ class QuanLyThongTinThe extends Component {
     }
   };
 
-  getIDChange = (contentItem, nameEmp, nameProcess) => {
+  getIDChange = (contentItem, valueEmp, nameProcess) => {
     valueContentLog = contentItem;
-    var date = new Date();
-    var dayCreate = date.valueOf();
     this.setState((preState) => ({
       // truyền giá trị vào valueCard
       valueCard: {
@@ -119,7 +166,7 @@ class QuanLyThongTinThe extends Component {
         Id: contentItem.Id, // cố định
         Employee: contentItem.Employee, // cố định
         Color: contentItem.Color,
-        RegistTime: dayCreate,
+        RegistTime: contentItem.RegistTime,
         Status: contentItem.Status, // cố định
         ProcessId: contentItem.ProcessId,
         ModelId: "", // không dùng
@@ -130,11 +177,16 @@ class QuanLyThongTinThe extends Component {
     }));
 
     /*-------------gán giá trị cho pop edit---------------- */
-    console.log(nameEmp);
     document.getElementById("idCard").value = contentItem.RFID;
-    //document.getElementById("idSelectEmployee").innerHTML = nameEmp;
     document.getElementById("idNameCard").value = contentItem.Id;
-    document.getElementById("nameEmp").innerHTML = nameEmp;
+    // đặt lại giá trị mặc định cho select
+    document.getElementById("idSelectEmployee").selectedIndex = 0;
+    document.getElementById("idSelectProcess").selectedIndex = 0;
+    document.getElementById("idSelectType").selectedIndex = 0;
+    document.getElementById("idSelectMauThe").selectedIndex = 0;
+
+    document.getElementById("nameEmp").innerHTML =
+      valueEmp.Name + "-" + valueEmp.CardNo;
     document.getElementById("nameProcess").innerHTML = nameProcess;
     document.getElementById("nameClassify").innerHTML = contentItem.Classify;
     document.getElementById("nameColor").innerHTML = contentItem.Color;
@@ -160,7 +212,6 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentProcess: arrayValueProcess,
         });
-        console.log(arrayValueProcess);
       })
       .catch((err) => {
         console.log(err);
@@ -186,13 +237,11 @@ class QuanLyThongTinThe extends Component {
         this.setState({
           contentEmployee: arrayValueEmp,
         });
-        console.log(arrayValueEmp);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
   // hàm xóa thẻ
   getIDDeleteChange = (idRFID, contentCard) => {
     var notionDelete = window.confirm("Bạn có đồng ý xóa thẻ nào không?");
@@ -231,10 +280,9 @@ class QuanLyThongTinThe extends Component {
           "&classify=Card&key=" +
           idRFID,
         data: null,
-      })
-        .then((res) => {
-          this.LoadData();
-        });
+      }).then((res) => {
+        this.LoadData();
+      });
     }
   };
   /*-------------hàm lấy type từ process ---------------------- */
@@ -266,7 +314,6 @@ class QuanLyThongTinThe extends Component {
         console.log(err);
       });
   };
-
   // hàm random key value
   uuidv4 = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -279,7 +326,7 @@ class QuanLyThongTinThe extends Component {
     );
   };
   /*-------------Hàm sửa thẻ vào công nhân------------- */
-  createNewCard = (event) => {
+  editCard = (event) => {
     event.preventDefault();
     var { valueCard } = this.state;
     var stringValueCard = JSON.stringify(valueCard);
@@ -343,13 +390,17 @@ class QuanLyThongTinThe extends Component {
       data: null,
     })
       .then((res) => {
-        console.log(res.data);
         ArrayValue = []; // load lại data
         for (var i = 0; i < res.data.length; i++) {
           JsonValue = JSON.parse(res.data[i]);
           ArrayValue.push(JsonValue);
         }
         ArrayValue.sort().reverse(); // sort đảo mảng
+        // vòng for gán tên công nhân từ id công nhân và công đoạn
+        for (var k in ArrayValue) {
+          this.getEmpToID(k, ArrayValue[k].Employee);
+          this.getProcessToID(k, ArrayValue[k].ProcessId);
+        }
         this.setState({
           contentItems: ArrayValue,
         });
@@ -381,6 +432,7 @@ class QuanLyThongTinThe extends Component {
         return (
           contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Color.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.Employee.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.ProcessId.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Classify.toLowerCase().indexOf(keyword) !== -1
         );
@@ -407,7 +459,7 @@ class QuanLyThongTinThe extends Component {
 
           {/*-----------------giao diện chỉnh sửa thông tin thẻ----------------------*/}
           <div className="modal fade" id="modal-edit">
-            <form onSubmit={this.createNewCard}>
+            <form onSubmit={this.editCard}>
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">

@@ -5,40 +5,15 @@ class LogItemQLThe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nameEmployeeOld: "",
       nameEmployeeNew: "",
-      nameProcessOld: "",
       nameProcessNew: "",
     };
   }
   componentDidMount = () => {
     var { contentItem } = this.props;
-    var idEmployeeOld = contentItem.ValueOld.Employee;
     var idEmployeeNew = contentItem.ValueNew.Employee;
-    var idProcessOld = contentItem.ValueOld.ProcessId;
     var idProcessNew = contentItem.ValueNew.ProcessId;
 
-    /*------lấy tên công nhân cũ ----------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Employee&key=" +
-        idEmployeeOld,
-      data: null,
-    })
-      .then((res) => {
-        var Object = JSON.parse(res.data);
-        this.setState({
-          nameEmployeeOld: Object.Name,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log("lỗi lấy tên công nhân !");
-      });
     /*------lấy tên công nhân mới ----------- */
     axios({
       method: "GET",
@@ -60,27 +35,7 @@ class LogItemQLThe extends Component {
         console.log(err);
         console.log("lỗi lấy tên công nhân !");
       });
-    /*------lấy tên công đoạn cũ ----------- */
-    axios({
-      method: "GET",
-      url:
-        `${Config.API_URL}` +
-        "/api/data/valuekey?token=" +
-        `${Config.TOKEN}` +
-        "&Classify=Process&key=" +
-        idProcessOld,
-      data: null,
-    })
-      .then((res) => {
-        var Object = JSON.parse(res.data);
-        this.setState({
-          nameProcessOld: Object.Name,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log("lỗi lấy tên công đoạn !");
-      });
+
     /*------lấy tên công đoạn mới ----------- */
     axios({
       method: "GET",
@@ -107,10 +62,8 @@ class LogItemQLThe extends Component {
   render() {
     var { contentItem, index } = this.props;
     var {
-      nameEmployeeOld,
       nameEmployeeNew,
       nameProcessNew,
-      nameProcessOld,
     } = this.state;
     var valueContentNew;
     if (contentItem.ValueNew == "Thông tin đã xóa") {
@@ -132,11 +85,11 @@ class LogItemQLThe extends Component {
     var valueContentOld = (
       <p>
         tên thẻ: {contentItem.ValueOld.Id} <br />
-        Tên công nhân: {nameEmployeeOld}
+        Tên công nhân: {contentItem.ValueOld.Employee}
         <br />
         Màu: {contentItem.ValueOld.Color}
         <br />
-        Công đoạn: {nameProcessOld}
+        Công đoạn: {contentItem.ValueOld.ProcessId}
         <br />
         Loại: {contentItem.ValueOld.Classify}
       </p>
