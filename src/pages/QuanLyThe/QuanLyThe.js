@@ -10,14 +10,14 @@ class QuanLyThe extends Component {
     return (
       <div className="content-wrapper">
          <section className="content-header">
-          <h1>QUẢN LÝ THẺ</h1>
+          <h1>QUẢN LÝ DANH SÁCH THẺ CÔNG NHÂN</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Quản lý thẻ</li>
+            <li className="active">Quản lý ds thẻ công nhân</li>
           </ol>
         </section>
         <QuanLyThongTinThe/>

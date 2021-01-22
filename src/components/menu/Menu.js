@@ -130,12 +130,12 @@ class Menu extends Component {
                     </li>
                   </ul>
                 </li>
-                <li className="">
+                {/*<li className="">
                   <Link to="/Tinh-tien">
                     <i className="fa fa-money" aria-hidden="true"></i>
                     <span>Tính tiền</span>
                   </Link>
-                </li>
+                  </li>*/}
 
                 <li className="treeview">
                   <a>
@@ -147,7 +147,7 @@ class Menu extends Component {
                   </a>
                   <ul className="treeview-menu">
                     <li className="">
-                      <Link to="/Them-the">Thêm thẻ</Link>
+                      <Link to="/Them-the">Tra cứu-Thêm thẻ</Link>
                     </li>
                     <li className="">
                       <Link to="/Quan-ly-the">Danh sách thẻ</Link>

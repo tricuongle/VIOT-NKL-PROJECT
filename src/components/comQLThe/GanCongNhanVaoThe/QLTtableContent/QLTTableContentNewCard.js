@@ -10,6 +10,7 @@ class QLTTableContentNewCard extends Component {
             <tr className="tieude">
               <th>Số thứ tự thẻ RFID</th>
               <th>ID thẻ RFID</th>
+              <th>Thông tin thẻ RFID</th>
               <th>Thêm thẻ RFID vào công nhân</th>
               <th>Xóa thẻ RFID</th>
             </tr>

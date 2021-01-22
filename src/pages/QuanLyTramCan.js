@@ -160,9 +160,9 @@ class QuanLyTramCan extends Component {
         console.log(err);
       });
   };
-
+// hàm edit thiết bị
   onGetIdEdit = (IdDevice, valueDevice) => {
-    /*-----------------------function get list process to api ---------------------------------- */
+  /*-----------------------function get list process to api ---------------------------------- */
     document.getElementById("btnEditDevice").disabled = false;
     valueDeviceOld = valueDevice;
     console.log(valueDeviceOld);
@@ -217,7 +217,6 @@ class QuanLyTramCan extends Component {
 
         arrayPara = JSON.parse(this.state.contentDevice.Status.Para);
         for (var k in arrayPara) {
-          console.log(arrayPara[k].Type);
         } // lấy value para và chuyển Object
       })
       .catch((err) => {
@@ -246,7 +245,6 @@ class QuanLyTramCan extends Component {
         console.log("Lỗi lấy thông tin khu vực - sections");
       });
   };
-
   // load dữ liệu lại
   dataTableLoad = () => {
     axios({
@@ -279,8 +277,7 @@ class QuanLyTramCan extends Component {
     });
     this.dataTableLoad();
   };
-  /*------------------------------------- */
-
+  /*----------------------------------------------------------- */
   clearRadioGroup = (GroupName) => {
     var ele = document.getElementsByName(GroupName);
     for (var i = 0; i < ele.length; i++) ele[i].checked = false;
@@ -293,12 +290,15 @@ class QuanLyTramCan extends Component {
     }
   };
   // hàm tạo type thiết bị
-  addProcess = () => {
-    var { contentProcess } = this.state;
+  addProcess = (contentProcess) => {
+    //var { contentProcess } = this.state;
     var arrayvalue = [];
     var arrayname = [];
     let valueHTML;
+    // hàm dọn sạch button radio khi lựa chọn device khác
     this.Clear();
+    console.log(contentProcess);
+    // vòng for tạo danh sách công đoạn
     for (var k = 0; k < contentProcess.length; k++) {
       arrayname.push(contentProcess[k].Id);
       valueHTML = (
@@ -351,6 +351,7 @@ class QuanLyTramCan extends Component {
           <h5 className="nameProcess"> {contentProcess[k].Name}</h5>
         </div>
       );
+      // vòng for điền radio button cho công đooạn
       for (var j = 0; j < arrayPara.length; j++) {
         if (arrayPara[j].ProcessId == contentProcess[k].Id) {
           if (arrayPara[j].Type == "In") {
@@ -370,7 +371,6 @@ class QuanLyTramCan extends Component {
       }
       arrayvalue.push(valueHTML);
     }
-
     return arrayvalue;
   };
   // hàm random key value
@@ -469,7 +469,6 @@ class QuanLyTramCan extends Component {
             <li className="active">Quản lý trạm cân</li>
           </ol>
         </section>
-
         <section className="content">
           <form className="filter-section form-inline">
             <div className="input-group inputSeach">
@@ -538,7 +537,8 @@ class QuanLyTramCan extends Component {
                         {this.showContentSelect(contentSection)}
                       </select>
                     </div>
-                    {this.addProcess()}
+                    {/* hàm sinh radio button */}
+                    {this.addProcess(contentProcess)}
                   </div>
                   <div className="modal-footer">
                     <button

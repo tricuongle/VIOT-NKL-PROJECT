@@ -432,6 +432,7 @@ class QuanLyThongTinThe extends Component {
         return (
           contentItems.Id.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Color.toLowerCase().indexOf(keyword) !== -1 ||
+          contentItems.RFID.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Employee.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.ProcessId.toLowerCase().indexOf(keyword) !== -1 ||
           contentItems.Classify.toLowerCase().indexOf(keyword) !== -1

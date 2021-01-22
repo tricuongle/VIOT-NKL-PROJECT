@@ -24,6 +24,7 @@ class QuanLyThongTinCongNhan extends Component {
       keyword: "",
       status: 1,
       idNewCard: "",
+      statusNewCard:"",
       nameCard: "",
       contentGetTableEmp: {
         idNameEmp: "",
@@ -138,19 +139,19 @@ class QuanLyThongTinCongNhan extends Component {
       });
   };
   /*-------------Hàm thêm thẻ vào công nhân------------- */
-  createNewCard = (idNewCard) => {
+  createNewCard = (contentCardNew) => {
     var { contentGetTableEmp, nameCard } = this.state;
     var date = new Date();
     var dateNew = date.valueOf();
-    console.log(contentGetTableEmp.status);
     if (
       contentGetTableEmp.idNameEmp == "" ||
       //contentGetTableEmp.colorCard == "" ||
       contentGetTableEmp.idProcess == "" ||
       // contentGetTableEmp.typeModel == "" ||
+      contentCardNew.Status == "Exist" ||
       contentGetTableEmp.status == false
     ) {
-      alert("Vui lòng chọn đầy đủ thông tin, hoặc công nhân đã nghỉ!");
+      alert("Vui lòng chọn đầy đủ thông tin, thẻ đã tồn tại hoặc công nhân đã nghỉ!");
     } else {
       var valueCard =
         '{"Id":"' +
@@ -166,14 +167,14 @@ class QuanLyThongTinCongNhan extends Component {
         '","ModelId":"","Classify":"' +
         contentGetTableEmp.typeModel +
         '","RFID":"' +
-        idNewCard +
+        contentCardNew.Id +
         '","CurrentRecord":""}';
       //--------------Thêm thẻ mới ---------------------
       axios({
         method: "POST",
         url: `${Config.API_URL}` + "/api/data?token=" + `${Config.TOKEN}`,
         data: {
-          Key: idNewCard,
+          Key: contentCardNew.Id,
           Classify: "Card",
           Value: valueCard,
           Description: "Card Ngọc Kim Loan",
@@ -188,7 +189,7 @@ class QuanLyThongTinCongNhan extends Component {
             "/api/data/key?token=" +
             `${Config.TOKEN}` +
             "&classify=NewCard&key=" +
-            idNewCard,
+            contentCardNew.Id,
           data: null,
         })
           .then((res) => {
@@ -203,17 +204,19 @@ class QuanLyThongTinCongNhan extends Component {
   };
 
   // hàm nhân id NewCard và  goi hàm tạo card mới và xóa thẻ RFID newCard.
-  getValueNewCard = (idNewCard) => {
+  getValueNewCard = (content) => {
     this.setState({
-      idNewCard: idNewCard,
+      idNewCard: content.Id,
+      statusNewCard: content.Status,
     });
     var CreateRFIDNewEmp = window.confirm(
-      "Gán công nhân vào thẻ RFID " + idNewCard + " này?"
+      "Gán công nhân vào thẻ RFID " + content.Id + " này?"
     );
     if (CreateRFIDNewEmp) {
-      this.createNewCard(idNewCard);
+      this.createNewCard(content);
     }
   };
+  // hàm xóa thông tin thẻ - newCard
   deleteRFID = (idNewCard) => {
     var DeleteRFIDNewCard = window.confirm(
       "Bạn có đồng ý xóa thông tin thẻ RFID " + idNewCard + " này không?"
@@ -243,6 +246,7 @@ class QuanLyThongTinCongNhan extends Component {
         console.log(err);
       });
   };
+  // Hàm xóa tất cả newCard
   deleteAllNewCard = () => {
     var DeleteRFIDNewCard = window.confirm(
       "Bạn có đồng ý xóa tất cả thông tin thẻ RFID  đã quét không?"
@@ -339,7 +343,6 @@ class QuanLyThongTinCongNhan extends Component {
       for (var g in contentItemsSortMax) {
         contentItemsSortMax[g].CardNo = contentItemsSortMax[g].CardNo + "";
       }
-      console.log(contentItemsSortMax);
       contentItemss = contentItemsSortMax.filter((contentItemsSortMax) => {
         return (
           //contentItemsSortMax.Id.toLowerCase().indexOf(keyword) !== -1 ||
@@ -348,13 +351,15 @@ class QuanLyThongTinCongNhan extends Component {
           contentItemsSortMax.CardNo.toLowerCase().indexOf(keyword) !== -1
         );
       });
-      contentItemsSortMax = contentItemsSortMax.filter((contentItemsSortMax) => {
-        if (status === -1) {
-          return contentItemsSortMax;
-        } else {
-          return contentItemsSortMax.IsLock === (status === 1 ? true : false);
+      contentItemsSortMax = contentItemsSortMax.filter(
+        (contentItemsSortMax) => {
+          if (status === -1) {
+            return contentItemsSortMax;
+          } else {
+            return contentItemsSortMax.IsLock === (status === 1 ? true : false);
+          }
         }
-      });
+      );
     }
 
     return (
@@ -389,8 +394,8 @@ class QuanLyThongTinCongNhan extends Component {
 
           {/*đổ dữ liệu công nhân sau khi tìm kiếm vào talbe */}
           <p>
-            Gợi ý: Tìm công nhân, gõ họ tên, hoặc số thẻ nhân viên, sau đó
-            chọn thông tin cần thiết vd: Nếu mã CN = 01 gõ 1 để tìm.
+            Gợi ý: Tìm công nhân, gõ họ tên, hoặc số thẻ nhân viên, sau đó chọn
+            thông tin cần thiết vd: Nếu mã CN = 01 gõ 1 để tìm.
           </p>
           <QLTTableContentCongNhan onSearch={this.onSearch}>
             {this.showContentItems(contentItemss)}

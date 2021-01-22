@@ -5,14 +5,14 @@ class ThemThe extends Component {
     return (
       <div className="content-wrapper">
         <section className="content-header">
-          <h1>THÊM THẺ</h1>
+          <h1>TRA CỨU VÀ THÊM THẺ MỚI</h1>
           <ol className="breadcrumb">
             <li>
               <a href="#">
                 <i className="fa fa-home" aria-hidden="true"></i> Trang chủ
               </a>
             </li>
-            <li className="active">Thêm thẻ</li>
+            <li className="active">Tra cứu và thêm thẻ mới</li>
           </ol>
         </section>
         <section className="content">
