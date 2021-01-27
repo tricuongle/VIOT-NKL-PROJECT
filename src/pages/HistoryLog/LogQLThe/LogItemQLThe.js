@@ -61,37 +61,34 @@ class LogItemQLThe extends Component {
 
   render() {
     var { contentItem, index } = this.props;
-    var {
-      nameEmployeeNew,
-      nameProcessNew,
-    } = this.state;
+    var { nameEmployeeNew, nameProcessNew } = this.state;
     var valueContentNew;
     if (contentItem.ValueNew == "Thông tin đã xóa") {
-      valueContentNew = contentItem.ValueNew;
+      valueContentNew = <p className="textLog">Thông tin đã xóa</p>;
     } else {
       valueContentNew = (
         <p>
-          Tên thẻ: {contentItem.ValueNew.Id} <br />
-          Tên công nhân: {nameEmployeeNew}
+          <b>Tên thẻ:</b> {contentItem.ValueNew.Id} <br />
+          <b>Tên công nhân:</b> {nameEmployeeNew}
           <br />
-          Màu: {contentItem.ValueNew.Color}
+          <b>Màu:</b> {contentItem.ValueNew.Color}
           <br />
-          Công đoạn: {nameProcessNew}
+          <b>Công đoạn:</b> {nameProcessNew}
           <br />
-          Loại: {contentItem.ValueNew.Classify}
+          <b>Loại:</b> {contentItem.ValueNew.Classify}
         </p>
       );
     }
     var valueContentOld = (
       <p>
-        tên thẻ: {contentItem.ValueOld.Id} <br />
-        Tên công nhân: {contentItem.ValueOld.Employee}
+        <b>tên thẻ:</b> {contentItem.ValueOld.Id} <br />
+        <b>Tên công nhân:</b> {contentItem.ValueOld.Employee}
         <br />
-        Màu: {contentItem.ValueOld.Color}
+        <b>Màu:</b> {contentItem.ValueOld.Color}
         <br />
-        Công đoạn: {contentItem.ValueOld.ProcessId}
+        <b>Công đoạn:</b> {contentItem.ValueOld.ProcessId}
         <br />
-        Loại: {contentItem.ValueOld.Classify}
+        <b> Loại</b> : {contentItem.ValueOld.Classify}
       </p>
     );
     // lấy thời gian của log

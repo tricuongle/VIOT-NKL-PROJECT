@@ -7,18 +7,18 @@ class LogItemQLCongDoan extends Component {
     var { contentItem, index } = this.props;
     var valueContentNew;
     if (contentItem.ValueNew == "Thông tin đã xóa") {
-      valueContentNew = contentItem.ValueNew;
+      valueContentNew = <p className="textLog">Thông tin đã xóa</p>;
     } else {
       valueContentNew = (
         <p>
-          Tên: {contentItem.ValueNew.Name} <br />
+          <b>Tên:</b> {contentItem.ValueNew.Name} <br />
         </p>
       );
     }
 
     var valueContentOld = (
       <p>
-        tên: {contentItem.ValueOld.Name} <br />
+        <b>Tên:</b> {contentItem.ValueOld.Name} <br />
       </p>
     );
     // lấy thời gian của log

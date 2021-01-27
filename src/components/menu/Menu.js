@@ -125,9 +125,9 @@ class Menu extends Component {
                     <li className="">
                       <Link to="/Quan-ly-ma-ca">Tạo mã cá</Link>
                     </li>
-                    <li className="">
+                    {/*<li className="">
                       <Link to="/Dinh-muc-ma-ca">Tạo định mức giá mã cá</Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </li>
                 {/*<li className="">
@@ -186,9 +186,9 @@ class Menu extends Component {
                     <li className="">
                       <Link to="/Log-Quan-ly-Ma-Ca">Quản lý mã cá</Link>
                     </li>
-                    <li className="">
+                    {/*<li className="">
                       <Link to="/Log-Quan-ly-Dinh-Muc">Quản lý định mức</Link>
-                    </li>
+                    </li> */}
                     <li className="">
                       <Link to="/Log-Quan-ly-The">Quản lý thẻ</Link>
                     </li>
@@ -251,10 +251,18 @@ class Menu extends Component {
         <Route path="/Raw-data" exact component={rawData} />
         <Route path="/Log-Quan-ly-Cn" exact component={logContentQLCongNhan} />
         <Route path="/Log-Quan-ly-Can" exact component={logContentQLTramCan} />
-        <Route path="/Log-Quan-ly-Cong-Doan" exact component={logContentQLCongDoan} />
+        <Route
+          path="/Log-Quan-ly-Cong-Doan"
+          exact
+          component={logContentQLCongDoan}
+        />
         <Route path="/Log-Quan-ly-The" exact component={logContentQLThe} />
         <Route path="/Log-Quan-ly-Ma-Ca" exact component={logContentQLMaCa} />
-        <Route path="/Log-Quan-ly-Dinh-Muc" exact component={logContentQLDinhMuc} />
+        <Route
+          path="/Log-Quan-ly-Dinh-Muc"
+          exact
+          component={logContentQLDinhMuc}
+        />
       </Router>
     );
   }
@@ -320,10 +328,10 @@ const logContentQLCongDoan = () => {
 const logContentQLThe = () => {
   return <LogContentQLThe />;
 };
-const logContentQLMaCa= () => {
+const logContentQLMaCa = () => {
   return <LogContentQLMaCa />;
 };
-const logContentQLDinhMuc= () => {
+const logContentQLDinhMuc = () => {
   return <LogContentQLDinhMuc />;
 };
 export default Menu;

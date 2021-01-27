@@ -192,10 +192,17 @@ class TableItemTongHop extends Component {
     }*/
     // lấy dinh muc can
     var DinhMucCan;
-    if ( DinhMuc == 0 || DinhMuc == "" || DinhMuc == null ) {
+    if (DinhMuc == 0 || DinhMuc == "" || DinhMuc == null) {
       DinhMucCan = "-";
     } else {
       DinhMucCan = DinhMuc;
+    }
+    // màu thẻ
+    var colorCard;
+    if (valueCard.Color == null) {
+      colorCard = "?";
+    } else {
+      colorCard = valueCard.Color;
     }
     return (
       <tr>
@@ -204,14 +211,14 @@ class TableItemTongHop extends Component {
         <td>{contentItem.EmployeeName}</td>
         <td>{valueEmployee.CardNo}</td>
         <td>{contentItem.CardId}</td>
-        <td>{valueCard.Color}</td>
+        <td>{colorCard}</td>
         <td>{contentItem.ModelName}</td>
         <td>{contentItem.Classify}</td>
         <td>{contentItem.ProcessName}</td>
         <td>{valueDeviceRecordIn.Name}</td>
         <td>{contentItem.DeviceName}</td>
-        <td>{valueRecordIn.Weight}</td>
-        <td>{contentItem.Weight}</td>
+        <td><b>{valueRecordIn.Weight}</b></td>
+        <td><b>{contentItem.Weight}</b></td>
         <td>{dateNewTimeIn}</td>
         <td>{dateNewTimeOut}</td>
         <td>{DinhMucCan} </td>

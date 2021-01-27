@@ -6,33 +6,33 @@ class LogItemQLCongNhan extends Component {
   render() {
     var { contentItem, index } = this.props;
     var valueContentNew;
-    if(contentItem.ValueNew == "Thông tin đã xóa"){
-      valueContentNew = contentItem.ValueNew
-    }else{
+    if (contentItem.ValueNew == "Thông tin đã xóa") {
+      valueContentNew = <p className="textLog">Thông tin đã xóa</p>;
+    } else {
       valueContentNew = (
         <p>
-          Tên: {contentItem.ValueNew.Name} <br />
-          Mã số: {contentItem.ValueNew.CardNo}
+          <b>Tên:</b> {contentItem.ValueNew.Name} <br />
+          <b>Mã số:</b> {contentItem.ValueNew.CardNo}
           <br />
-          Giới tính: {contentItem.ValueNew.gender}
+          <b>Giới tính:</b> {contentItem.ValueNew.gender}
           <br />
-          CMND: {contentItem.ValueNew.CMND}
+          <b>CMND:</b> {contentItem.ValueNew.CMND}
           <br />
-          Ngày sinh: {contentItem.ValueNew.BirthDay}
+          <b>Ngày sinh:</b> {contentItem.ValueNew.BirthDay}
         </p>
       );
     }
-    
+
     var valueContentOld = (
       <p>
-        tên: {contentItem.ValueOld.Name} <br />
-        Mã số: {contentItem.ValueOld.CardNo}
+        <b>tên:</b> {contentItem.ValueOld.Name} <br />
+        <b>Mã số:</b> {contentItem.ValueOld.CardNo}
         <br />
-        giới tính: {contentItem.ValueOld.gender}
+        <b>Giới tính:</b> {contentItem.ValueOld.gender}
         <br />
-        CMND: {contentItem.ValueOld.CMND}
+        <b>CMND:</b> {contentItem.ValueOld.CMND}
         <br />
-        Ngày sinh: {contentItem.ValueOld.BirthDay}
+        <b>Ngày sinh:</b> {contentItem.ValueOld.BirthDay}
       </p>
     );
     // lấy thời gian của log
@@ -45,7 +45,9 @@ class LogItemQLCongNhan extends Component {
       <tr id="device2" className="edit">
         <td>{index + 1}</td>
         <td>{contentItem.ValueOld.Id}</td>
-        <td>{day}-{time}</td>
+        <td>
+          {day}-{time}
+        </td>
         <td>{valueContentNew}</td>
         <td>{valueContentOld}</td>
       </tr>

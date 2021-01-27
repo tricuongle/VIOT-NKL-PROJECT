@@ -251,22 +251,22 @@ class LogItemQLTramCan extends Component {
     } = this.state;
     var valueContentNew = (
       <p>
-        Tên: {contentItem.ValueNew.Name} <br />
-        Type: {nameItemTypeGetIdNew + " "}
+        <b>Tên:</b>  {contentItem.ValueNew.Name} <br />
+        <b>Type:</b>  {nameItemTypeGetIdNew + " "}
         <br />
-        Công đoạn: {nameItemModelGetIdNew + " "}
+        <b>Công đoạn:</b>  {nameItemModelGetIdNew + " "}
         <br />
-        Khu vực: {nameSectionNew}
+        <b>Khu vực:</b>  {nameSectionNew}
       </p>
     );
     var valueContentOld = (
       <p>
-        Tên: {contentItem.ValueOld.Name} <br />
-        Type: {nameItemTypeGetIdOld + " "}
+        <b>Tên:</b>  {contentItem.ValueOld.Name} <br />
+        <b>Type:</b>  {nameItemTypeGetIdOld + " "}
         <br />
-        Công đoạn: {nameItemModelGetIdOld + " "}
+        <b>Công đoạn:</b>  {nameItemModelGetIdOld + " "}
         <br />
-        Khu vực: {nameSectionOld}
+        <b>Khu vực:</b>  {nameSectionOld}
       </p>
     );
     // lấy thời gian của log

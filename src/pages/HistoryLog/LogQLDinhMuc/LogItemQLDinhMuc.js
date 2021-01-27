@@ -63,27 +63,27 @@ class LogItemQLDinhMuc extends Component {
     var { nameModelOld, nameModelNew } = this.state;
     var valueContentNew;
     if (contentItem.ValueNew == "Thông tin đã xóa") {
-      valueContentNew = contentItem.ValueNew;
+      valueContentNew = <p className="textLog">Thông tin đã xóa</p>;
     } else {
       valueContentNew = (
         <p>
-          Tên mã cá: {nameModelNew} <br />
-          Tên định mức giá: {contentItem.ValueNew.Name}
+          <b>Tên mã cá:</b> {nameModelNew} <br />
+          <b>Tên định mức giá:</b> {contentItem.ValueNew.Name}
           <br />
-          Khối lượng: {contentItem.ValueNew.Weight}
+          <b>Khối lượng:</b> {contentItem.ValueNew.Weight}
           <br />
-          Đơn giá: {contentItem.ValueNew.Price}
+          <b>Đơn giá:</b> {contentItem.ValueNew.Price}
         </p>
       );
     }
     var valueContentOld = (
       <p>
-        Tên mã cá: {nameModelOld} <br />
-        Tên định mức giá: {contentItem.ValueOld.Name}
+        <b>Tên mã cá:</b> {nameModelOld} <br />
+        <b>Tên định mức giá:</b> {contentItem.ValueOld.Name}
         <br />
-        Khối lượng: {contentItem.ValueOld.Weight}
+        <b>Khối lượng:</b> {contentItem.ValueOld.Weight}
         <br />
-        Đơn giá: {contentItem.ValueOld.Price}
+        <b>Đơn giá:</b> {contentItem.ValueOld.Price}
       </p>
     );
     // lấy thời gian của log

@@ -62,39 +62,39 @@ class LogItemQLMaCa extends Component {
     var valueContentNew;
 
     if (contentItem.ValueNew == "Thông tin đã xóa") {
-      valueContentNew = contentItem.ValueNew;
+      valueContentNew = <p className="textLog">Thông tin đã xóa</p>;
     } else {
       valueContentNew = (
         <p>
-          Tên: {contentItem.ValueNew.Name} <br />
-          KL vào Min/Max: {contentItem.ValueNew.WeightInMin}/
+          <b>Tên:</b> {contentItem.ValueNew.Name} <br />
+          <b>KL vào Min/Max:</b> {contentItem.ValueNew.WeightInMin}/
           {contentItem.ValueNew.WeighInMax}
           <br />
-          KL ra Min/Max: {contentItem.ValueNew.WeightOutMin}/
+          <b>KL ra Min/Max:</b> {contentItem.ValueNew.WeightOutMin}/
           {contentItem.ValueNew.WeighOutMax}
           <br />
-          công đoạn: {nameProcessNew}
+          <b>công đoạn:</b> {nameProcessNew}
           <br />
-          Nhóm: {contentItem.ValueNew.Group}
+          <b>Nhóm:</b> {contentItem.ValueNew.Group}
           <br />
-          Classify: {contentItem.ValueNew.Classify}
+          <b>Classify:</b> {contentItem.ValueNew.Classify}
         </p>
       );
     }
     var valueContentOld = (
       <p>
-        Tên: {contentItem.ValueOld.Name} <br />
-        KL vào Min/Max: {contentItem.ValueOld.WeightInMin}/
+        <b>Tên:</b> {contentItem.ValueOld.Name} <br />
+        <b>KL vào Min/Max:</b> {contentItem.ValueOld.WeightInMin}/
         {contentItem.ValueOld.WeighInMax}
         <br />
-        KL ra Min/Max: {contentItem.ValueOld.WeightOutMin}/
+        <b>KL ra Min/Max:</b> {contentItem.ValueOld.WeightOutMin}/
         {contentItem.ValueOld.WeighOutMax}
         <br />
-        công đoạn: {nameProcessOld}
+        <b>công đoạn:</b> {nameProcessOld}
         <br />
-        Nhóm: {contentItem.ValueOld.Group}
+        <b>Nhóm:</b> {contentItem.ValueOld.Group}
         <br />
-        Classify: {contentItem.ValueOld.Classify}
+        <b>Classify:</b> {contentItem.ValueOld.Classify}
       </p>
     );
     // lấy thời gian của log
